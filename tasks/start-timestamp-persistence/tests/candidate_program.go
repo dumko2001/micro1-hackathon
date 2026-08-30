@@ -257,11 +257,13 @@ func main() {
 		if err := db.CompactHead(tsdb.NewRangeHead(db.Head(), base, base+int64(samples-1))); err != nil {
 			panic(err)
 		}
-	} else if mode == "inorder" || mode == "legacy" || mode == "disabled" {
+	} else if mode == "inorder" || mode == "compact" || mode == "legacy" || mode == "disabled" {
 		app := db.AppenderV2(context.Background())
 		for ordinal := 0; ordinal < lifecycleSamples; ordinal++ {
 			sampleST := int64(0)
-			if ordinal%3 == 0 {
+			if mode == "compact" {
+				sampleST = st
+			} else if ordinal%3 == 0 {
 				sampleST = st + int64(ordinal)
 			}
 			appendSample(app, base+int64(ordinal), sampleST, count+int64(ordinal), ordinal)

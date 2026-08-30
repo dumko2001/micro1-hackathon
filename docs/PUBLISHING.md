@@ -2,7 +2,7 @@
 
 ## Current state
 
-This checkout is not public. The repository has no commit and no configured remote.
+This checkout is not public. It has local commit `8cc0415` and no configured remote. Final Oracle-alignment edits remain uncommitted.
 
 The tree contains both sides of the evaluation boundary:
 
@@ -10,7 +10,8 @@ The tree contains both sides of the evaluation boundary:
 - bundled clean-parent source archives;
 - reference patches and `solve.sh` scripts;
 - verifier cases and trusted fixtures;
-- private calibration code, candidate fixtures, manifests, raw jobs, and trajectories, which are excluded by `.gitignore`.
+- reviewer calibration code, candidate fixtures, manifests, and rubric outputs, which are tracked in this transparent authoring repository;
+- credentials, raw `jobs/` output, and recordings, which remain excluded by `.gitignore`.
 
 All five bundled source archives are stripped of `.git`, remotes, and history. That prevents direct Git discovery inside the task checkout. It cannot stop an actor with public egress from identifying familiar code or searching online. A published authoring repository is also not secret: its reference patches and verifier cases are readable once pushed.
 
@@ -52,8 +53,8 @@ Share private calibration evidence through restricted repository access or an en
 
 Before creating a remote:
 
-1. create the first commit and record its SHA in the submission;
-2. run `git status --ignored` and confirm `.env`, `.private-eval/`, `jobs/`, private submissions, and raw trajectories are ignored;
+1. commit the final Oracle-alignment edits and record the SHA in the submission;
+2. run `git status --ignored` and confirm `.env`, `jobs/`, private submissions, and raw trajectories are ignored;
 3. scan the staged tree for credentials, `auth.json`, private URLs, and personal paths;
 4. decide whether the release is transparent or secrecy-preserving, then include or exclude solutions and verifier cases consistently;
 5. add representative redacted trajectories for every agent used;

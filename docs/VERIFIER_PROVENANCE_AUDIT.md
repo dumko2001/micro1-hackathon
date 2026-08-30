@@ -10,15 +10,19 @@ in the clean parent or is a mechanical extension of an established Prometheus
 convention. A public issue symptom, reproducer, or reviewed external interface
 may be stated in the instruction. Oracle-invented helper names, patch structure,
 target files, hidden cases, and private root-cause reasoning are not agent
-requirements and must be graded through behavior instead.
+requirements. Reviewed architectural invariants may be enforced when the task
+is explicitly upstream-conformance, but the verifier must record why they
+matter.
 
 The visible instruction states the incident and any genuinely new public
 interface. It does not enumerate routine senior-maintainer obligations such as
 preserving established behavior, failing safely, maintaining compatibility, or
 covering the repository's normal lifecycle paths. The verifier may enforce
 those obligations when they follow from the clean repository and established
-Prometheus conventions; it may not turn an Oracle-specific design choice into
-an unstated requirement.
+Prometheus conventions. This suite deliberately adds two stricter conformance
+choices: the reviewed PromQL preprocessing boundary and the landed ST wire
+format. They are documented here and in task metadata, not leaked as solution
+steps in the actor instruction.
 
 ## Unix-socket scraping
 
@@ -30,8 +34,11 @@ It is not represented as the exact knowledge state of one author on one parent.
   TLS identity; target isolation; reload/resync; fail closed; ordinary TCP.
 - Not fair to require: `UnixSocketLabel`, `newUnixSocketScrapeClient`, a context
   key type, a per-target cache name, or the oracle's client layout.
-- Positive cases: HTTP UDS, HTTPS UDS, two sockets sharing an authority, UDS and
-  TCP sharing an authority, socket change after reload/resync, ordinary TCP.
+- Positive cases: HTTP UDS, HTTPS UDS, empty address mapped to `localhost`, two
+  targets on one socket sharing an effective pool, two sockets sharing an
+  authority remaining isolated, UDS and TCP sharing an authority remaining
+  isolated, socket change after reload/resync, ordinary TCP, and keep-alive
+  reuse.
 - Negative cases: after reload, a nonexistent socket may be omitted or report
   `up=0`; in either case a live TCP trap must record no fallback connection.
 - Boundary: an external controller drives a real candidate daemon through
@@ -45,14 +52,16 @@ included the failing query shape; the internal AST diagnosis remains hidden.
 
 - Fair visible contract: the reported fixed-time subquery symptom plus correct
   instant/range, nested, `@`, offset, and ordinary-subquery behavior.
-- Not fair to require: the reference helper, wrapper placement, return flags,
-  or an exact AST rewrite.
+- Required reviewed invariant: the subquery node itself remains step-sensitive
+  while invariant work inside it may still be wrapped. The verifier does not
+  require the Oracle helper or source diff.
 - Positive cases: fixed-time matrix and subquery forms, constant and
   step-varying arguments, nested expression, `@ start()`, `@ end()`, and offset.
 - Negative/regression cases: ordinary non-fixed subqueries must remain
   step-varying and fixed constant results must remain invariant.
-- Boundary: an external controller queries a real candidate daemon over HTTP;
-  no production helper name is referenced.
+- Boundary: an external controller queries a real candidate daemon over HTTP.
+  A verifier-owned probe checks the exported preprocessed AST without naming a
+  private helper.
 
 ## Native-histogram extended rates
 
@@ -79,16 +88,17 @@ reports the public bare-versus-wrapped symptom but not the internal cause.
 The public proposal and #18609 define a long-horizon storage feature. Existing
 `AppenderV2.Append`, `Iterator.AtST`, `EnableSTStorage`, chunk interfaces, and
 parallel encoding/type naming conventions make the new public encodings and
-`histograms-st-encoding` feature flag legitimate contracts. Private encoder
-layout and bit manipulation are not requirements.
+`histograms-st-encoding` feature flag legitimate contracts. The final task also
+treats the landed persistent byte format as an upstream-conformance contract.
 
 - Fair visible contract: integer and float histogram start timestamps across
   head, OOO, WAL/WBL, compaction, block reopen, and queries; legacy behavior
   when disabled; independent histogram-ST and XOR2 feature gates.
 - Convention-fair internal surface: parallel chunk encoding/type names and the
   established command feature parser/options path.
-- Not fair to require: private `stEncoder`/`stDecoder` layout, exact header bits,
-  setter organization, or recoding algorithm.
+- Not required: private `stEncoder`/`stDecoder` names, setter organization, or
+  source layout. Required: blocks must interoperate with the exact landed
+  reader, which indirectly fixes the reviewed header and sample grammar.
 - Positive cases: 130-sample semantic receipts across seek, recode, chunk cuts,
   compatible layout expansion, zero-threshold transition, stale recovery,
   normal and OOO storage, WAL/WBL replay, block reopen, and all four feature-flag
@@ -100,11 +110,11 @@ layout and bit manipulation are not requirements.
   root controller projects valid blocks into a root-owned read-only tree,
   deletes the original writable database, seals the parent, and compares
   complete semantic receipts. A clean-parent writer creates legacy integer and
-  float fixtures. No trusted decoder requires the Oracle bitstream.
-- Remaining risk: a deliberately task-aware writer and reader could coordinate
-  through a private protocol. Sealed projections, source deletion, independent
-  legacy fixtures, and root-owned comparisons constrain this route but do not
-  rule it out formally.
+  float fixtures. A second root-only reader built from the landed patch must
+  decode the same sealed blocks and return identical receipts.
+- Boundary: the candidate cannot read the landed source or reader binary. The
+  gate checks wire interoperability without requiring the Oracle's Go names or
+  call graph.
 
 ## Stale-series WAL expiry
 
@@ -127,28 +137,25 @@ hidden.
 
 ## Evidence status
 
-The five prompt-tightened packages pass deterministic materialization,
-shell/Python syntax, Harbor 0.14 task parsing, and source checksums. On the
-preceding instruction digests, frozen Daytona evidence contains ten Oracle
-rewards of `1`, ten no-op rewards of `0`, five accepted alternates, and 15
-rejected mutants, all without Harbor exceptions. The private 30-case full gate
-and 20-case repeat gate each report balanced accuracy `1.0`, false-accept rate
-`0.0`, and false-reject rate `0.0` on those earlier bytes. Fresh runtime binding
-is required before applying those claims to the current prompt-tightened tasks.
+The five current packages pass deterministic materialization, shell/Python
+syntax, Harbor 0.14 task parsing, and source checksums. On the current
+Oracle-conformance bytes, frozen Daytona evidence contains five Oracle rewards
+of `1`, five no-op rewards of `0`, five accepted alternates, and ten rejected
+mutants, all without Harbor exceptions. Two formerly accepted non-landed ST
+encodings also return `0`. The older 30-case full gate and 20-case repeat gate
+remain bound to earlier bytes and are not current-byte repeatability evidence.
 
 These results certify the registered candidates, not every valid architecture.
-The start-timestamp verifier was changed after its exact decoder rejected
-coherent alternate encodings. The public proposal did not define the final
-bitstream, and review history showed that it changed after the first author
-implementation. Exact bytes were therefore not task-time-derivable and are no
-longer reward truth.
+The start-timestamp verifier briefly accepted alternate encodings, then moved
+back to exact landed-format interoperability when the task policy changed from
+method neutrality to upstream conformance. Two formerly passing Luna-max
+archives now return reward `0`; the exact reference and an independently
+organized format-compatible alternate return `1`.
 
 Histogram retains a linked breadth test; start timestamp no longer runs reward
 assertions in a process linked with candidate code. Neither boundary proves
-resistance to deliberately task-aware code. Both final start-timestamp stock
-jobs passed without an exception or retry. Their candidate archives differ and
-use genuinely distinct encodings. The complete stock result is 8/10; histogram
-accounts for both semantic misses.
+resistance to deliberately task-aware code. Earlier ST solve rates belong to
+the superseded method-neutral verifier and are not final conformance results.
 
 The verifier runs separately without network access. Daytona Codex actors need
 public egress for the model service. Opaque identifiers and the instruction not

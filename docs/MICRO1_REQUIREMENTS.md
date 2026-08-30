@@ -8,10 +8,10 @@ Source: `micro1 - First Hackathon97ce7c5.pdf`, checked as text and as ten render
 |---|---:|---|
 | Define the user, bottleneck, and practical value | 1 and 7 | Covered in the README |
 | Use agents purposefully | 2 and 5 | Covered by the Harbor authoring and evaluation workflow; the brief does not require a skill or MCP server |
-| Compare a reasonable baseline and final solution on the same cases | 2 and 4 | Pending as an agent-workflow comparison; Oracle/no-op smoke tests are verifier evidence, not this comparison |
-| Choose one primary metric and report complete results | 4 | Primary verifier metric is defined; current-prompt runtime rebinding and Micro1 baseline/final results are pending |
-| Keep an Improvement Changelog with meaningful and removed experiments | 3 and 7 | Partial: `CHANGELOG.md` records the verifier iterations and removed experiments, but the simple-baseline and final-workflow rows still need the same-case comparison results |
-| Submit complete solution code and agent instructions | 7 | Present in this checkout; no commit or shareable remote yet |
+| Compare a reasonable baseline and final solution on the same cases | 2 and 4 | The changelog defines the baseline as the first narrow PR-shaped task and the final as the hardened five-task environment. A numerical same-case comparison is not yet claimed. |
+| Choose one primary metric and report complete results | 4 | Current final verifier decisions are complete; the fresh Luna-default difficulty run is still active. |
+| Keep an Improvement Changelog with meaningful and removed experiments | 3 and 7 | Covered by `CHANGELOG.md`, including false rejects, false accepts, removed designs, and the final Oracle-conformance decision. |
+| Submit complete solution code and agent instructions | 7 | Present in local commit `8cc0415`; final Oracle-alignment edits still need a commit and remote. |
 | Provide a clean-environment reproduction guide with versions, runtime, cost, and expected output | 7 | Paths are documented; current-prompt runtime evidence, clean clone URL, and baseline/final runtime and cost are pending |
 | Submit a solution video of no more than five minutes | 7 | Missing |
 | Submit representative trajectories for every agent used | 7 | Missing |
@@ -46,9 +46,8 @@ It specifies no PR count, public GitHub repository, research novelty, research-p
 
 ## Remaining submission work
 
-1. Define the Micro1 baseline and final workflow. The completed stock calibration does not serve as that comparison.
-2. Compare both on the same task cases with the same resource budget.
-3. Report complete primary-metric results, runtime, token use, and cost.
-4. Publish representative redacted trajectories for every agent used.
-5. Record the five-minute-or-shorter video.
-6. Create a clean commit and give judges a reproducible source URL or private share.
+1. Decide whether to add a numerical same-case comparison to the changelog or present the documented evolution only.
+2. Finish the active Luna-default run and report its complete runtime, token use, and cost.
+3. Publish representative redacted trajectories for every agent used.
+4. Record the five-minute-or-shorter video.
+5. Commit the final edits and give judges a reproducible source URL or private share.

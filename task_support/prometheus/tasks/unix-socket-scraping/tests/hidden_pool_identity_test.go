@@ -10,6 +10,7 @@ import (
 
 	"github.com/prometheus/prometheus/config"
 	"github.com/prometheus/prometheus/discovery/targetgroup"
+	"github.com/prometheus/prometheus/model/labels"
 	"github.com/prometheus/prometheus/model/relabel"
 	"github.com/prometheus/prometheus/util/teststorage"
 )
@@ -19,6 +20,13 @@ func sameConnectionPool(left, right *http.Client) bool {
 }
 
 func TestMicro1UnixSocketPoolIdentity(t *testing.T) {
+	emptyAddressTarget := NewTarget(labels.FromStrings(
+		model.SchemeLabel, "http",
+		model.MetricsPathLabel, "/metrics",
+		"__unix_socket__", "/tmp/empty-address.sock",
+	), &config.ScrapeConfig{}, nil, nil)
+	require.Equal(t, "localhost", emptyAddressTarget.URL().Host, "Unix-socket targets without an advertised address must retain a valid HTTP authority")
+
 	cfg := &config.ScrapeConfig{
 		JobName:                    "unix-socket-pool-identity",
 		Scheme:                     "http",

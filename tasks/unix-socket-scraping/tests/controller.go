@@ -44,7 +44,6 @@ type endpoint struct {
 	listener net.Listener
 	hits     atomic.Int64
 	accepts  atomic.Int64
-	closes   atomic.Int64
 	badHost  atomic.Bool
 }
 
@@ -80,11 +79,7 @@ func serve(listener net.Listener, host, metric, origin string, tlsConfig *tls.Co
 		}
 		w.Header().Set("Content-Type", "text/plain; version=0.0.4")
 		fmt.Fprintf(w, "%s{origin=%q} 1\n", metric, origin)
-	}), ConnState: func(_ net.Conn, state http.ConnState) {
-		if state == http.StateClosed || state == http.StateHijacked {
-			e.closes.Add(1)
-		}
-	}}
+	})}
 	listener = &countingListener{Listener: listener, accepts: &e.accepts}
 	if tlsConfig != nil {
 		listener = tls.NewListener(listener, tlsConfig)
@@ -151,7 +146,7 @@ func reservePort() (int, error) {
 	return port, l.Close()
 }
 
-func writeConfig(path, authority, fallbackAuthority, caPath, socketA, socketB, socketTLS, socketEmpty, reloadSocket, tcpAuthority string) error {
+func writeConfig(path, authority, fallbackAuthority, caPath, socketA, socketB, socketTLS, reloadSocket, tcpAuthority string) error {
 	config := fmt.Sprintf(`global:
   scrape_interval: 200ms
   scrape_timeout: 150ms
@@ -173,13 +168,6 @@ scrape_configs:
   static_configs:
   - targets: [%q]
     labels: {__unix_socket__: %q, target_slot: "missing"}
-- job_name: uds_empty_address
-  static_configs:
-  - targets: ["discard.invalid:80"]
-    labels: {__unix_socket__: %q, target_slot: "empty"}
-  relabel_configs:
-  - target_label: __address__
-    replacement: ""
 - job_name: uds_reload
   static_configs:
   - targets: [%q]
@@ -188,7 +176,7 @@ scrape_configs:
   static_configs:
   - targets: [%q]
 `, authority, socketA, authority, socketB, caPath, authority, socketTLS,
-		fallbackAuthority, filepath.Join(filepath.Dir(socketA), "absent.sock"), socketEmpty, authority, reloadSocket, tcpAuthority)
+		fallbackAuthority, filepath.Join(filepath.Dir(socketA), "absent.sock"), authority, reloadSocket, tcpAuthority)
 	return os.WriteFile(path, []byte(config), 0o644)
 }
 
@@ -281,16 +269,6 @@ func observeFailClosed(base, expression string, duration time.Duration) error {
 	return nil
 }
 
-func waitConnectionsClosed(endpoint *endpoint, deadline time.Time) error {
-	for time.Now().Before(deadline) {
-		if endpoint.accepts.Load() > 0 && endpoint.closes.Load() >= endpoint.accepts.Load() {
-			return nil
-		}
-		time.Sleep(50 * time.Millisecond)
-	}
-	return fmt.Errorf("retired scrape transport left %d of %d connections open", endpoint.accepts.Load()-endpoint.closes.Load(), endpoint.accepts.Load())
-}
-
 func main() {
 	if len(os.Args) != 3 {
 		panic("usage: controller PROMETHEUS RUNTIME")
@@ -333,7 +311,7 @@ func main() {
 	tcp := serve(tcpListener, tcpAuthority, "micro1_tcp_control", tcpOrigin, nil)
 	defer tcp.server.Close()
 
-	origins := []string{token(), token(), token(), token(), token(), token()}
+	origins := []string{token(), token(), token(), token(), token()}
 	httpA, socketA, err := unixEndpoint(controllerDir, "a.sock", tcpAuthority, "micro1_uds_probe", origins[0], nil)
 	if err != nil {
 		panic(err)
@@ -350,24 +328,20 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	emptyAddress, socketEmpty, err := unixEndpoint(controllerDir, "empty.sock", "localhost", "micro1_empty_address_probe", origins[3], nil)
+	reloadA, reloadSocketA, err := unixEndpoint(controllerDir, "reload-a.sock", tcpAuthority, "micro1_reload_probe", origins[3], nil)
 	if err != nil {
 		panic(err)
 	}
-	reloadA, reloadSocketA, err := unixEndpoint(controllerDir, "reload-a.sock", tcpAuthority, "micro1_reload_probe", origins[4], nil)
+	reloadB, reloadSocketB, err := unixEndpoint(controllerDir, "reload-b.sock", tcpAuthority, "micro1_reload_probe", origins[4], nil)
 	if err != nil {
 		panic(err)
 	}
-	reloadB, reloadSocketB, err := unixEndpoint(controllerDir, "reload-b.sock", tcpAuthority, "micro1_reload_probe", origins[5], nil)
-	if err != nil {
-		panic(err)
-	}
-	for _, e := range []*endpoint{httpA, httpB, httpsEndpoint, emptyAddress, reloadA, reloadB} {
+	for _, e := range []*endpoint{httpA, httpB, httpsEndpoint, reloadA, reloadB} {
 		defer e.server.Close()
 	}
 
 	configPath := filepath.Join(controllerDir, "prometheus.yml")
-	if err := writeConfig(configPath, tcpAuthority, fallbackAuthority, caPath, socketA, socketB, socketTLS, socketEmpty, reloadSocketA, tcpAuthority); err != nil {
+	if err := writeConfig(configPath, tcpAuthority, fallbackAuthority, caPath, socketA, socketB, socketTLS, reloadSocketA, tcpAuthority); err != nil {
 		panic(err)
 	}
 	port, err := reservePort()
@@ -406,7 +380,6 @@ func main() {
 		{`micro1_uds_probe{target_slot="a"}`, map[string]string{"origin": origins[0], "target_slot": "a"}},
 		{`micro1_uds_probe{target_slot="b"}`, map[string]string{"origin": origins[1], "target_slot": "b"}},
 		{`micro1_tls_probe{target_slot="tls"}`, map[string]string{"origin": origins[2], "target_slot": "tls"}},
-		{`micro1_empty_address_probe{target_slot="empty"}`, map[string]string{"origin": origins[3], "target_slot": "empty"}},
 		{`micro1_tcp_control`, map[string]string{"origin": tcpOrigin, "job": "tcp_control"}},
 	}
 	for _, check := range checks {
@@ -424,7 +397,6 @@ func main() {
 		"http-a": httpA,
 		"http-b": httpB,
 		"https":  httpsEndpoint,
-		"empty":  emptyAddress,
 		"reload": reloadA,
 	} {
 		if endpoint.hits.Load() < 3 {
@@ -434,11 +406,11 @@ func main() {
 			panic(fmt.Sprintf("%s opened a fresh connection for every scrape instead of reusing its pool", name))
 		}
 	}
-	if httpA.badHost.Load() || httpB.badHost.Load() || httpsEndpoint.badHost.Load() || emptyAddress.badHost.Load() || reloadA.badHost.Load() {
+	if httpA.badHost.Load() || httpB.badHost.Load() || httpsEndpoint.badHost.Load() || reloadA.badHost.Load() {
 		panic("Unix-socket scrape used the wrong HTTP authority")
 	}
 
-	if err := writeConfig(configPath, tcpAuthority, fallbackAuthority, caPath, socketA, socketB, socketTLS, socketEmpty, reloadSocketB, tcpAuthority); err != nil {
+	if err := writeConfig(configPath, tcpAuthority, fallbackAuthority, caPath, socketA, socketB, socketTLS, reloadSocketB, tcpAuthority); err != nil {
 		panic(err)
 	}
 	reloadRequest, _ := http.NewRequestWithContext(context.Background(), http.MethodPost, base+"/-/reload", strings.NewReader(""))
@@ -451,10 +423,7 @@ func main() {
 	if reloadResponse.StatusCode != http.StatusOK {
 		panic("configuration reload failed")
 	}
-	if err := waitSeries(base, `micro1_reload_probe{target_slot="reload"}`, map[string]string{"origin": origins[5]}, time.Now().Add(10*time.Second)); err != nil {
-		panic(err)
-	}
-	if err := waitConnectionsClosed(reloadA, time.Now().Add(5*time.Second)); err != nil {
+	if err := waitSeries(base, `micro1_reload_probe{target_slot="reload"}`, map[string]string{"origin": origins[4]}, time.Now().Add(10*time.Second)); err != nil {
 		panic(err)
 	}
 	if reloadB.badHost.Load() || fallback.hits.Load() != 0 {

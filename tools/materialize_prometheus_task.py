@@ -82,6 +82,8 @@ def expected_files(task_name: str, overlay: Path) -> dict[str, str]:
                 (Path("tests/common") / verifier_relative).as_posix(),
                 file_hash(path),
             )
+    if task_name == "start-timestamp-persistence":
+        result["tests/oracle.patch"] = file_hash(overlay / "solution/fix.patch")
     return result
 
 
@@ -123,6 +125,11 @@ def materialize(task_name: str, overlay: Path, destination: Path) -> None:
             if target.exists():
                 target.chmod(0o644)
             shutil.copy2(path, target)
+    if task_name == "start-timestamp-persistence":
+        shutil.copy2(
+            overlay / "solution/fix.patch",
+            temporary / "tests/oracle.patch",
+        )
     if destination.exists():
         destination.rename(backup)
     try:

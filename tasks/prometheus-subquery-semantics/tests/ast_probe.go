@@ -9,7 +9,7 @@ import (
 )
 
 func preprocess(query string) parser.Expr {
-	expr, err := parser.ParseExpr(query)
+	expr, err := parser.NewParser(parser.Options{}).ParseExpr(query)
 	if err != nil {
 		panic(err)
 	}

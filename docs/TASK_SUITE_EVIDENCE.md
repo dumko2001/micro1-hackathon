@@ -14,51 +14,48 @@ Snapshot: 30 August 2026. Static provenance, host checks, Daytona execution, pri
 
 All source archives pass their SHA-256 checks. Every upstream patch stack applies in order to its clean parent. Actor archives contain no Git history or solution material.
 
-## Current and calibrated Harbor task digests
+## Current Harbor task digests
 
-| Task | Current prompt-tightened SHA-256 | Previously calibrated SHA-256 | Files |
-|---|---|---|---:|
-| Unix-socket scraping | `05d8ad20bca1a6d219230f99857adb0f5aabad6c78b5965f7304a33890aed408` | `3a986ebb2e926b9314a0359db5e3b46d45c7955ca1dc5585511fd771033c0739` | 19 |
-| Step-invariant subquery | `9bba37a998f7f0155536f7fa019f5c584ac5f656970040856d00170524c19c96` | `ba05dcfef28c72fddfe64c3b77449e88d72fc34ae6a66b51c3722d9cb32a4756` | 18 |
-| Native-histogram rates | `f350fbb854d6fb0f9163c77b2834a9477e92b25059c5da2c7ea94d2a459d557e` | `884f463e0d4bd9c5e253d84045f24b66970aa632f165f2432788049454f76f36` | 20 |
-| Start-timestamp persistence | `7bcfab6d49fd9b4d988aee464c717e878f875395a7f37ddaa9776a60bcebb184` | `faba462bbfb4c3c614d8b8778d5e5ee74104f0395af42312e98183f79dbfb057` | 21 |
-| Stale-series WAL expiry | `ed115231760f7ec36a695616ad891c8b171977e4bc67513e3fa8a684d353e18c` | `8ce6a3a21fcc1f92774602fa09670aab1ab8c3ea4374ca3a7838348314fb9487` | 21 |
+| Task | Harbor task checksum | Files |
+|---|---|---:|
+| Unix-socket scraping | `81ae9884f2e0c99d7d67c63adba7059c655e8946eebb20d7a2af43f41db701e0` | 20 |
+| Step-invariant subquery | `942d83d397e25a26c606b86c59d7a2c83dc4158040446f178a59764df2946e93` | 19 |
+| Native-histogram rates | `4cb916e104943c0056820052dde5760083e7bcb89090e7a745c7b5acd6152683` | 20 |
+| Start-timestamp persistence | `484b625cda23135c577bbcde198415a4bb7aea7af6df74a3df0be728c70817d4` | 22 |
+| Stale-series WAL expiry | `485bb43bedc0762ad1b2619b66cff5f71ef9b78ad39b7604a4e5ff0bb73d19a1` | 21 |
 
-Only the instruction bytes changed. Verify mode, Harbor parsing, source parity, and no-`.git` checks pass on the current packages. The Daytona jobs below bind to the previously calibrated digests and must be repeated before they are claimed for the current prompt-tightened packages.
+Verify mode, Harbor parsing, source parity, and no-`.git` checks pass on these packages. The current jobs below record the same checksum in each trial result.
 
 ## Task shape and verifier boundary
 
 | Task | Shared episode shape | Unique verifier observation | Remaining limitation |
 |---|---|---|---|
-| Unix-socket scraping | clean parent, non-root actor, separate verifier | live randomized HTTP/TLS sockets, Host/SNI, reload, target isolation, TCP control and fallback trap | actor egress makes the no-search rule a policy control |
-| Step-invariant subquery | same | instant, range, nested, numeric, `start()`, `end()`, offset, and ordinary queries over trusted data | focused cases do not cover all PromQL behavior |
+| Unix-socket scraping | clean parent, non-root actor, separate verifier | live randomized HTTP/TLS sockets plus pool-identity, keep-alive, reload, localhost, TCP isolation, and fallback gates | actor egress makes the no-search rule a policy control |
+| Step-invariant subquery | same | instant/range API results plus the reviewed direct-subquery AST boundary | deliberately rejects downstream-unwrapping workarounds |
 | Native-histogram rates | same | daemon/API output, warnings, resets, schemas, panic resistance, and linked interpolation breadth | candidate code shares a process for the linked breadth test |
-| Start-timestamp persistence | same | candidate reader observes root-owned sealed blocks; controller compares complete receipts; clean-parent writer supplies legacy fixtures | a deliberate writer/reader protocol could collude |
-| Stale-series WAL expiry | same | clean-parent reader checks candidate checkpoints and replay across randomized horizons | pre-existing internal retention conventions are intentionally enforced |
+| Start-timestamp persistence | same | candidate and landed-format readers compare complete receipts from root-owned sealed blocks; clean-parent writer supplies legacy fixtures | final wire-format interoperability is intentionally enforced |
+| Stale-series WAL expiry | same | clean-parent reader checks checkpoint membership and queries retained compacted and active data across randomized horizons | pre-existing internal retention conventions are intentionally enforced |
 
 Candidate programs run as UID 65532 with an empty environment, `no_new_privs`, no capabilities, and resource limits. Build sources are removed before executable gates run. These controls reduce the tested attack surface. They do not prove safety against arbitrary hostile code.
 
-## Repeated Daytona results
+## Current Daytona results
 
 Harbor used Daytona only. Every sandbox requested 2 vCPU, 4096 MiB RAM, and 10240 MiB disk, with at most five concurrent sandboxes.
 
-The jobs in this section bind to the previously calibrated digests in the table above. They predate the instruction-only senior-maintainer prompt rewrite and are not current-byte certification.
+| Case class | Jobs | Decisions | Result | Exceptions |
+|---|---|---:|---:|---:|
+| Exact reference | `micro1-oracle-alignment-final-oracle-20260830`; ST rebound by `st-oracle-conformance-final-oracle-20260830` | 5 | 5 reward `1` | 0 |
+| No-op | `micro1-oracle-alignment-final-nop-20260830`; ST rebound by `st-oracle-conformance-final-nop-20260830` | 5 | 5 reward `0` | 0 |
+| Alternate-valid | `micro1-oracle-alignment-final-alternate-main-20260830`; UDS and ST rebound separately | 5 | 5 reward `1` | 0 |
+| Mutant 1 | `micro1-oracle-alignment-final-mutant-1-20260830`; ST rebound separately | 5 | 5 reward `0` | 0 |
+| Mutant 2 | `micro1-oracle-alignment-final-mutant-2-20260830`; ST rebound separately | 5 | 5 reward `0` | 0 |
+| Formerly passing ST encodings | `st-oracle-conformance-replay-max-r1-20260830`; `...max-r2...` | 2 | 2 reward `0` | 0 |
 
-| Task | Reference r1/r2 | No-op r1/r2 | Alternate | Named mutants | Exceptions |
-|---|---|---|---|---:|---:|
-| Unix-socket scraping | `uds-contract-final-oracle-r1-20260830` / `uds-contract-final-oracle-r2-20260830` | `uds-contract-final-nop-r1-20260830` / `uds-contract-final-nop-r2-20260830` | `uds-contract-final-alternate-valid-20260830` | 2 | 0 |
-| Step-invariant subquery | `step-timeout-20260830-oracle-r1` / `step-timeout-20260830-oracle-r2` | `step-timeout-20260830-nop-r1` / `step-timeout-20260830-nop-r2` | `step-timeout-20260830-alternate-valid` | 2 | 0 |
-| Native-histogram rates | `hist-finaldoc-20260830-oracle-r1` / `hist-finaldoc-20260830-oracle-r2` | `hist-finaldoc-20260830-nop-r1` / `hist-finaldoc-20260830-nop-r2` | `hist-finaldoc-20260830-alternate-valid` | 2 | 0 |
-| Start-timestamp persistence | `st-neutral-final-oracle-r1-20260830` / `st-neutral-final-oracle-r2-20260830` | `st-neutral-final-nop-r1-20260830` / `st-neutral-final-nop-r2-20260830` | `st-neutral-final-alternate-valid-20260830` | 7 | 0 |
-| Stale-series WAL expiry | `micro1-prometheus-oracle-r1-v2-20260830` / `micro1-prometheus-oracle-r2-20260830` | `micro1-prometheus-nop-r1-20260830` / `micro1-prometheus-nop-r2-20260830` | `micro1-prometheus-alternate-valid-final-20260830` | 2 | 0 |
-
-All ten reference decisions and five alternates returned `1`. All ten no-op decisions and 15 mutants returned `0`. The repeated pairs establish repeatability for the pinned runs, not a probabilistic reliability bound.
-
-Reference r1 wall times, including Daytona setup and verifier lifecycle, were 382.7s for UDS, 361.8s for step, 358.8s for histogram, 563.9s for start timestamp, and 203.9s for WAL.
+This is one final-byte decision per registered case, not a repeatability estimate. Earlier task digests have 2-run reference/no-op evidence and five additional ST mutants; those remain development history until replayed on this final package.
 
 ## Alternate-valid and mutant calibration
 
-The UDS alternate constructs a transport per target. Step uses a different wrapper guard. Histogram normalizes the window and checks bucket families independently. WAL factors expiry through another helper path. The start-timestamp alternate passes without a verifier-owned exact decoder.
+The UDS alternate uses a different registry and ownership layout. Step uses a different wrapper guard. Histogram normalizes the window and checks bucket families independently. WAL factors expiry through another helper path. The start-timestamp alternate reorganizes dispatch but keeps the landed persistent format.
 
 | Task | Mutant 1 | Mutant 2 | Additional start-timestamp mutants |
 |---|---|---|---|
@@ -70,15 +67,13 @@ The UDS alternate constructs a transport per target. Step uses a different wrapp
 
 The start-timestamp corpus has 130 samples. It crosses recode and chunk thresholds, expands compatible bucket layouts, changes zero thresholds, recovers from stale markers, reopens WAL/WBL and normal/OOO blocks, and exercises fresh and past-end `Seek`. The root controller compares timestamp, start timestamp, kind, reset state, schema, zero threshold and count, bucket populations, custom bounds, count, sum, ordering, and cardinality. Equivalent span segmentation is accepted.
 
-## Start-timestamp false-reject correction
+## Start-timestamp conformance decision
 
-The first external design used a trusted reader for the final Oracle bitstream. Two clean stock implementations chose different coherent encodings and were rejected before their behavior could be judged.
+The project tested a method-neutral version first. It built both writer and reader from candidate source and accepted two clean Luna-max solutions with different on-disk formats. That experiment showed the lifecycle could be solved without reproducing the landed bytes.
 
-That requirement was unfair. The public proposal did not specify the bitstream, the PR author's first version used another header, and the final layout emerged during review. The exact decoder and Oracle patch were removed from the verifier image.
+The final task is stricter by design. It treats the reviewed persistent format as part of upstream conformance. The candidate writer still creates real normal and OOO lifecycles, and its own reader must return complete semantic receipts. The controller then runs a second root-only reader built from the exact landed patch against the same sealed blocks. Both readers must agree. The Oracle source and reader are inaccessible to the candidate process.
 
-The final gate builds both writer and reader from candidate source. The candidate writer creates real normal and OOO lifecycles. A root controller projects valid blocks into a new location, makes them root-owned and read-only, deletes the original writable database, and seals the parent. The candidate reader then uses the pre-existing public querier and iterator APIs against that projection. A clean-parent writer independently creates legacy integer and float fixtures. The root controller computes expected receipts and performs every comparison.
-
-This accepts alternate encodings while checking the required persistence behavior. A deliberately coordinated writer and reader could still invent a private protocol, so method neutrality is demonstrated for the registered alternate rather than proved for hostile code.
+The two formerly passing Luna-max archives now return reward `0`. The registered ST alternate still returns `1` because it changes dispatch organization while preserving the final format. This is deliberate format conformance, not a claim of method neutrality.
 
 ## Private evidence gates
 
@@ -89,7 +84,7 @@ The private grader binds task digest, candidate identity, agent, resource reques
 | Full: reference, no-op, alternate, and mutants | 30 | yes | `1.0` | `0.0` | `0.0` |
 | Repeatability: reference r1/r2 and no-op r1/r2 | 20 | yes | `1.0` | `0.0` | `0.0` |
 
-These metrics apply only to the registered candidates and pinned jobs. The manifests, fixtures, reports, and raw jobs are reviewer-only and gitignored. Give judges the private bundle through restricted access or an encrypted archive, and record its SHA-256 in the release manifest.
+These metrics apply only to the registered candidates and pinned jobs. The repository now includes the reviewer fixtures and reports; raw `jobs/` output and credentials remain ignored. A public copy is therefore a transparent benchmark artifact, not a secret evaluator.
 
 ## Failed experiments kept in the record
 
@@ -99,25 +94,25 @@ These metrics apply only to the registered candidates and pinned jobs. The manif
 - The first UDS gate required a missing socket to remain visible as `up=0`. It now also accepts omission after reload, while the live TCP trap must remain untouched.
 - The first histogram alternate exposed a false reject around an incompatible first sample. An independent compatibility preflight fixed it; both mutants still fail.
 - A stock step patch passed verification but reached the 1800-second actor timeout. The final task allows 3600 seconds and its matrix was repeated.
-- An exact start-timestamp decoder rejected alternative on-disk layouts. It was removed for the task-time fairness reasons above. The `st-neutral-final-*` jobs certify the previously calibrated verifier design, not the later prompt-only package digest.
+- A method-neutral start-timestamp reader accepted coherent but non-landed formats. The final task policy was changed to upstream format conformance, so a root-only landed reader was added and the two old encodings now fail. The `st-neutral-final-*` jobs remain development history.
 
 ## Conductor rubric
 
-The unchanged 30-criterion Conductor `task-implementation.toml` rubric has SHA-256 `8beb2c4a6faea2b5d673189b009e9a5f939eb717946372a8ace1fa475675868f`. It ran through `harbor check` with `gpt-5.6-sol`. Raw results remain in the gitignored reviewer directory.
+The unchanged 30-criterion Conductor `task-implementation.toml` rubric has SHA-256 `8beb2c4a6faea2b5d673189b009e9a5f939eb717946372a8ace1fa475675868f`. It ran through `harbor check` with `gpt-5.6-sol`. Raw results are tracked under `.private-eval/reviews/oracle-alignment-final/`.
 
 | Task | Raw result | Raw failures | Adjudication |
 |---|---:|---|---|
-| Unix-socket scraping | 27 pass / 1 fail / 2 N/A | `task_toml_schema` | stale rubric schema; Harbor parses and runs the task |
-| Step-invariant subquery | 25 pass / 3 fail / 2 N/A | schema plus `verifiable` and separate-verifier cascades | all three arise from the stale schema rule; runtime evidence confirms collection and separate verification |
-| Native-histogram rates | 25 pass / 3 fail / 2 N/A | schema plus the same 2 cascades | same stale-rule cascade; no additional task defect identified |
-| Start-timestamp persistence | 26 pass / 2 fail / 2 N/A | `solvable`; `task_toml_schema` | `solvable` is a genuine failure because the expert estimate is 16 hours; schema is stale |
-| Stale-series WAL expiry | 28 pass / 0 fail / 2 N/A | none | no raw failure |
+| Unix-socket scraping | 28 pass / 0 fail / 2 N/A | none | clean raw result |
+| Step-invariant subquery | 24 pass / 4 fail / 2 N/A | AST outcome/alignment, no-online concision, schema | AST coupling is deliberate Oracle conformance; schema rule is stale |
+| Native-histogram rates | 22 pass / 6 fail / 2 N/A | no-online outcome/alignment/concision and anti-cheat, metadata wording, schema | public actor egress and the explicit no-online rule are disclosed policy limits; schema is stale |
+| Start-timestamp persistence | 25 pass / 3 fail / 2 N/A | few-hours solvability, hidden conformance breadth, schema | 16-hour stretch and landed-wire policy are deliberate; schema is stale |
+| Stale-series WAL expiry | 27 pass / 1 fail / 2 N/A | schema | Harbor parses and runs the valid extended schema |
 
 The N/A criteria are structured-data schema and task README. The rubric predates valid local Harbor fields such as `network_mode` and `[[verifier.collect]]`. A stale rule is reported, not rewritten as a pass.
 
-## Stock-agent calibration
+## Historical stock-agent calibration
 
-All jobs use Codex 0.145.0 with `gpt-5.6-luna` and max reasoning. The ten runs produced eight verifier passes, a stock solve rate of 80%.
+These jobs used Codex 0.145.0 with `gpt-5.6-luna` and max reasoning on earlier verifier bytes. They produced eight passes under the then-current method-neutral ST gate.
 
 | Task | Result | Wall times | Interpretation |
 |---|---:|---:|---|
@@ -134,10 +129,10 @@ The final start-timestamp jobs had no exception or retry:
 | `st-neutral-final-luna-r1-20260830` | 1:38:57.57 | 1:32:31.93 | 5:34.52 | 74,692,273 | 72,761,600 | 188,134 | $2.06712740 | `717ef199…` |
 | `st-neutral-final-luna-r2-20260830` | 1:29:26.58 | 1:23:08.76 | 5:20.18 | 60,919,614 | 59,318,272 | 146,349 | $1.68225264 | `51336b71…` |
 
-The candidate archives differ and use genuinely distinct encodings. Trajectory review found no executed online search or fetch, verifier, solution, hidden-test, or reward access, reward hack, refusal, or timeout. R1 ran `make -n lint`, which printed a `curl` command but did not execute it.
+The candidate archives differ and use genuinely distinct encodings. Both now return reward `0` under the final landed-format reader. Trajectory review found no executed online search or fetch, verifier, solution, hidden-test, or reward access, reward hack, refusal, or timeout. R1 ran `make -n lint`, which printed a `curl` command but did not execute it.
 
-The old exact-decoder ST diagnostics are false-reject evidence, not model failures, and are excluded from solve rate. The 80% result measures stock difficulty only. It is not a Micro1 baseline/final comparison.
+The earlier 80% result is development history, not the final task solve rate or a Micro1 baseline/final comparison.
 
 ## Current claim
 
-The current prompt-tightened suite has pinned lineage, exact-reference fidelity, deterministic packaging, source parity, and Harbor parsing. Its immediately preceding digests have repeated reference/no-op discrimination, five accepted alternates, 15 rejected mutants, and an 8/10 stock calibration. Fresh runtime binding is required before those results can be promoted to the current task bytes. A formal hostile-code proof and the Micro1 same-case baseline/final comparison are also incomplete.
+The current suite has pinned lineage, exact-reference fidelity, deterministic packaging, source parity, Harbor parsing, 5/5 reference passes, 5/5 no-op rejections, 5/5 accepted format-compatible alternates, 10/10 rejected mutants, and 2/2 rejected superseded ST encodings. The fresh 10-trial Luna-default job is still active. Repeatability on the final bytes, a formal hostile-code proof, the video, and any numerical Micro1 same-case comparison remain incomplete.

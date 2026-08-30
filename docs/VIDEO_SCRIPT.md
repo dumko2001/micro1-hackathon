@@ -54,6 +54,6 @@ On screen: the complete baseline-versus-final table. Do not substitute Oracle/no
 
 "The biggest improvement was treating the verifier as part of the product. Alternate-valid implementations exposed false rejects; mutants exposed false accepts; and the separate process boundary reduced reward hacking.
 
-One experiment we removed was exact-byte decoding for the start-timestamp format. Review history showed that those bytes were not specified at task time, and two coherent implementations were rejected for solving the behavior differently. We kept the exact PR as the positive Oracle, but moved reward to persistent behavior.
+One experiment made start-timestamp fully method-neutral. Two agents produced coherent but incompatible encodings and passed. We then made an explicit benchmark choice: this episode measures conformance to the final reviewed Prometheus format. The verifier now reads sealed candidate blocks with both the candidate reader and a root-only reader built from the landed patch. The old alternative encodings fail, while an independently organized format-compatible implementation passes.
 
 My hot take is that a benchmark is not trustworthy because the reference patch passes. It becomes trustworthy only when valid alternatives pass, realistic wrong fixes fail, and those decisions repeat on frozen infrastructure."

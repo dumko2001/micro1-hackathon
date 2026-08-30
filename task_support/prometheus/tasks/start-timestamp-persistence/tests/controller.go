@@ -37,6 +37,7 @@ type readResult struct {
 	Samples     []sample `json:"samples"`
 	Seek        *sample  `json:"seek"`
 	PastEnd     bool     `json:"past_end"`
+	BlockBytes  int64    `json:"-"`
 }
 
 type integerBucket struct {
@@ -180,6 +181,20 @@ func projectBlocks(source, destination string) error {
 	return nil
 }
 
+func blockBytes(root string) (int64, error) {
+	var total int64
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.Mode().IsRegular() {
+			total += info.Size()
+		}
+		return nil
+	})
+	return total, err
+}
+
 func sealReadOnly(root string) error {
 	return filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -290,9 +305,7 @@ func lastTimestamp(mode string, base int64) int64 {
 		return base + 3
 	case "recode":
 		return base + 2
-	case "inorder":
-		return base + lifecycleSamples - 1
-	case "disabled":
+	case "inorder", "compact", "disabled":
 		return base + lifecycleSamples - 1
 	case "ooo":
 		return base + 200
@@ -301,7 +314,7 @@ func lastTimestamp(mode string, base int64) int64 {
 	}
 }
 
-func tryRun(candidate, candidateReader, mode string, floatMode, xor2 bool, st, base, count int64, optionIndex, profile int) (readResult, error) {
+func tryRun(candidate, candidateReader, oracleReader, mode string, floatMode, xor2 bool, st, base, count int64, optionIndex, profile int) (readResult, error) {
 	defer stopCandidateProcesses()
 	root, err := os.MkdirTemp("/tmp/micro1-verifier-tmp", "st-state-")
 	if err != nil {
@@ -322,6 +335,10 @@ func tryRun(candidate, candidateReader, mode string, floatMode, xor2 bool, st, b
 	}
 	projection := root + "/blocks-only"
 	if err := projectBlocks(dir, projection); err != nil {
+		return readResult{}, err
+	}
+	storageBytes, err := blockBytes(projection)
+	if err != nil {
 		return readResult{}, err
 	}
 	if err := sealReadOnly(projection); err != nil {
@@ -356,11 +373,31 @@ func tryRun(candidate, candidateReader, mode string, floatMode, xor2 bool, st, b
 	if err := json.Unmarshal(blockOutput, &blockResult); err != nil {
 		return readResult{}, err
 	}
+	if oracleReader != "" {
+		oracleOutput, err := exec.Command(
+			oracleReader,
+			projection, metric, fmt.Sprint(base+1), "-2", fmt.Sprint(histogramEncoding), "-", fmt.Sprint(lastTimestamp(mode, base)),
+		).CombinedOutput()
+		if err != nil {
+			return readResult{}, fmt.Errorf("landed-format reader rejected candidate block: %w: %s", err, oracleOutput)
+		}
+		oracleResult := readResult{Samples: []sample{}}
+		if err := json.Unmarshal(oracleOutput, &oracleResult); err != nil {
+			return readResult{}, err
+		}
+		if !reflect.DeepEqual(blockResult.Samples, oracleResult.Samples) ||
+			blockResult.SeriesCount != oracleResult.SeriesCount ||
+			!reflect.DeepEqual(blockResult.Seek, oracleResult.Seek) ||
+			blockResult.PastEnd != oracleResult.PastEnd {
+			return readResult{}, fmt.Errorf("candidate block is not interoperable with the landed persistent histogram format")
+		}
+	}
+	blockResult.BlockBytes = storageBytes
 	return blockResult, nil
 }
 
-func run(candidate, candidateReader, mode string, floatMode, xor2 bool, st, base, count int64, optionIndex, profile int) readResult {
-	result, err := tryRun(candidate, candidateReader, mode, floatMode, xor2, st, base, count, optionIndex, profile)
+func run(candidate, candidateReader, oracleReader, mode string, floatMode, xor2 bool, st, base, count int64, optionIndex, profile int) readResult {
+	result, err := tryRun(candidate, candidateReader, oracleReader, mode, floatMode, xor2, st, base, count, optionIndex, profile)
 	if err != nil {
 		panic(err)
 	}
@@ -620,7 +657,7 @@ func expectedSample(floatMode bool, st, timestamp, n int64, profile, ordinal int
 func discoverOption(candidate, candidateReader string, st, base, count int64) int {
 	want := expectedSample(false, st, base, count, 0, 0)
 	for index := 0; index < 128; index++ {
-		samples, err := tryRun(candidate, candidateReader, "probe", false, true, st, base, count, index, 0)
+		samples, err := tryRun(candidate, candidateReader, "", "probe", false, true, st, base, count, index, 0)
 		if err != nil {
 			continue
 		}
@@ -641,6 +678,14 @@ func expectedInOrder(floatMode, legacy bool, st, base, count int64, profile int)
 			sampleST = st + int64(ordinal)
 		}
 		result = append(result, expectedSample(floatMode, sampleST, base+int64(ordinal), count+int64(ordinal), profile, ordinal))
+	}
+	return result
+}
+
+func expectedCompact(floatMode bool, st, base, count int64, profile int) []sample {
+	result := expectedInOrder(floatMode, false, st, base, count, profile)
+	for index := range result {
+		result[index].ST = st
 	}
 	return result
 }
@@ -776,7 +821,7 @@ func requireFeatureState(features map[string]map[string]bool, histogramST, xor2 
 }
 
 func main() {
-	if len(os.Args) != 5 {
+	if len(os.Args) != 6 {
 		panic("invalid arguments")
 	}
 	st := int64(1000 + int(token()[0]))
@@ -784,25 +829,30 @@ func main() {
 	count := int64(140 + int(token()[2])%20)
 	optionIndex := discoverOption(os.Args[1], os.Args[2], st, base, count)
 	for _, floatMode := range []bool{false, true} {
-		reset := run(os.Args[1], os.Args[2], "reset", floatMode, true, st, base, count, optionIndex, 0)
+		reset := run(os.Args[1], os.Args[2], os.Args[4], "reset", floatMode, true, st, base, count, optionIndex, 0)
 		requireResult(reset, expectedReset(floatMode, st, base, count), true, base+1)
-		recode := run(os.Args[1], os.Args[2], "recode", floatMode, true, st, base, count, optionIndex, 0)
+		recode := run(os.Args[1], os.Args[2], os.Args[4], "recode", floatMode, true, st, base, count, optionIndex, 0)
 		requireResult(recode, expectedSpecial("recode", floatMode, st, base), false, base+1)
-		stale := run(os.Args[1], os.Args[2], "stale", floatMode, true, st, base, count, optionIndex, 0)
+		stale := run(os.Args[1], os.Args[2], os.Args[4], "stale", floatMode, true, st, base, count, optionIndex, 0)
 		requireResult(stale, expectedSpecial("stale", floatMode, st, base), false, base+1)
-		inorder := run(os.Args[1], os.Args[2], "inorder", floatMode, true, st, base, count, optionIndex, 0)
+		inorder := run(os.Args[1], os.Args[2], os.Args[4], "inorder", floatMode, true, st, base, count, optionIndex, 0)
 		requireResult(inorder, expectedInOrder(floatMode, false, st, base, count, 0), false, base+1)
-		disabled := run(os.Args[1], os.Args[2], "disabled", floatMode, true, st, base, count, optionIndex, 2)
+		disabled := run(os.Args[1], os.Args[2], os.Args[4], "disabled", floatMode, true, st, base, count, optionIndex, 2)
 		requireResult(disabled, expectedInOrder(floatMode, true, st, base, count, 2), false, base+1)
-		custom := run(os.Args[1], os.Args[2], "inorder", floatMode, true, st, base, count, optionIndex, 3)
+		compact := run(os.Args[1], os.Args[2], os.Args[4], "compact", floatMode, true, st, base, count, optionIndex, 2)
+		requireResult(compact, expectedCompact(floatMode, st, base, count, 2), false, base+1)
+		if compact.BlockBytes > disabled.BlockBytes+64 {
+			panic(fmt.Sprintf("constant start timestamps added %d bytes to the durable block; compact encoding required", compact.BlockBytes-disabled.BlockBytes))
+		}
+		custom := run(os.Args[1], os.Args[2], os.Args[4], "inorder", floatMode, true, st, base, count, optionIndex, 3)
 		requireResult(custom, expectedInOrder(floatMode, false, st, base, count, 3), false, base+1)
-		ooo := run(os.Args[1], os.Args[2], "ooo", floatMode, true, st, base, count, optionIndex, 1)
+		ooo := run(os.Args[1], os.Args[2], os.Args[4], "ooo", floatMode, true, st, base, count, optionIndex, 1)
 		requireResult(ooo, expectedOOO(floatMode, st, base, count, 1), false, base+1)
 		legacy := runLegacy(os.Args[2], os.Args[3], floatMode, st, base, count, 2)
 		requireResult(legacy, expectedInOrder(floatMode, true, st, base, count, 2), false, base+1)
 	}
-	requireFeatureState(runFeatureCase(os.Args[4], nil), false, false)
-	requireFeatureState(runFeatureCase(os.Args[4], []string{"histograms-st-encoding"}), true, false)
-	requireFeatureState(runFeatureCase(os.Args[4], []string{"xor2-encoding"}), false, true)
-	requireFeatureState(runFeatureCase(os.Args[4], []string{"histograms-st-encoding", "xor2-encoding"}), true, true)
+	requireFeatureState(runFeatureCase(os.Args[5], nil), false, false)
+	requireFeatureState(runFeatureCase(os.Args[5], []string{"histograms-st-encoding"}), true, false)
+	requireFeatureState(runFeatureCase(os.Args[5], []string{"xor2-encoding"}), false, true)
+	requireFeatureState(runFeatureCase(os.Args[5], []string{"histograms-st-encoding", "xor2-encoding"}), true, true)
 }

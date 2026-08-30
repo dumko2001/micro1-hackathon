@@ -21,10 +21,10 @@ The tasks share one episode shape but test different surfaces:
 | Unix-socket scraping | scrape transport and reload | live HTTP/TLS Unix sockets and TCP fallback trap | target isolation across shared authorities |
 | Step-invariant subquery | PromQL evaluation | instant and range queries over trusted data | fixed-time, nested, offset, `start()`, and `end()` cases |
 | Native-histogram rates | PromQL histogram functions | API output, warnings, and one linked breadth test | schemas, resets, interpolation, and mixed windows |
-| Start-timestamp persistence | chunks, WAL/WBL, blocks, and feature flags | sealed block projections read through candidate public APIs | 130-sample normal and OOO storage lifecycle |
+| Start-timestamp persistence | chunks, WAL/WBL, blocks, and feature flags | sealed blocks read by candidate and landed-format readers | lifecycle correctness plus wire-format compatibility |
 | Stale-series WAL expiry | head compaction and checkpointing | candidate artifacts inspected by a clean-parent reader | metadata lifetime around randomized horizons |
 
-Start-timestamp persistence is a deliberate 16-hour expert stretch. It falls outside Conductor's few-hour solvability target. The suite keeps it to test coordinated storage-format work, not as a typical episode length.
+Start-timestamp persistence is a deliberate 16-hour expert stretch. It falls outside the copied Conductor rubric's few-hour solvability criterion. The suite keeps it to test coordinated storage-format work, not as a typical episode length.
 
 The references are exact upstream patch stacks. They are never placed in the actor filesystem, and reward never compares source diffs. Every actor archive is Git-stripped and contains no remotes, commit metadata, reference solution, or verifier source.
 
@@ -39,30 +39,29 @@ The actor needs public egress to reach the model service. Each instruction forbi
 
 The verifier rejects unsafe archives and dependency drift, removes candidate tests, restores trusted harness files, and runs candidate code as UID 65532 with an empty environment, no capabilities, `no_new_privs`, and resource limits.
 
-- Unix-socket and subquery tasks drive a real candidate Prometheus daemon from an external controller.
+- Unix-socket and subquery tasks drive a real candidate Prometheus daemon from an external controller. UDS also checks effective pool identity through the pre-existing scrape-pool seam; subquery also checks the reviewed preprocessing invariant through the exported AST.
 - WAL expiry runs a candidate program and inspects its artifacts with a trusted clean-parent reader.
 - Histogram uses an external API controller plus one linked Go breadth test.
-- Start timestamp builds a writer and reader from candidate source. The writer creates normal and OOO TSDB lifecycles. A root controller projects valid blocks, seals them read-only, deletes the writable database, and compares complete semantic receipts from the candidate reader. A clean-parent writer supplies legacy fixtures.
+- Start timestamp builds a writer and reader from candidate source. The writer creates normal and OOO TSDB lifecycles. A root controller projects valid blocks, seals them read-only, deletes the writable database, and compares complete semantic receipts from the candidate reader. A clean-parent writer supplies legacy fixtures. A second root-only reader built from the landed patch must decode the same blocks.
 
-The start-timestamp verifier does not require the Oracle bitstream. That encoding was settled during review and was not derivable from the task-time contract. It grades persisted behavior through existing query and iterator APIs instead.
+The start-timestamp task is intentionally an upstream-conformance episode. It does not require the landed Go type names or source layout, but it does require blocks to use the final reviewed wire format. Two previously accepted Luna-max solutions used coherent alternative encodings; both now return reward `0` when replayed against the landed reader.
 
 Histogram retains its linked-code limitation. A deliberately task-aware start-timestamp implementation could also make its writer and reader collude on a private protocol. Sealed projections, source deletion, independent legacy fixtures, and root-owned comparisons make that harder, but do not prove hostile-code resistance. See the [verifier provenance audit](docs/VERIFIER_PROVENANCE_AUDIT.md).
 
 ## Frozen evidence
 
-The registered alternate and mutant results below were collected immediately before the final senior-maintainer prompt rewrite. The current prompt bytes have fresh two-run reference and no-op controls for every task. The step verifier was then strengthened with randomized exact-output controls and separately repeated at reference `2/2` and no-op `2/2`.
+The latest Oracle-alignment pass uses one final-byte reference, no-op, alternate, and 2-mutant decision per task. Start timestamp was then rebound separately after the landed-format reader was added. Every run used Harbor on Daytona at 2 vCPU, 4096 MiB RAM, and 10240 MiB disk.
 
 | Gate | Result |
 |---|---:|
 | Deterministic materialization and source integrity | 5/5 |
-| Exact reference, 2 Daytona runs per task | 10/10 reward `1` |
-| No-op, 2 Daytona runs per task | 10/10 reward `0` |
+| Exact reference on current verifier bytes | 5/5 reward `1` |
+| No-op on current verifier bytes | 5/5 reward `0` |
 | Alternate-valid fixtures | 5/5 accepted |
-| Named behavioral mutants | 15/15 rejected |
-| Private full calibration gate | 30/30 decisions; BA `1.0`, FAR `0.0`, FRR `0.0` |
-| Private repeatability gate | 20/20 decisions; BA `1.0`, FAR `0.0`, FRR `0.0` |
+| Current named behavioral mutants | 10/10 rejected |
+| Replayed non-landed ST encodings | 2/2 rejected |
 
-Start timestamp now has seven rejected mutants covering flag coupling, OOO downgrade, recode loss, always-on persistence, block loss, stale recovery, and `Seek`. Its alternate passed the method-neutral verifier. These results establish repeatability and discrimination for the registered candidates, not universal correctness.
+Earlier frozen snapshots also contain repeat runs and a broader 15-mutant corpus. They remain useful development evidence, but their task digests differ from the final Oracle-conformance package and are not presented as current-byte certification.
 
 Final task digests and job-level evidence are in the [evidence ledger](docs/TASK_SUITE_EVIDENCE.md).
 
@@ -81,13 +80,13 @@ The [reproduction guide](docs/REPRODUCTION.md) covers public source checks and H
 
 The project documents the move from an initial PromQL episode to five calibrated Prometheus environments. The [changelog](CHANGELOG.md) records each verifier correction, false reject, runtime failure, and hardening decision made along the way.
 
-On the current prompt bytes, ten `gpt-5.6-luna` rollouts with no reasoning override produced seven raw verifier passes: UDS, step, and WAL returned two passes; start timestamp returned one; histogram returned none. Harbor's Codex adapter used its default `high` setting, not `max`. All ten trials finished without infrastructure exceptions. Step R1 preceded the final exact-output verifier hardening, so only its instruction and source—not its verifier bytes—match the final package. These runs measure task difficulty; they do not by themselves prove every reward decision correct.
+Ten final-byte `gpt-5.6-luna` rollouts are running now: 2 per task with no reasoning override. Earlier cohorts are kept in the evidence ledger as development history, including the two ST solutions that passed the method-neutral verifier but fail the final landed-format gate. Agent solve rate measures difficulty; it does not establish verifier validity.
 
 The solution video, redacted representative trajectories, and a shareable commit remain submission work. See the [Micro1 checklist](docs/MICRO1_REQUIREMENTS.md).
 
 ## Publishing
 
-This checkout has no commit or Git remote. It is not public.
+This checkout has a local Git commit but no GitHub remote yet. It is not public.
 
 The authoring tree contains solutions and verifier cases. It can be published as a transparent submission and reproduction artifact, but not as a secret network-enabled benchmark. A live secret benchmark needs unreleased cases, private evaluator storage, and runtime-only credentials. The [publishing guide](docs/PUBLISHING.md) keeps those release modes separate.
 

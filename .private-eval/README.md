@@ -1,7 +1,8 @@
 # Private evidence gates
 
-This gitignored directory contains author-side release criteria. It is not actor
-input and an empty manifest is not evidence of a result.
+This tracked directory contains author-side release criteria and calibration
+fixtures. It is not actor input, and an empty manifest is not evidence of a
+result. Raw Harbor jobs and credentials remain ignored.
 
 ## Two deliberately separate gates
 

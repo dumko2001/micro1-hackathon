@@ -189,6 +189,13 @@ func main() {
 	opts.FloatChunkEncoding = chunkenc.EncXOR2
 	opts.OutOfOrderTimeWindow = 1000
 	if histogramEncoding {
+		if optionIndex == -2 {
+			field, ok := reflect.TypeOf(*opts).FieldByName("EnableHistogramSTEncoding")
+			if !ok {
+				panic("reference histogram start-timestamp option is missing")
+			}
+			optionIndex = field.Index[0]
+		}
 		if optionIndex < 0 || optionIndex >= reflect.TypeOf(*opts).NumField() {
 			panic("invalid option index")
 		}
