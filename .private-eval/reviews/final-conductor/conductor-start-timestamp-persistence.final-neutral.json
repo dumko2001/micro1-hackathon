@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "verifiable": {
+      "explanation": "The verifier programmatically compiles candidate code and checks exact end-to-end TSDB behavior. Randomized identifiers and parameters are incorporated into exact expected results and do not make grading subjective.",
+      "outcome": "pass"
+    },
+    "solvable": {
+      "explanation": "A substantial working reference patch and solve script are provided, but the metadata estimates 16 expert hours and the patch changes 34 files with nearly 3,000 inserted lines. That exceeds the criterion's expectation that an expert who knows the approach can implement it in a few hours at most.",
+      "outcome": "fail"
+    },
+    "difficult": {
+      "explanation": "The work requires deep Prometheus TSDB and binary-codec expertise across histogram variants, WAL/WBL replay, chunk recoding, compaction, querying, feature gating, and backward compatibility.",
+      "outcome": "pass"
+    },
+    "interesting": {
+      "explanation": "Persisting native-histogram start timestamps is a realistic observability-storage feature with direct production utility for Prometheus users and maintainers.",
+      "outcome": "pass"
+    },
+    "outcome_verified": {
+      "explanation": "The instructions state behavioral outcomes, while tests accept any implementation that preserves the required semantics. Reflection is used to discover the effective option rather than enforce an internal symbol name.",
+      "outcome": "pass"
+    },
+    "anti_cheat_robustness": {
+      "explanation": "The verifier restores trusted module metadata and upstream tests, rejects unsafe artifacts, compiles verifier programs after collection, removes candidate source before execution, runs candidate binaries unprivileged without capabilities, and keeps verifier/reference data inaccessible.",
+      "outcome": "pass"
+    },
+    "task_security": {
+      "explanation": "The files contain only source preparation, compilation, sandboxing, local process control, and behavioral TSDB testing. There is no credential access, external exfiltration, host escape, obfuscated payload, or unjustified destructive operation.",
+      "outcome": "pass"
+    },
+    "functional_verification": {
+      "explanation": "Verification executes candidate-built Prometheus and TSDB programs through restart, compaction, block reading, queries, iterator seeking, and the public feature API. It does not grade source keywords or implementation patterns.",
+      "outcome": "pass"
+    },
+    "deterministic_reproducible": {
+      "explanation": "Both images use the same digest-pinned Go base and byte-identical checksummed Prometheus archive. Dependencies are downloaded while images are built, and verification itself is configured without network access. Random test inputs have deterministically derived expectations.",
+      "outcome": "pass"
+    },
+    "essential_difficulty": {
+      "explanation": "The difficulty lies in designing compatible on-disk encodings and propagating them correctly through numerous storage lifecycles, not formatting or clerical output requirements.",
+      "outcome": "pass"
+    },
+    "test_instruction_alignment": {
+      "explanation": "Tests cover persistent integer and float histograms, normal and out-of-order paths, restart and compaction, legacy readability, iterator behavior, and independent feature flags. These checks trace directly to the stated requirements.",
+      "outcome": "pass"
+    },
+    "novel": {
+      "explanation": "This is a repository-specific upstream storage-format change involving a novel interaction between start timestamps and Prometheus histogram encodings, not a standard textbook exercise.",
+      "outcome": "pass"
+    },
+    "agentic": {
+      "explanation": "Solving it requires exploring a large Go repository, tracing multiple storage paths, editing many interconnected components, compiling, testing, and debugging behavior across restarts and compaction.",
+      "outcome": "pass"
+    },
+    "reviewable": {
+      "explanation": "Although specialized, the metadata explains the strategy and verification in detail, the verifier derives expected histogram semantics in readable Go, and the reference patch exposes all implementation changes for review.",
+      "outcome": "pass"
+    },
+    "instruction_concision": {
+      "explanation": "The instruction is brief, direct, human-readable, and outcome-focused. It contains no relative path references, procedural walkthrough, tool inventory, or unnecessary roleplay.",
+      "outcome": "pass"
+    },
+    "solution_quality": {
+      "explanation": "The solve script applies a separately maintained substantive patch, formats affected code, runs relevant Go tests, and builds a real binary. It does not merely emit a predetermined answer or hide a large implementation in a heredoc.",
+      "outcome": "pass"
+    },
+    "separate_verifier_configured": {
+      "explanation": "All agent inputs are declared artifacts, verifier code and reference source are baked into the verifier image, required Go dependencies are prewarmed at build time, and the duplicated Prometheus archives byte-match exactly.",
+      "outcome": "pass"
+    },
+    "environment_hygiene": {
+      "explanation": "The agent image copies neither tests nor solution files. Apt is updated and cleaned correctly, and verifier-only programs and dependencies are confined to the separate verifier image.",
+      "outcome": "pass"
+    },
+    "structured_data_schema": {
+      "explanation": "The task asks for source-code changes rather than a user-authored JSON, CSV, API, database, or configuration output with a prescribed schema.",
+      "outcome": "not_applicable"
+    },
+    "typos": {
+      "explanation": "No conflicting or misspelled critical filenames, paths, commands, feature names, or variable identifiers were found across the task artifacts.",
+      "outcome": "pass"
+    },
+    "difficulty_explanation_quality": {
+      "explanation": "The explanation names the concrete cross-cutting storage and compatibility challenges, identifies the real Prometheus source snapshot, and places the work in the role of a Prometheus TSDB maintainer.",
+      "outcome": "pass"
+    },
+    "solution_explanation_quality": {
+      "explanation": "The explanation concisely describes the encoding, independent gating, lifecycle propagation, and backward-compatibility strategy and agrees with the supplied patch.",
+      "outcome": "pass"
+    },
+    "verification_explanation_quality": {
+      "explanation": "The explanation accurately and concretely covers artifact validation, sandboxing, randomized lifecycles, exact semantic comparisons, legacy blocks, iterator checks, and public feature-state checks. No unexplained tolerance ranges are used.",
+      "outcome": "pass"
+    },
+    "category_and_tags": {
+      "explanation": "The Observability category is accurate, and the tags specifically identify Prometheus, TSDB, WAL, chunk encoding, native histograms, and feature flags.",
+      "outcome": "pass"
+    },
+    "task_name": {
+      "explanation": "start-timestamp-persistence is descriptive, specific, lowercase kebab-case, and exactly three tokens.",
+      "outcome": "pass"
+    },
+    "resource_configuration": {
+      "explanation": "Two CPUs, 4 GB RAM, 10 GB storage, a one-hour build allowance, a 30-minute verifier allowance, and a three-hour agent allowance are reasonable for compiling and testing a large Prometheus tree. No GPU or excessive compute is requested.",
+      "outcome": "pass"
+    },
+    "task_readme": {
+      "explanation": "No README.md is present; it is optional.",
+      "outcome": "not_applicable"
+    },
+    "expert_time_estimate": {
+      "explanation": "The 16-hour estimate is nonzero and plausible for an expert implementing a nearly 3,000-line, cross-cutting storage-format feature with compatibility and lifecycle testing.",
+      "outcome": "pass"
+    },
+    "task_toml_schema": {
+      "explanation": "task.toml contains fields outside the supplied Harbor schema: network_mode appears under both verifier.environment and environment, and the [[verifier.collect]] section with command, timeout_sec, and user is not among the recognized verifier fields.",
+      "outcome": "fail"
+    },
+    "no_extraneous_files": {
+      "explanation": "Every listed file is used by an image build, source verification/prewarming, the reference solution, artifact preparation, candidate execution, or behavioral verification. No scratch, editor, backup, or unrelated files were found.",
+      "outcome": "pass"
+    }
+  }
+}

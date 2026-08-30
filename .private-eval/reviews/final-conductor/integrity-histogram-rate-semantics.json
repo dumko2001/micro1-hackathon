@@ -1,0 +1,68 @@
+{
+  "checks": {
+    "source_lineage": {
+      "explanation": "Fail: the workspace could not be read because the filesystem sandbox rejected every read operation, so the archive checksum, clean-parent lineage, merge anchor, and license could not be verified as mutually consistent.",
+      "outcome": "fail"
+    },
+    "reset_isolation": {
+      "explanation": "Fail: container construction and trial-reset behavior could not be inspected or verified.",
+      "outcome": "fail"
+    },
+    "agent_contract": {
+      "explanation": "Fail: the runtime/resource bounds, writable workspace, and deterministic verifier phase could not be confirmed from the inaccessible configuration.",
+      "outcome": "fail"
+    },
+    "outcome_instruction": {
+      "explanation": "Fail: instruction contents could not be inspected for disclosures of target files, commands, hidden tests, thresholds, root cause, or implementation structure.",
+      "outcome": "fail"
+    },
+    "separate_truth": {
+      "explanation": "Fail: it could not be established that reward comes exclusively from a separate trusted verifier.",
+      "outcome": "fail"
+    },
+    "artifact_binding": {
+      "explanation": "Fail: no readable evidence established collection and binding of both candidate.tar.gz and candidate.sha256 to completed trials.",
+      "outcome": "fail"
+    },
+    "hostile_code_boundary": {
+      "explanation": "Fail: process, user, filesystem, and controller boundaries could not be inspected, so candidate access to trusted verifier inputs or reward artifacts cannot be ruled out.",
+      "outcome": "fail"
+    },
+    "behavioral_specificity": {
+      "explanation": "Fail: the hidden tests and controller were inaccessible, preventing verification of positive, negative, edge, and regression behavior at the product boundary.",
+      "outcome": "fail"
+    },
+    "task_time_epistemics": {
+      "explanation": "Fail: actor-visible files could not be inspected for private root-cause reasoning, patch layout, hidden cases, reference commits, or implementation-route disclosures.",
+      "outcome": "fail"
+    },
+    "original_fails_reference_passes": {
+      "explanation": "Fail: no readable bound runtime evidence demonstrated that the original fails and the reference solution passes.",
+      "outcome": "fail"
+    },
+    "nop_rejected": {
+      "explanation": "Fail: no completed bound no-op trial with binary reward zero and null exception_info could be verified.",
+      "outcome": "fail"
+    },
+    "alternate_valid_accepted": {
+      "explanation": "Fail: the named alternate-valid artifacts could not be read, and no completed bound trial proving acceptance of a materially different method could be verified.",
+      "outcome": "fail"
+    },
+    "mutant_discrimination": {
+      "explanation": "Fail: named mutants and bound per-mutant runtime results could not be inspected or confirmed.",
+      "outcome": "fail"
+    },
+    "repeatability": {
+      "explanation": "Fail: at least two independent clean successful runs could not be verified, nor could infrastructure failures be distinguished from reward-zero outcomes.",
+      "outcome": "fail"
+    },
+    "same_case_fairness": {
+      "explanation": "Fail: stable case identifiers and hashes across candidate comparisons could not be confirmed from the inaccessible manifests.",
+      "outcome": "fail"
+    },
+    "public_private_boundary": {
+      "explanation": "Fail: actor-visible and reviewer-only contents could not be inspected sufficiently to rule out leaked held-out cases, thresholds, reference patches, credentials, trajectories, or calibration bindings.",
+      "outcome": "fail"
+    }
+  }
+}

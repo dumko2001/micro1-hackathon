@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "verifiable": {
+      "explanation": "The separate verifier deterministically builds and runs the candidate against local randomized HTTP, HTTPS, Unix-socket, and TCP endpoints. It checks observable Prometheus series and has generous deadlines; no subjective or LLM-based grading is used.",
+      "outcome": "pass"
+    },
+    "solvable": {
+      "explanation": "A complete reference solution is provided as two applicable Go patches plus formatting and scrape-package tests. The implementation is scoped to a few Prometheus scraping files and is reasonable for an expert to complete in several hours.",
+      "outcome": "pass"
+    },
+    "difficult": {
+      "explanation": "The task requires genuine Go networking and Prometheus expertise across relabeling, HTTP transport construction, TLS identity, connection pooling, reload lifecycle, and fail-closed behavior.",
+      "outcome": "pass"
+    },
+    "interesting": {
+      "explanation": "Scraping node-local exporters through Unix sockets while preventing cross-target metric contamination is a realistic observability-system maintenance problem.",
+      "outcome": "pass"
+    },
+    "outcome_verified": {
+      "explanation": "The verifier checks externally observable scraping behavior and isolation. It does not require the reference patch, particular functions, or a prescribed editing approach.",
+      "outcome": "pass"
+    },
+    "anti_cheat_robustness": {
+      "explanation": "The candidate has no runtime access to tests or solution files. The verifier validates the artifact, freezes module metadata, restores trusted upstream tests, builds root-owned execute-only binaries, removes candidate source, runs non-root, and uses unpredictable metric identities.",
+      "outcome": "pass"
+    },
+    "task_security": {
+      "explanation": "All filesystem and process operations are directly related to source preparation, build isolation, or verification. There is no credential access, unjustified exfiltration, obfuscated payload, host escape, prompt injection, or destructive host-level behavior.",
+      "outcome": "pass"
+    },
+    "functional_verification": {
+      "explanation": "Verification executes the built Prometheus daemon, serves real TCP and Unix-socket HTTP/TLS endpoints, reloads configuration, and queries Prometheus's API. It does not grade through source keyword matching.",
+      "outcome": "pass"
+    },
+    "deterministic_reproducible": {
+      "explanation": "The source archives byte-match, their checksum is pinned, both images use the same digest-pinned Go base, Go dependencies are locked by go.sum, and verification uses only local services. Random tokens vary inputs without varying the expected invariants.",
+      "outcome": "pass"
+    },
+    "essential_difficulty": {
+      "explanation": "The core challenge is reasoning about authority preservation, dial routing, HTTP keep-alive pooling, client ownership, and reload behavior\u2014not formatting or clerical precision.",
+      "outcome": "pass"
+    },
+    "test_instruction_alignment": {
+      "explanation": "The controller covers HTTP and HTTPS Unix-socket scraping, Host/TLS behavior, same-authority socket isolation, UDS-versus-TCP isolation, configuration reloads, unchanged TCP scraping, missing-socket failure, and absence of TCP fallback. These trace directly to the instruction.",
+      "outcome": "pass"
+    },
+    "novel": {
+      "explanation": "This is a codebase-specific combination of Prometheus relabeling and subtle HTTP transport-pool isolation behavior, not a textbook or standard memorized exercise.",
+      "outcome": "pass"
+    },
+    "agentic": {
+      "explanation": "A solver must explore a substantial existing repository, locate several interacting scrape paths, edit and format Go code, compile, test, and diagnose lifecycle behavior over multiple iterations.",
+      "outcome": "pass"
+    },
+    "reviewable": {
+      "explanation": "The concise instruction, separate feature and isolation patches, detailed metadata, and readable end-to-end controller make the intended behavior and implementation strategy reviewable without requiring undocumented ground truth.",
+      "outcome": "pass"
+    },
+    "instruction_concision": {
+      "explanation": "The instruction is short, human-readable, and primarily states observable goals without prescribing implementation steps. It names no task-relative input or output paths requiring conversion to absolute paths; the brief prohibition on online solutions is an anti-cheat constraint rather than a solution hint.",
+      "outcome": "pass"
+    },
+    "solution_quality": {
+      "explanation": "The solution applies two substantive, separately stored patches, formats the affected Go files, and runs the relevant tests. It does not print or hardcode a final answer, and large changes are not embedded as heredocs in solve.sh.",
+      "outcome": "pass"
+    },
+    "separate_verifier_configured": {
+      "explanation": "All agent inputs read by the verifier are the two declared artifacts. Verifier source, controller, reference module, dependencies, Go toolchain, and shell utilities are baked into tests/Dockerfile. The environment and verifier source archives are byte-identical.",
+      "outcome": "pass"
+    },
+    "environment_hygiene": {
+      "explanation": "The agent Dockerfile copies neither tests nor solution files. Its packages are useful to the agent, apt is updated and cleaned correctly, and verifier-only tooling resides in the separate verifier image.",
+      "outcome": "pass"
+    },
+    "structured_data_schema": {
+      "explanation": "The task expects modifications to an existing Go source tree, not a structured JSON, CSV, database, API, or configuration output with a task-defined schema.",
+      "outcome": "not_applicable"
+    },
+    "typos": {
+      "explanation": "No consequential typo was found in task filenames, paths, commands, variables, labels, or artifact identifiers. The duplicated source archive is an upstream codebase rather than task-authored identifier documentation.",
+      "outcome": "pass"
+    },
+    "difficulty_explanation_quality": {
+      "explanation": "The metadata identifies the coupled subsystems that make the problem hard, explains that fixtures are synthetic but realistic, and names a Prometheus networking maintainer as the relevant real-world role.",
+      "outcome": "pass"
+    },
+    "solution_explanation_quality": {
+      "explanation": "The metadata accurately summarizes preservation of advertised authority, fail-closed Unix dialing, isolated transport ownership, reload reconstruction, and preservation of normal TCP behavior. This agrees with the supplied patches.",
+      "outcome": "pass"
+    },
+    "verification_explanation_quality": {
+      "explanation": "The metadata accurately explains artifact validation, no-network building, privilege separation, randomized endpoints, behavioral coverage, and the two-second missing-socket observation window. There are no unexplained numeric acceptance tolerances.",
+      "outcome": "pass"
+    },
+    "category_and_tags": {
+      "explanation": "The Observability category is accurate, and the tags specifically identify Prometheus, scraping, Unix sockets, TLS, and transport isolation.",
+      "outcome": "pass"
+    },
+    "task_name": {
+      "explanation": "unix-socket-scraping is descriptive, specific, lowercase kebab-case, and exactly three hyphen-separated words.",
+      "outcome": "pass"
+    },
+    "resource_configuration": {
+      "explanation": "Two CPUs and 4 GiB are reasonable for compiling the large Prometheus Go module. The 40-minute image-build allowance, 60-minute agent allowance, and 20-minute verifier allowance are generous but proportionate to repository exploration and potentially cold Go compilation; no GPU or excessive storage is requested.",
+      "outcome": "pass"
+    },
+    "task_readme": {
+      "explanation": "No README.md is present, and a task README is optional.",
+      "outcome": "not_applicable"
+    },
+    "expert_time_estimate": {
+      "explanation": "The nonzero three-hour estimate is plausible for a focused expert already familiar with Go HTTP transports and Prometheus's scrape manager.",
+      "outcome": "pass"
+    },
+    "task_toml_schema": {
+      "explanation": "task.toml contains unsupported fields under the supplied Harbor schema: network_mode appears in both environment tables, and [[verifier.collect]] with command and timeout fields is not a recognized verifier subsection. Such fields may be silently ignored.",
+      "outcome": "fail"
+    },
+    "no_extraneous_files": {
+      "explanation": "Every listed file participates in environment construction, source validation and prewarming, diagnostics, the reference solution, artifact preparation, verifier hardening, controller execution, or behavioral testing. The duplicated source archive is intentionally required by the separate images and byte-matches.",
+      "outcome": "pass"
+    }
+  }
+}

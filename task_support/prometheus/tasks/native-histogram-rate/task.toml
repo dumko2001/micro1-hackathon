@@ -1,0 +1,57 @@
+schema_version = "1.0"
+artifacts = ["/app/verifier-artifacts/candidate.tar.gz", "/app/verifier-artifacts/candidate.sha256"]
+
+[metadata]
+author_name = "Sidharth Rajmohan"
+author_email = "micro1@example.invalid"
+difficulty_explanation = "A PromQL maintainer must interpolate histogram boundaries, preserve counter-reset semantics, reconcile schemas, emit structured warnings, and avoid mixed-sample panics without changing the established float path. The corpus comes from the upstream native-histogram extended-range feature and its direct panic correction."
+solution_explanation = "Extend the smoothed/anchored evaluator and rate-family helpers to native histograms, then harden mixed float/histogram windows so incompatible inputs are omitted with annotations rather than indexed unsafely."
+verification_explanation = "A separate no-network verifier validates the candidate archive and module graph, then combines a real Prometheus HTTP/API controller with focused verifier-owned PromQL tests. Series structure, labels, warnings, and nonnumeric values must match exactly. Numeric API strings use a 1e-12 relative-or-absolute tolerance only to absorb floating-point roundoff; a structurally different valid implementation exposed and now passes that boundary. Coverage includes anchored and smoothed rate, increase, delta, selectors, custom and compatible schemas, resets, mixed windows, float controls, and range evaluation; it is not a claim of full-repository regression coverage."
+category = "Observability"
+tags = ["prometheus", "promql", "native-histogram", "rate", "temporal-semantics"]
+expert_time_estimate_hours = 5.0
+relevant_experience = "PromQL evaluation, native histograms, counter semantics, schema conversion, and annotations"
+
+[verifier]
+environment_mode = "separate"
+timeout_sec = 1200.0
+
+[verifier.environment]
+build_timeout_sec = 2400.0
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
+gpus = 0
+network_mode = "no-network"
+
+[[verifier.collect]]
+timeout_sec = 180.0
+user = "root"
+command = '''
+set -eu
+for status_file in /proc/[0-9]*/status; do
+  pid=${status_file#/proc/}; pid=${pid%/status}
+  if test "$pid" = "1"; then continue; fi
+  test "$(awk '/^Uid:/{print $2}' "$status_file")" != "1000" || kill -KILL "$pid" 2>/dev/null || true
+done
+chown -R root:root /app/prometheus
+chmod -R a-w /app/prometheus
+out=/app/verifier-artifacts
+rm -rf "$out"
+install -d -o root -g root -m 0700 "$out"
+cd /app
+/usr/bin/tar --exclude='prometheus/.git' --exclude='prometheus/.cache' --exclude='prometheus/web/ui/node_modules' --exclude='prometheus/prometheus' --exclude='prometheus/promtool' -czf "$out/candidate.tar.gz" prometheus
+/usr/bin/sha256sum "$out/candidate.tar.gz" > "$out/candidate.sha256"
+'''
+
+[agent]
+timeout_sec = 5400.0
+user = "agent"
+
+[environment]
+build_timeout_sec = 2400.0
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "verifiable": {
+      "explanation": "The workspace reader was blocked by an environment-level sandbox error (`sandbox-exec: sandbox_apply: Operation not permitted`) even for read-only commands. Verifier reliability therefore could not be established.",
+      "outcome": "fail"
+    },
+    "solvable": {
+      "explanation": "The supplied solution could not be inspected or executed because filesystem access failed, so a working solution that passes the tests could not be confirmed.",
+      "outcome": "fail"
+    },
+    "difficult": {
+      "explanation": "The instruction, source, and metadata could not be read, so genuine human difficulty could not be assessed.",
+      "outcome": "fail"
+    },
+    "interesting": {
+      "explanation": "The task scenario could not be read; the folder name alone is insufficient evidence of professional relevance.",
+      "outcome": "fail"
+    },
+    "outcome_verified": {
+      "explanation": "The instructions and tests could not be compared, so it could not be established that grading considers only the final behavior.",
+      "outcome": "fail"
+    },
+    "anti_cheat_robustness": {
+      "explanation": "The environment image, build scripts, and hardened verifier could not be inspected, so resistance to adversarial shortcuts could not be established.",
+      "outcome": "fail"
+    },
+    "task_security": {
+      "explanation": "Security review requires examining every script, Dockerfile, patch, and archive. The sandbox prevented those reads, so the artifacts cannot be certified safe.",
+      "outcome": "fail"
+    },
+    "functional_verification": {
+      "explanation": "`tests/controller.go` and the test scripts could not be inspected to determine whether they execute behavior rather than scan source text.",
+      "outcome": "fail"
+    },
+    "deterministic_reproducible": {
+      "explanation": "Dependency pins, external-service usage, and runtime behavior could not be inspected, so reproducibility could not be established.",
+      "outcome": "fail"
+    },
+    "essential_difficulty": {
+      "explanation": "The technical requirements could not be examined, preventing assessment of whether difficulty comes from substantive reasoning rather than clerical details.",
+      "outcome": "fail"
+    },
+    "test_instruction_alignment": {
+      "explanation": "Neither `instruction.md` nor the tests could be read, so requirement-to-assertion alignment could not be established.",
+      "outcome": "fail"
+    },
+    "novel": {
+      "explanation": "The specific defect and expected behavior could not be examined, so novelty cannot be established from the directory name alone.",
+      "outcome": "fail"
+    },
+    "agentic": {
+      "explanation": "The task workflow and solution could not be inspected to determine whether multi-step exploration and debugging are required.",
+      "outcome": "fail"
+    },
+    "reviewable": {
+      "explanation": "The artifacts were unavailable because the execution sandbox failed, so correctness was not reviewable in this run.",
+      "outcome": "fail"
+    },
+    "instruction_concision": {
+      "explanation": "`instruction.md` could not be read, so concision, absolute-path usage, and solution hints could not be assessed.",
+      "outcome": "fail"
+    },
+    "solution_quality": {
+      "explanation": "`solution/solve.sh` and its patches could not be inspected, so genuine derivation and maintainability could not be established.",
+      "outcome": "fail"
+    },
+    "separate_verifier_configured": {
+      "explanation": "`task.toml`, `tests/Dockerfile`, duplicated archives, and verifier path usage could not be inspected, so separate-verifier sufficiency could not be established.",
+      "outcome": "fail"
+    },
+    "environment_hygiene": {
+      "explanation": "`environment/Dockerfile` and its build context usage could not be inspected, so image hygiene could not be established.",
+      "outcome": "fail"
+    },
+    "structured_data_schema": {
+      "explanation": "The instruction could not be read to determine whether structured output is expected, so this criterion's applicability is unknown.",
+      "outcome": "not_applicable"
+    },
+    "typos": {
+      "explanation": "File contents could not be inspected for critical identifier typos.",
+      "outcome": "fail"
+    },
+    "difficulty_explanation_quality": {
+      "explanation": "The metadata field in `task.toml` could not be read, so its quality could not be established.",
+      "outcome": "fail"
+    },
+    "solution_explanation_quality": {
+      "explanation": "The metadata explanation could not be compared with the actual solution files.",
+      "outcome": "fail"
+    },
+    "verification_explanation_quality": {
+      "explanation": "The metadata explanation could not be compared with the verifier implementation or calibration evidence.",
+      "outcome": "fail"
+    },
+    "category_and_tags": {
+      "explanation": "The metadata category and tags could not be read.",
+      "outcome": "fail"
+    },
+    "task_name": {
+      "explanation": "`unix-socket-scraping` is descriptive, specific, lowercase kebab-case, and exactly three tokens.",
+      "outcome": "pass"
+    },
+    "resource_configuration": {
+      "explanation": "The verifier, agent, and environment resource settings in `task.toml` could not be read.",
+      "outcome": "fail"
+    },
+    "task_readme": {
+      "explanation": "No task-level `README.md` appears in the supplied complete file tree, so this optional criterion is not applicable.",
+      "outcome": "not_applicable"
+    },
+    "expert_time_estimate": {
+      "explanation": "The estimate in `task.toml` could not be read or compared with the task's actual complexity.",
+      "outcome": "fail"
+    },
+    "task_toml_schema": {
+      "explanation": "`task.toml` could not be read, so use of only recognized Harbor fields could not be established.",
+      "outcome": "fail"
+    },
+    "no_extraneous_files": {
+      "explanation": "The supplied tree contains plausible artifacts, but determining whether every build script, patch, duplicated archive, and manifest is referenced requires content inspection, which the sandbox blocked.",
+      "outcome": "fail"
+    }
+  }
+}

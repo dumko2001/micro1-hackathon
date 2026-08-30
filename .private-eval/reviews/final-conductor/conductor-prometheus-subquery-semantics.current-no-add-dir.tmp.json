@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "verifiable": {
+      "explanation": "Not evaluated: the filesystem sandbox rejected every read attempt with `sandbox_apply: Operation not permitted`, so the verifier could not be inspected.",
+      "outcome": "not_applicable"
+    },
+    "solvable": {
+      "explanation": "Not evaluated because the reference solution and tests could not be read or executed.",
+      "outcome": "not_applicable"
+    },
+    "difficult": {
+      "explanation": "Not evaluated because the instruction, source, and solution were inaccessible.",
+      "outcome": "not_applicable"
+    },
+    "interesting": {
+      "explanation": "Not evaluated because the task scenario could not be read.",
+      "outcome": "not_applicable"
+    },
+    "outcome_verified": {
+      "explanation": "Not evaluated because the instruction and test assertions could not be compared.",
+      "outcome": "not_applicable"
+    },
+    "anti_cheat_robustness": {
+      "explanation": "Not evaluated because the environment and verifier implementation could not be inspected.",
+      "outcome": "not_applicable"
+    },
+    "task_security": {
+      "explanation": "Not evaluated because none of the scripts, Dockerfiles, patches, or archives could be inspected.",
+      "outcome": "not_applicable"
+    },
+    "functional_verification": {
+      "explanation": "Not evaluated because the test implementation could not be read.",
+      "outcome": "not_applicable"
+    },
+    "deterministic_reproducible": {
+      "explanation": "Not evaluated because dependency versions, build behavior, and tests could not be inspected.",
+      "outcome": "not_applicable"
+    },
+    "essential_difficulty": {
+      "explanation": "Not evaluated because the required behavior and implementation could not be read.",
+      "outcome": "not_applicable"
+    },
+    "test_instruction_alignment": {
+      "explanation": "Not evaluated because the instruction and tests could not be compared.",
+      "outcome": "not_applicable"
+    },
+    "novel": {
+      "explanation": "Not evaluated because the precise task and source changes could not be inspected.",
+      "outcome": "not_applicable"
+    },
+    "agentic": {
+      "explanation": "Not evaluated because the expected workflow could not be determined from inaccessible files.",
+      "outcome": "not_applicable"
+    },
+    "reviewable": {
+      "explanation": "Not evaluated because the artifacts were unavailable to the reviewer.",
+      "outcome": "not_applicable"
+    },
+    "instruction_concision": {
+      "explanation": "Not evaluated because `instruction.md` could not be read.",
+      "outcome": "not_applicable"
+    },
+    "solution_quality": {
+      "explanation": "Not evaluated because `solution/solve.sh` and `solution/fix.patch` could not be read.",
+      "outcome": "not_applicable"
+    },
+    "separate_verifier_configured": {
+      "explanation": "Not evaluated because `task.toml`, both Dockerfiles, duplicated archives, and verifier paths could not be inspected or compared.",
+      "outcome": "not_applicable"
+    },
+    "environment_hygiene": {
+      "explanation": "Not evaluated because `environment/Dockerfile` and supporting build files could not be read.",
+      "outcome": "not_applicable"
+    },
+    "structured_data_schema": {
+      "explanation": "Not evaluated because the instruction could not be read, so it is unknown whether structured output is required.",
+      "outcome": "not_applicable"
+    },
+    "typos": {
+      "explanation": "Not evaluated beyond the supplied file tree because file contents were inaccessible.",
+      "outcome": "not_applicable"
+    },
+    "difficulty_explanation_quality": {
+      "explanation": "Not evaluated because the metadata in `task.toml` could not be read.",
+      "outcome": "not_applicable"
+    },
+    "solution_explanation_quality": {
+      "explanation": "Not evaluated because `task.toml` and the solution files could not be compared.",
+      "outcome": "not_applicable"
+    },
+    "verification_explanation_quality": {
+      "explanation": "Not evaluated because `task.toml` and verifier files could not be compared.",
+      "outcome": "not_applicable"
+    },
+    "category_and_tags": {
+      "explanation": "Not evaluated because the metadata could not be read.",
+      "outcome": "not_applicable"
+    },
+    "task_name": {
+      "explanation": "The visible folder name is lowercase kebab-case, descriptive, and exactly three tokens: `prometheus-subquery-semantics`.",
+      "outcome": "pass"
+    },
+    "resource_configuration": {
+      "explanation": "Not evaluated because the resource and timeout configuration in `task.toml` could not be read.",
+      "outcome": "not_applicable"
+    },
+    "task_readme": {
+      "explanation": "No README appears in the supplied complete file tree, so this optional criterion is not applicable.",
+      "outcome": "not_applicable"
+    },
+    "expert_time_estimate": {
+      "explanation": "Not evaluated because the metadata field in `task.toml` could not be read.",
+      "outcome": "not_applicable"
+    },
+    "task_toml_schema": {
+      "explanation": "Not evaluated because `task.toml` could not be read.",
+      "outcome": "not_applicable"
+    },
+    "no_extraneous_files": {
+      "explanation": "Not evaluated conclusively because references among the listed files could not be inspected.",
+      "outcome": "not_applicable"
+    }
+  }
+}

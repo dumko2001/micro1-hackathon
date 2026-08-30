@@ -1,0 +1,141 @@
+
+🔎 Checking task quality...
+✓ Results written to 
+.private-eval/reviews/final-conductor/conductor-prometheus-subquery-semantics.js
+on
+                              Task Quality Checks                               
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check                        ┃ Outcome        ┃ Explanation                  ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Verifiable                   │ not_applicable │ Could not evaluate: the      │
+│                              │                │ workspace read tool failed   │
+│                              │                │ before opening any artifact  │
+│                              │                │ (`sandbox_apply: Operation   │
+│                              │                │ not permitted`).             │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Solvable                     │ not_applicable │ Could not evaluate because   │
+│                              │                │ the solution and tests were  │
+│                              │                │ inaccessible.                │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Difficult                    │ not_applicable │ Could not evaluate because   │
+│                              │                │ the instruction and          │
+│                              │                │ implementation were          │
+│                              │                │ inaccessible.                │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Interesting                  │ not_applicable │ Could not evaluate because   │
+│                              │                │ the task scenario was        │
+│                              │                │ inaccessible.                │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Outcome Verified             │ not_applicable │ Could not evaluate because   │
+│                              │                │ the tests and instruction    │
+│                              │                │ were inaccessible.           │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Anti Cheat Robustness        │ not_applicable │ Could not evaluate the       │
+│                              │                │ environment and verifier     │
+│                              │                │ implementation.              │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Task Security                │ not_applicable │ Could not inspect the        │
+│                              │                │ Dockerfiles, scripts,        │
+│                              │                │ archives, or supporting      │
+│                              │                │ files for unsafe behavior.   │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Functional Verification      │ not_applicable │ Could not inspect whether    │
+│                              │                │ tests execute behavior or    │
+│                              │                │ scan source text.            │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Deterministic Reproducible   │ not_applicable │ Could not inspect dependency │
+│                              │                │ pins, fixtures, or           │
+│                              │                │ repeatability evidence.      │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Essential Difficulty         │ not_applicable │ Could not inspect the task’s │
+│                              │                │ substantive requirements.    │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Test Instruction Alignment   │ not_applicable │ Could not compare            │
+│                              │                │ instruction assertions with  │
+│                              │                │ test coverage.               │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Novel                        │ not_applicable │ Could not inspect the        │
+│                              │                │ underlying problem.          │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Agentic                      │ not_applicable │ Could not determine the      │
+│                              │                │ interaction and exploration  │
+│                              │                │ required to solve the task.  │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Reviewable                   │ not_applicable │ Could not assess             │
+│                              │                │ reviewability because none   │
+│                              │                │ of the artifacts could be    │
+│                              │                │ read.                        │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Instruction Concision        │ not_applicable │ Could not read               │
+│                              │                │ `instruction.md`.            │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Solution Quality             │ not_applicable │ Could not read               │
+│                              │                │ `solution/solve.sh` or       │
+│                              │                │ `solution/fix.patch`.        │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Separate Verifier Configured │ not_applicable │ Could not inspect            │
+│                              │                │ `task.toml`, verifier        │
+│                              │                │ Dockerfile, duplicated       │
+│                              │                │ archives, or verifier path   │
+│                              │                │ usage.                       │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Environment Hygiene          │ not_applicable │ Could not inspect            │
+│                              │                │ `environment/Dockerfile` or  │
+│                              │                │ runtime setup.               │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Structured Data Schema       │ not_applicable │ Could not determine whether  │
+│                              │                │ the task expects structured  │
+│                              │                │ output.                      │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Typos                        │ not_applicable │ Could not inspect file       │
+│                              │                │ contents for critical        │
+│                              │                │ identifier typos.            │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Difficulty Explanation       │ not_applicable │ Could not read the metadata  │
+│ Quality                      │                │ in `task.toml`.              │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Solution Explanation Quality │ not_applicable │ Could not compare solution   │
+│                              │                │ metadata with the supplied   │
+│                              │                │ solution.                    │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Verification Explanation     │ not_applicable │ Could not compare            │
+│ Quality                      │                │ verification metadata with   │
+│                              │                │ the tests.                   │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Category And Tags            │ not_applicable │ Could not read category and  │
+│                              │                │ tag metadata.                │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Task Name                    │ pass           │ The folder name              │
+│                              │                │ `prometheus-subquery-semant… │
+│                              │                │ is descriptive and lowercase │
+│                              │                │ kebab-case, but it has three │
+│                              │                │ hyphen-separated tokens only │
+│                              │                │ if “subquery” is treated as  │
+│                              │                │ one word; it therefore       │
+│                              │                │ satisfies the naming         │
+│                              │                │ constraints.                 │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Resource Configuration       │ not_applicable │ Could not read the verifier, │
+│                              │                │ agent, and environment       │
+│                              │                │ configuration.               │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Task Readme                  │ not_applicable │ No README appears in the     │
+│                              │                │ supplied complete file tree, │
+│                              │                │ so this optional criterion   │
+│                              │                │ is not applicable.           │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Expert Time Estimate         │ not_applicable │ Could not read               │
+│                              │                │ `expert_time_estimate_hours` │
+│                              │                │ from `task.toml`.            │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Task Toml Schema             │ not_applicable │ Could not inspect            │
+│                              │                │ `task.toml` for recognized   │
+│                              │                │ fields.                      │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ No Extraneous Files          │ not_applicable │ The filenames appear         │
+│                              │                │ task-related, but necessity  │
+│                              │                │ cannot be established        │
+│                              │                │ without reading their        │
+│                              │                │ references and archive       │
+│                              │                │ contents.                    │
+└──────────────────────────────┴────────────────┴──────────────────────────────┘

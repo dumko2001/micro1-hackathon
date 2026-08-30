@@ -1,0 +1,68 @@
+{
+  "checks": {
+    "source_lineage": {
+      "explanation": "fail \u2014 The artifacts could not be inspected because every filesystem command failed with `sandbox-exec: sandbox_apply: Operation not permitted`; exact lineage, checksums, merge anchor, and license therefore cannot be established.",
+      "outcome": "fail"
+    },
+    "reset_isolation": {
+      "explanation": "fail \u2014 Container construction, cleanup behavior, and mutable-state isolation could not be verified from the inaccessible files.",
+      "outcome": "fail"
+    },
+    "agent_contract": {
+      "explanation": "fail \u2014 The task configuration and instructions could not be read, so bounded runtime/resources, writable workspace, and deterministic verification are not evidenced.",
+      "outcome": "fail"
+    },
+    "outcome_instruction": {
+      "explanation": "fail \u2014 `instruction.md` could not be examined for prohibited disclosure of implementation details, commands, tests, or root cause.",
+      "outcome": "fail"
+    },
+    "separate_truth": {
+      "explanation": "fail \u2014 The verifier implementation could not be read, so there is no established evidence that reward comes from independent behavioral truth.",
+      "outcome": "fail"
+    },
+    "artifact_binding": {
+      "explanation": "fail \u2014 No completed, bound runtime evidence establishing collection of both `candidate.tar.gz` and `candidate.sha256` could be inspected.",
+      "outcome": "fail"
+    },
+    "hostile_code_boundary": {
+      "explanation": "fail \u2014 Process, user, filesystem, controller, and reward-file boundaries could not be inspected and therefore are not demonstrated to resist candidate-controlled code.",
+      "outcome": "fail"
+    },
+    "behavioral_specificity": {
+      "explanation": "fail \u2014 The controller and test scripts could not be read, so positive, negative, edge, regression, and method-neutral product-boundary coverage is unestablished.",
+      "outcome": "fail"
+    },
+    "task_time_epistemics": {
+      "explanation": "fail \u2014 Actor-visible instructions and artifacts could not be inspected for private root-cause, patch-layout, target-file, hidden-case, or reference leakage.",
+      "outcome": "fail"
+    },
+    "original_fails_reference_passes": {
+      "explanation": "fail \u2014 No accessible completed bound trials demonstrate that the original fails and the reference solution passes; static solution artifacts would not suffice.",
+      "outcome": "fail"
+    },
+    "nop_rejected": {
+      "explanation": "fail \u2014 No accessible completed bound no-op trial demonstrates binary reward zero with null `exception_info`.",
+      "outcome": "fail"
+    },
+    "alternate_valid_accepted": {
+      "explanation": "fail \u2014 The listed private candidate evidence contains no directory for `prometheus-subquery-semantics`, and no accessible bound trial demonstrates acceptance of a materially different valid implementation.",
+      "outcome": "fail"
+    },
+    "mutant_discrimination": {
+      "explanation": "fail \u2014 No named, task-specific mutants with accessible bound per-mutant outcomes were provided for `prometheus-subquery-semantics`.",
+      "outcome": "fail"
+    },
+    "repeatability": {
+      "explanation": "fail \u2014 At least two independent clean, completed runs could not be established; the runtime manifests were inaccessible.",
+      "outcome": "fail"
+    },
+    "same_case_fairness": {
+      "explanation": "fail \u2014 Stable case identifiers and hashes across compared candidates could not be verified because the manifests and runtime records were inaccessible.",
+      "outcome": "fail"
+    },
+    "public_private_boundary": {
+      "explanation": "fail \u2014 Actor-visible and reviewer-only file contents could not be inspected for leaked held-out cases, patches, thresholds, credentials, trajectories, or calibration bindings.",
+      "outcome": "fail"
+    }
+  }
+}

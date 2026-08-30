@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "verifiable": {
+      "explanation": "Fail: the verifier artifacts could not be inspected because every filesystem command was rejected by the execution sandbox (`sandbox_apply: Operation not permitted`), so deterministic verification cannot be established from evidence.",
+      "outcome": "fail"
+    },
+    "solvable": {
+      "explanation": "Fail: I could not inspect or execute the supplied solution and tests, so there is no verified evidence that the reference solution passes.",
+      "outcome": "fail"
+    },
+    "difficult": {
+      "explanation": "Fail: the implementation and tests were inaccessible, preventing an evidence-based determination that the task meets the difficulty bar.",
+      "outcome": "fail"
+    },
+    "interesting": {
+      "explanation": "Fail: the filename suggests a realistic Prometheus timestamp-persistence defect, but the inaccessible instructions prevent confirming its actual professional relevance.",
+      "outcome": "fail"
+    },
+    "outcome_verified": {
+      "explanation": "Fail: I could not determine whether tests assess only observable outcomes or prescribe an implementation approach.",
+      "outcome": "fail"
+    },
+    "anti_cheat_robustness": {
+      "explanation": "Fail: the environment image, build scripts, and verifier harness could not be inspected for leaks or bypasses.",
+      "outcome": "fail"
+    },
+    "task_security": {
+      "explanation": "Fail: security requires inspecting every script, Dockerfile, patch, and archive; sandbox failure made that impossible.",
+      "outcome": "fail"
+    },
+    "functional_verification": {
+      "explanation": "Fail: I could not inspect whether tests execute behavior or rely on source-pattern checks.",
+      "outcome": "fail"
+    },
+    "deterministic_reproducible": {
+      "explanation": "Fail: dependency pinning, external-service use, and repeatability could not be checked.",
+      "outcome": "fail"
+    },
+    "essential_difficulty": {
+      "explanation": "Fail: the inaccessible implementation prevents distinguishing genuine technical difficulty from clerical complexity.",
+      "outcome": "fail"
+    },
+    "test_instruction_alignment": {
+      "explanation": "Fail: neither the full instruction nor test assertions could be read and compared.",
+      "outcome": "fail"
+    },
+    "novel": {
+      "explanation": "Fail: the task appears codebase-specific, but novelty cannot be established without reading its requested change and fixtures.",
+      "outcome": "fail"
+    },
+    "agentic": {
+      "explanation": "Fail: I could not inspect the required workflow closely enough to establish that multi-step environment interaction is essential.",
+      "outcome": "fail"
+    },
+    "reviewable": {
+      "explanation": "Fail: the task was not reviewable in the provided session because filesystem access failed before any artifact could be examined.",
+      "outcome": "fail"
+    },
+    "instruction_concision": {
+      "explanation": "Fail: `instruction.md` could not be read, so its clarity, path usage, and concision cannot be validated.",
+      "outcome": "fail"
+    },
+    "solution_quality": {
+      "explanation": "Fail: `solution/solve.sh` and `solution/fix.patch` could not be inspected or executed.",
+      "outcome": "fail"
+    },
+    "separate_verifier_configured": {
+      "explanation": "Fail: `task.toml`, verifier Dockerfile, artifact declarations, duplicated archives, and runtime setup could not be compared.",
+      "outcome": "fail"
+    },
+    "environment_hygiene": {
+      "explanation": "Fail: the Dockerfile and setup scripts could not be inspected for copied tests, solution leakage, or package-management hygiene.",
+      "outcome": "fail"
+    },
+    "structured_data_schema": {
+      "explanation": "No determination is applicable from the visible tree alone; whether structured output is required depends on the inaccessible instruction.",
+      "outcome": "not_applicable"
+    },
+    "typos": {
+      "explanation": "Fail: critical identifiers inside scripts, configuration, tests, and patches could not be checked.",
+      "outcome": "fail"
+    },
+    "difficulty_explanation_quality": {
+      "explanation": "Fail: the metadata field in `task.toml` could not be read.",
+      "outcome": "fail"
+    },
+    "solution_explanation_quality": {
+      "explanation": "Fail: the metadata explanation could not be compared with the inaccessible reference solution.",
+      "outcome": "fail"
+    },
+    "verification_explanation_quality": {
+      "explanation": "Fail: the metadata explanation could not be compared with the inaccessible verifier implementation.",
+      "outcome": "fail"
+    },
+    "category_and_tags": {
+      "explanation": "Fail: category and tags in `task.toml` could not be inspected.",
+      "outcome": "fail"
+    },
+    "task_name": {
+      "explanation": "Pass: `start-timestamp-persistence` is descriptive, lowercase kebab-case, and exactly three words.",
+      "outcome": "pass"
+    },
+    "resource_configuration": {
+      "explanation": "Fail: verifier, agent, and environment resource settings in `task.toml` could not be read.",
+      "outcome": "fail"
+    },
+    "task_readme": {
+      "explanation": "No `README.md` appears in the supplied task file tree, and a task README is optional.",
+      "outcome": "not_applicable"
+    },
+    "expert_time_estimate": {
+      "explanation": "Fail: the estimate in `task.toml` could not be inspected or assessed against task complexity.",
+      "outcome": "fail"
+    },
+    "task_toml_schema": {
+      "explanation": "Fail: `task.toml` could not be read and checked for unrecognized fields.",
+      "outcome": "fail"
+    },
+    "no_extraneous_files": {
+      "explanation": "Fail: although the visible filenames look task-related, references within inaccessible Dockerfiles and scripts could not be traced, so necessity of every file cannot be established.",
+      "outcome": "fail"
+    }
+  }
+}

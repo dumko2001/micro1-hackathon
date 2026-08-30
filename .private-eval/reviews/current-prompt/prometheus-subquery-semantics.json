@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "verifiable": {
+      "explanation": "The behavioral verifier is deterministic and programmatic, but the task is not operationally verifiable under the stated Harbor schema: candidate artifacts are created only by the unrecognized `[[verifier.collect]]` block. Because Harbor silently ignores that block, the declared archive and checksum will not be produced for the separate verifier.",
+      "outcome": "fail"
+    },
+    "solvable": {
+      "explanation": "The supplied patch is technically plausible, focused, and includes upstream regression tests, but the reference solution cannot pass the configured Harbor verification flow because the ignored artifact-collection block leaves the verifier without its candidate inputs.",
+      "outcome": "fail"
+    },
+    "difficult": {
+      "explanation": "Diagnosing an interaction between PromQL subqueries, fixed timestamps, AST preprocessing, and per-step evaluation requires genuine Prometheus query-engine expertise and careful regression analysis.",
+      "outcome": "pass"
+    },
+    "interesting": {
+      "explanation": "Incorrect PromQL results can directly affect production dashboards and alerting. This is a realistic query-engine regression that Prometheus maintainers or observability engineers would care about.",
+      "outcome": "pass"
+    },
+    "outcome_verified": {
+      "explanation": "The tests exercise the compiled Prometheus server through its HTTP API and compare observable instant and range-query results. They do not require a particular patch or editing process.",
+      "outcome": "pass"
+    },
+    "anti_cheat_robustness": {
+      "explanation": "The verifier restores trusted upstream tests and module metadata, rejects unsafe archives and dependency drift, builds root-owned execute-only binaries, removes candidate source before execution, runs candidate code as an unprivileged user, and generates randomized metric names and values. The solution is not present in the agent image.",
+      "outcome": "pass"
+    },
+    "task_security": {
+      "explanation": "The reviewed scripts, Dockerfiles, controller, patch, metadata, and source archive contain legitimate Prometheus build and verification behavior. No credential access, exfiltration, host escape, destructive system operation, obfuscated payload, or task-scoped prompt injection was found.",
+      "outcome": "pass"
+    },
+    "functional_verification": {
+      "explanation": "Verification compiles and runs the submitted Prometheus server, creates a TSDB fixture, calls real HTTP query endpoints, and checks decoded result shapes and values. It does not grade through source keyword or regex matching.",
+      "outcome": "pass"
+    },
+    "deterministic_reproducible": {
+      "explanation": "The base images are digest-pinned, Go dependencies are locked by immutable `go.mod` and `go.sum`, both source archives byte-match, and verification uses no live service. Random fixture details are generated internally and expected results are derived from those same values, so randomness does not change correctness.",
+      "outcome": "pass"
+    },
+    "essential_difficulty": {
+      "explanation": "The challenge is understanding temporal evaluation and AST optimization invariants in a mature query engine, not formatting, arbitrary precision, or clerical output requirements.",
+      "outcome": "pass"
+    },
+    "test_instruction_alignment": {
+      "explanation": "The API checks cover the stated instant/range discrepancy, equality with matrix-selector behavior, nonempty fixed-time subqueries, ordinary subquery health, and relevant fixed-time variants. The extra offset, `start()`, `end()`, and nested cases are reasonable manifestations of the requested semantic restoration rather than unrelated requirements.",
+      "outcome": "pass"
+    },
+    "novel": {
+      "explanation": "This is a codebase-specific Prometheus regression involving a subtle combination of fixed-time modifiers, subqueries, and step-varying function arguments, not a standard textbook or memorization exercise.",
+      "outcome": "pass"
+    },
+    "agentic": {
+      "explanation": "A solver must explore a large Go codebase, reproduce query behavior, trace preprocessing and evaluation, edit the implementation, and run targeted regression tests. It is not realistically solved by a single zero-shot response.",
+      "outcome": "pass"
+    },
+    "reviewable": {
+      "explanation": "The instruction gives a concrete reproduction, the one-line semantic change is explained, the patch includes readable upstream tests, and the external verifier derives fixtures and expected control values. A reviewer can follow the direct-versus-subquery comparisons without mastering all Prometheus internals.",
+      "outcome": "pass"
+    },
+    "instruction_concision": {
+      "explanation": "The instruction is short, human-readable, outcome-focused, and avoids procedural guidance or unnecessary environment details. It references no task file using a relative path, so the absolute-path requirement is not implicated.",
+      "outcome": "pass"
+    },
+    "solution_quality": {
+      "explanation": "The solution applies a substantive patch to PromQL preprocessing, formats the affected source, and runs the relevant Go tests. The sizeable patch is correctly stored as a separate solution file rather than embedded in a heredoc.",
+      "outcome": "pass"
+    },
+    "separate_verifier_configured": {
+      "explanation": "The declared artifacts and duplicated source assets are otherwise sufficient, verifier tooling is baked into `tests/Dockerfile`, and the two source archives byte-match. However, the artifacts depend entirely on the unsupported `[[verifier.collect]]` configuration, so the agent container is torn down without a valid mechanism that creates the verifier inputs.",
+      "outcome": "fail"
+    },
+    "environment_hygiene": {
+      "explanation": "The agent image does not copy `tests/` or `solution/`, apt is updated and cleaned correctly, and installed tools are useful for source diagnosis and patching. Verifier-only tooling and assets remain in the separate verifier image.",
+      "outcome": "pass"
+    },
+    "structured_data_schema": {
+      "explanation": "The agent is asked to repair source behavior, not produce a structured JSON, CSV, database, API, or configuration artifact.",
+      "outcome": "not_applicable"
+    },
+    "typos": {
+      "explanation": "No critical filename, path, command, or variable-name typo was found. Shell scripts also pass syntax checking.",
+      "outcome": "pass"
+    },
+    "difficulty_explanation_quality": {
+      "explanation": "The metadata identifies the specific AST/evaluation invariant that makes the regression subtle, explains the conflict between a local optimization and outer-step semantics, states that the cases derive from a real regression, and names Prometheus maintainers as the real-world practitioners.",
+      "outcome": "pass"
+    },
+    "solution_explanation_quality": {
+      "explanation": "The metadata concisely explains the central strategy\u2014retain invariance inside the subquery without treating the subquery node as globally reusable\u2014and matches the actual `preprocessExprHelper` change.",
+      "outcome": "pass"
+    },
+    "verification_explanation_quality": {
+      "explanation": "The metadata accurately describes checksum-addressed artifact verification, immutable module checks, server construction, HTTP API tests, fixed-time instant/range cases, and ordinary controls. The verifier uses exact semantic comparisons rather than unexplained tolerance bounds.",
+      "outcome": "pass"
+    },
+    "category_and_tags": {
+      "explanation": "`SDLC` is broad but applicable to a debugging task, while the tags precisely identify Prometheus, PromQL, query-engine debugging, and temporal semantics.",
+      "outcome": "pass"
+    },
+    "task_name": {
+      "explanation": "`prometheus-subquery-semantics` is descriptive, specific, lowercase kebab-case, and exactly three tokens.",
+      "outcome": "pass"
+    },
+    "resource_configuration": {
+      "explanation": "One hour for the agent, 15 minutes for the verifier, two CPUs, 4 GB RAM, and 10 GB storage are plausible for exploring and compiling Prometheus. The task's difficulty is semantic rather than computational. Unsupported configuration keys are assessed separately under the TOML schema check.",
+      "outcome": "pass"
+    },
+    "task_readme": {
+      "explanation": "No README is present, and README files are optional.",
+      "outcome": "not_applicable"
+    },
+    "expert_time_estimate": {
+      "explanation": "The 1.5-hour best-case estimate is nonzero and plausible for a Prometheus expert who already understands the regression and can make and validate the focused change.",
+      "outcome": "pass"
+    },
+    "task_toml_schema": {
+      "explanation": "The TOML contains unsupported Harbor fields: `network_mode` under both `[environment]` and `[verifier.environment]`, plus the entire `[[verifier.collect]]` table with `timeout_sec`, `user`, and `command`. These are not among the supplied valid fields and are silently ignored.",
+      "outcome": "fail"
+    },
+    "no_extraneous_files": {
+      "explanation": "Every listed file participates in environment construction, source validation/diagnosis, the reference solution, artifact preparation, hardened execution, or behavioral verification. The duplicated source archives are intentionally required by the separate agent and verifier images and are byte-identical.",
+      "outcome": "pass"
+    }
+  }
+}

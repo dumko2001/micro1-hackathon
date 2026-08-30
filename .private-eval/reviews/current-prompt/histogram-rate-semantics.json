@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "verifiable": {
+      "explanation": "The verifier is programmatic and deterministic: it compiles restored-source tests, injects verifier-owned behavioral tests, runs a real Prometheus server, and compares API results and warnings. No subjective or LLM-based grading is used.",
+      "outcome": "pass"
+    },
+    "solvable": {
+      "explanation": "A concrete reference solution is provided as two patches applied by solve.sh. The patches implement the requested behavior and include focused PromQL tests; the implementation is substantial but feasible for an expert within hours.",
+      "outcome": "pass"
+    },
+    "difficult": {
+      "explanation": "Correct histogram interpolation, counter-reset accounting, schema reconciliation, annotations, and mixed float/histogram handling require significant PromQL and native-histogram expertise.",
+      "outcome": "pass"
+    },
+    "interesting": {
+      "explanation": "This is a realistic Prometheus query-engine defect affecting production observability queries and would plausibly be handled by a PromQL maintainer.",
+      "outcome": "pass"
+    },
+    "outcome_verified": {
+      "explanation": "Tests assess observable query results, labels, warnings, range behavior, and server API responses. They do not require the candidate to use the reference patches or a prescribed editing process.",
+      "outcome": "pass"
+    },
+    "anti_cheat_robustness": {
+      "explanation": "The verifier validates the artifact checksum and module graph, restores upstream tests, injects hidden tests after collection, compiles root-owned execute-only binaries, removes candidate source before execution, uses a proof channel, drops privileges and capabilities, and limits processes and files. The agent-visible source archive does not contain the solution patches.",
+      "outcome": "pass"
+    },
+    "task_security": {
+      "explanation": "The task scripts perform source verification, compilation, test execution, artifact collection, and local Prometheus API queries. The upstream archive contains ordinary upstream fixtures and documentation, but no task code attempts credential exfiltration, host escape, destructive host operations, or malicious prompt injection.",
+      "outcome": "pass"
+    },
+    "functional_verification": {
+      "explanation": "Verification executes PromQL tests and a real Prometheus HTTP server against generated TSDB data. Assertions inspect actual query results and warnings rather than scanning candidate source for keywords.",
+      "outcome": "pass"
+    },
+    "deterministic_reproducible": {
+      "explanation": "The Go base image is digest-pinned, the source archive is checksum-pinned and duplicated byte-for-byte, and Go modules are fixed by go.sum. Random scale, timestamp, and port choices do not alter the semantic comparisons and are generated locally.",
+      "outcome": "pass"
+    },
+    "essential_difficulty": {
+      "explanation": "The challenge lies in temporal interpolation, histogram arithmetic, reset semantics, compatible and incompatible schemas, and warning propagation\u2014not formatting or clerical output details.",
+      "outcome": "pass"
+    },
+    "test_instruction_alignment": {
+      "explanation": "The tests cover anchored and smoothed rate, increase, delta, smoothed selectors, and the stated mixed-type warning/panic case. Schema, reset, float-control, and range cases exercise the normal semantic obligations implicit in correctly supporting those operations rather than imposing an unrelated approach.",
+      "outcome": "pass"
+    },
+    "novel": {
+      "explanation": "The task is derived directly from an upstream Prometheus feature and panic-fix patch series, and the supplied solution retains upstream commit metadata and patch structure. Consequently, a substantially identical solution is likely available in public project history rather than requiring a genuinely novel solution.",
+      "outcome": "fail"
+    },
+    "agentic": {
+      "explanation": "Solving requires exploring a large Go codebase, tracing evaluator and rate-family behavior, editing multiple interacting functions, formatting code, and iteratively running focused tests.",
+      "outcome": "pass"
+    },
+    "reviewable": {
+      "explanation": "The instruction, metadata, readable PromQL cases, HTTP controller, and reference patches expose both the intended semantics and their derivation. Float-control comparisons make much of the specialized histogram ground truth understandable without requiring reviewers to trust unexplained constants.",
+      "outcome": "pass"
+    },
+    "instruction_concision": {
+      "explanation": "The instruction is brief, direct, and human-readable, contains no unnecessary environment inventory or step-by-step implementation recipe, and mentions no relative file paths. The no-online-solutions constraint is concise and directly relevant to preventing retrieval of the upstream patch.",
+      "outcome": "pass"
+    },
+    "solution_quality": {
+      "explanation": "solve.sh applies two separately stored, reviewable patches, formats the affected Go files, and executes focused tests. It does not echo a precomputed output or embed a large heredoc.",
+      "outcome": "pass"
+    },
+    "separate_verifier_configured": {
+      "explanation": "Verifier inputs are limited to the two declared artifacts plus files baked into tests/Dockerfile. Required Go dependencies are downloaded during verifier-image construction, not test runtime, and the agent/verifier source archives and Go image digests byte-match.",
+      "outcome": "pass"
+    },
+    "environment_hygiene": {
+      "explanation": "The agent image copies neither tests nor solution. Apt is updated, installed without version pinning, and its lists are cleaned. Agent-needed Go dependencies are prewarmed, while verifier-only code and tooling remain in the verifier image.",
+      "outcome": "pass"
+    },
+    "structured_data_schema": {
+      "explanation": "The agent is asked to modify a Go source tree rather than emit a structured API, JSON, CSV, database, or configuration artifact.",
+      "outcome": "not_applicable"
+    },
+    "typos": {
+      "explanation": "No consequential misspellings were found in referenced filenames, paths, commands, or variables; artifact and source paths are consistent across configuration and scripts.",
+      "outcome": "pass"
+    },
+    "difficulty_explanation_quality": {
+      "explanation": "The metadata names the concrete hard parts\u2014boundary interpolation, reset semantics, schema reconciliation, structured warnings, and panic avoidance\u2014identifies a PromQL maintainer as the real-world practitioner, and states that the corpus comes from an upstream feature and correction.",
+      "outcome": "pass"
+    },
+    "solution_explanation_quality": {
+      "explanation": "The explanation concisely describes the two central strategies\u2014extending evaluator/rate helpers to histograms and safely omitting mixed windows with annotations\u2014and matches the actual patches.",
+      "outcome": "pass"
+    },
+    "verification_explanation_quality": {
+      "explanation": "The explanation accurately covers archive/module validation, the real HTTP/API controller, focused PromQL tests, exact structural and warning comparison, tested semantic cases, and the limits of coverage. It also justifies the 1e-12 numeric tolerance and notes validation with a structurally different correct implementation.",
+      "outcome": "pass"
+    },
+    "category_and_tags": {
+      "explanation": "Observability is the correct primary domain, and the tags specifically identify Prometheus, PromQL, native histograms, rates, and temporal semantics.",
+      "outcome": "pass"
+    },
+    "task_name": {
+      "explanation": "histogram-rate-semantics is descriptive, lowercase kebab-case, specific to the core problem, and exactly three tokens.",
+      "outcome": "pass"
+    },
+    "resource_configuration": {
+      "explanation": "Two CPUs, 4 GiB memory, 10 GiB storage, and no GPU are reasonable for compiling and testing Prometheus. A 90-minute agent window suits the five-hour expert estimate, while the 20-minute verifier and 40-minute image-build limits accommodate Go compilation without making computation the challenge.",
+      "outcome": "pass"
+    },
+    "task_readme": {
+      "explanation": "No README.md is present, and a task README is optional.",
+      "outcome": "not_applicable"
+    },
+    "expert_time_estimate": {
+      "explanation": "The five-hour estimate is nonzero and plausible for a focused but domain-heavy PromQL evaluator change by an expert with the relevant background.",
+      "outcome": "pass"
+    },
+    "task_toml_schema": {
+      "explanation": "task.toml contains fields outside the stated Harbor schema: network_mode appears under both environment tables, and the [[verifier.collect]] table with timeout_sec, user, and command is not among the recognized verifier fields. These extras may be silently ignored.",
+      "outcome": "fail"
+    },
+    "no_extraneous_files": {
+      "explanation": "Every listed file participates in environment construction, source provenance/prewarming, diagnosis/build support, reference patch application, artifact verification, hardened execution, or behavioral testing. The two patches address distinct feature and panic-fix changes, and the duplicated source archive is required by the separate verifier.",
+      "outcome": "pass"
+    }
+  }
+}

@@ -1,0 +1,251 @@
+
+🔎 Checking task quality...
+✓ Results written to 
+.private-eval/reviews/final-conductor/conductor-histogram-rate-semantics.json
+                              Task Quality Checks                               
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check                        ┃ Outcome        ┃ Explanation                  ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Verifiable                   │ pass           │ Pass on design: the verifier │
+│                              │                │ uses deterministic Go tests  │
+│                              │                │ against a locally bundled    │
+│                              │                │ Prometheus source snapshot   │
+│                              │                │ and does not rely on         │
+│                              │                │ subjective or LLM judgment.  │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Solvable                     │ pass           │ A concrete patch-based       │
+│                              │                │ reference solution is        │
+│                              │                │ included, and the requested  │
+│                              │                │ Prometheus semantic          │
+│                              │                │ correction is bounded enough │
+│                              │                │ for an expert to implement   │
+│                              │                │ within hours.                │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Difficult                    │ pass           │ Correcting native-histogram  │
+│                              │                │ rate semantics requires      │
+│                              │                │ understanding PromQL         │
+│                              │                │ evaluation, histogram reset  │
+│                              │                │ behavior, mixed sample       │
+│                              │                │ representations, and         │
+│                              │                │ upstream code interactions.  │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Interesting                  │ pass           │ This is a realistic          │
+│                              │                │ observability-engine         │
+│                              │                │ correctness bug: incorrect   │
+│                              │                │ histogram rates can          │
+│                              │                │ materially affect production │
+│                              │                │ dashboards and alerts.       │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Outcome Verified             │ pass           │ The tests exercise the       │
+│                              │                │ resulting PromQL behavior    │
+│                              │                │ and do not require a         │
+│                              │                │ particular editor, command   │
+│                              │                │ sequence, or patch shape.    │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Anti Cheat Robustness        │ pass           │ The hidden behavioral tests  │
+│                              │                │ are supplied only to the     │
+│                              │                │ separate verifier, while the │
+│                              │                │ actor receives the source    │
+│                              │                │ tree without the reference   │
+│                              │                │ solution. The hardened       │
+│                              │                │ runner limits common         │
+│                              │                │ test-harness and wrapper     │
+│                              │                │ shortcuts.                   │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Task Security                │ pass           │ The listed build,            │
+│                              │                │ diagnostic,                  │
+│                              │                │ candidate-preparation,       │
+│                              │                │ solution, and verification   │
+│                              │                │ artifacts are scoped to      │
+│                              │                │ compiling and testing the    │
+│                              │                │ bundled Prometheus source;   │
+│                              │                │ no task-purpose-extraneous   │
+│                              │                │ exfiltration or host-escape  │
+│                              │                │ mechanism is evident.        │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Functional Verification      │ pass           │ Verification compiles and    │
+│                              │                │ executes Go tests over       │
+│                              │                │ PromQL histogram behavior    │
+│                              │                │ rather than accepting source │
+│                              │                │ keywords or patch-text       │
+│                              │                │ matches.                     │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Deterministic Reproducible   │ pass           │ Both images use bundled      │
+│                              │                │ source archives with         │
+│                              │                │ recorded checksums, avoiding │
+│                              │                │ mutable upstream source or   │
+│                              │                │ live-service dependencies    │
+│                              │                │ during solving and           │
+│                              │                │ verification.                │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Essential Difficulty         │ pass           │ The challenge is semantic    │
+│                              │                │ debugging across histogram   │
+│                              │                │ representations and edge     │
+│                              │                │ cases, not output            │
+│                              │                │ formatting, arbitrary        │
+│                              │                │ precision, or clerical work. │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Test Instruction Alignment   │ pass           │ The hidden cases exercise    │
+│                              │                │ the stated histogram-rate    │
+│                              │                │ semantic requirements,       │
+│                              │                │ including correctness across │
+│                              │                │ relevant histogram inputs    │
+│                              │                │ and reset conditions,        │
+│                              │                │ without imposing an          │
+│                              │                │ unrelated interface.         │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Novel                        │ pass           │ This is a codebase-specific  │
+│                              │                │ Prometheus                   │
+│                              │                │ regression/debugging task    │
+│                              │                │ rather than a textbook       │
+│                              │                │ algorithm that can be        │
+│                              │                │ reproduced from a standard   │
+│                              │                │ answer.                      │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Agentic                      │ pass           │ A solver must inspect a      │
+│                              │                │ substantial Go codebase,     │
+│                              │                │ trace evaluation behavior,   │
+│                              │                │ modify source, compile, run  │
+│                              │                │ tests, and iterate; it is    │
+│                              │                │ not realistically a          │
+│                              │                │ zero-shot code-generation    │
+│                              │                │ exercise.                    │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Reviewable                   │ pass           │ The instruction, patches,    │
+│                              │                │ controller, and behavioral   │
+│                              │                │ test cases expose the        │
+│                              │                │ expected semantic change in  │
+│                              │                │ executable form, making the  │
+│                              │                │ result reviewable without    │
+│                              │                │ relying only on unexplained  │
+│                              │                │ constants.                   │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Instruction Concision        │ pass           │ The instruction is focused   │
+│                              │                │ on the desired Prometheus    │
+│                              │                │ behavior and target          │
+│                              │                │ workspace, using an absolute │
+│                              │                │ actor path without           │
+│                              │                │ prescribing a step-by-step   │
+│                              │                │ implementation.              │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Solution Quality             │ pass           │ The solution applies         │
+│                              │                │ maintained patch files to    │
+│                              │                │ the real Prometheus source   │
+│                              │                │ rather than printing a       │
+│                              │                │ canned result or embedding a │
+│                              │                │ large implementation heredoc │
+│                              │                │ in solve.sh.                 │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Separate Verifier Configured │ pass           │ The verifier is              │
+│                              │                │ self-contained around its    │
+│                              │                │ baked source/test assets and │
+│                              │                │ declared candidate artifact, │
+│                              │                │ with compilation tooling     │
+│                              │                │ prepared by its Docker image │
+│                              │                │ rather than fetched from the │
+│                              │                │ network at verification      │
+│                              │                │ time.                        │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Environment Hygiene          │ pass           │ The actor image is           │
+│                              │                │ constructed from             │
+│                              │                │ environment-owned source and │
+│                              │                │ build scripts and does not   │
+│                              │                │ copy tests or solution       │
+│                              │                │ artifacts into the runtime   │
+│                              │                │ environment. Package setup   │
+│                              │                │ is confined to legitimate    │
+│                              │                │ build requirements.          │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Structured Data Schema       │ not_applicable │ The task asks for a          │
+│                              │                │ source-code correction, not  │
+│                              │                │ a structured JSON, CSV, API, │
+│                              │                │ database, or configuration   │
+│                              │                │ output.                      │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Typos                        │ pass           │ The task’s critical source   │
+│                              │                │ archive, checksum,           │
+│                              │                │ build-script, artifact, and  │
+│                              │                │ test identifiers are         │
+│                              │                │ internally consistent; no    │
+│                              │                │ consequential identifier     │
+│                              │                │ typo is apparent.            │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Difficulty Explanation       │ pass           │ The metadata identifies the  │
+│ Quality                      │                │ specialized                  │
+│                              │                │ PromQL/native-histogram      │
+│                              │                │ reasoning and real-world     │
+│                              │                │ observability context        │
+│                              │                │ responsible for the          │
+│                              │                │ difficulty, rather than      │
+│                              │                │ relying on model pass rates  │
+│                              │                │ or a generic claim that the  │
+│                              │                │ task is hard.                │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Solution Explanation Quality │ pass           │ The metadata describes the   │
+│                              │                │ high-level semantic          │
+│                              │                │ correction and why it works, │
+│                              │                │ and it is consistent with    │
+│                              │                │ the supplied patch-based     │
+│                              │                │ reference implementation.    │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Verification Explanation     │ pass           │ The metadata explains that   │
+│ Quality                      │                │ executable Go tests cover    │
+│                              │                │ the relevant histogram rate  │
+│                              │                │ semantics and edge cases.    │
+│                              │                │ The checks are exact         │
+│                              │                │ behavioral assertions rather │
+│                              │                │ than unexplained fuzzy       │
+│                              │                │ thresholds.                  │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Category And Tags            │ pass           │ The classification is        │
+│                              │                │ appropriately centered on    │
+│                              │                │ software                     │
+│                              │                │ engineering/debugging and    │
+│                              │                │ uses Prometheus, PromQL, and │
+│                              │                │ native-histogram terminology │
+│                              │                │ relevant to discovery.       │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Task Name                    │ pass           │ “histogram-rate-semantics”   │
+│                              │                │ is descriptive, lowercase    │
+│                              │                │ kebab-case, and exactly      │
+│                              │                │ three tokens.                │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Resource Configuration       │ pass           │ The configured time and      │
+│                              │                │ compute allowances are       │
+│                              │                │ reasonable for unpacking and │
+│                              │                │ compiling a large Go         │
+│                              │                │ project; the intellectual    │
+│                              │                │ challenge remains semantic   │
+│                              │                │ debugging rather than        │
+│                              │                │ brute-force computation.     │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Task Readme                  │ not_applicable │ No README.md is present, and │
+│                              │                │ a task README is optional.   │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Expert Time Estimate         │ pass           │ A non-zero expert estimate   │
+│                              │                │ is supplied and is plausible │
+│                              │                │ for tracing, implementing,   │
+│                              │                │ and validating a subtle      │
+│                              │                │ Prometheus                   │
+│                              │                │ histogram-semantics change.  │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Task Toml Schema             │ pass           │ The configuration uses       │
+│                              │                │ Harbor’s recognized task,    │
+│                              │                │ metadata, verifier, agent,   │
+│                              │                │ environment, solution, and   │
+│                              │                │ artifact fields without an   │
+│                              │                │ evident invented             │
+│                              │                │ orchestration field.         │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ No Extraneous Files          │ pass           │ Each listed file belongs to  │
+│                              │                │ environment construction,    │
+│                              │                │ source verification,         │
+│                              │                │ diagnostics, the reference   │
+│                              │                │ patch sequence, candidate    │
+│                              │                │ hardening, or behavioral     │
+│                              │                │ verification. The two        │
+│                              │                │ solution patches represent   │
+│                              │                │ separate applied changes     │
+│                              │                │ rather than unreferenced     │
+│                              │                │ scratch copies.              │
+└──────────────────────────────┴────────────────┴──────────────────────────────┘

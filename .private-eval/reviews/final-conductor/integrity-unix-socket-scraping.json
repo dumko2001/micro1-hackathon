@@ -1,0 +1,68 @@
+{
+  "checks": {
+    "source_lineage": {
+      "explanation": "Fail: the required lineage and checksum evidence could not be verified because the workspace reader failed with `sandbox_apply: Operation not permitted`; therefore exact parent lineage, merge anchor, archive checksum, and license consistency are unestablished.",
+      "outcome": "fail"
+    },
+    "reset_isolation": {
+      "explanation": "Fail: container construction, cleanup behavior, and mutable-state isolation could not be inspected, so clean per-trial reset is not demonstrated.",
+      "outcome": "fail"
+    },
+    "agent_contract": {
+      "explanation": "Fail: the task configuration and instruction could not be read, so bounded runtime/resources, writable workspace, and deterministic verification cannot be established.",
+      "outcome": "fail"
+    },
+    "outcome_instruction": {
+      "explanation": "Fail: the actor instruction could not be examined for disclosure of target files, commands, hidden tests, thresholds, root cause, or patch structure.",
+      "outcome": "fail"
+    },
+    "separate_truth": {
+      "explanation": "Fail: verifier code and reward flow could not be inspected, so reward independence from candidate-authored output is not established.",
+      "outcome": "fail"
+    },
+    "artifact_binding": {
+      "explanation": "Fail: collection and binding of both `candidate.tar.gz` and `candidate.sha256`, including runtime hashes and IDs, could not be verified.",
+      "outcome": "fail"
+    },
+    "hostile_code_boundary": {
+      "explanation": "Fail: process, user, filesystem, and controller boundaries could not be inspected, so candidate code may have access to trusted verifier inputs or reward outputs.",
+      "outcome": "fail"
+    },
+    "behavioral_specificity": {
+      "explanation": "Fail: the controller and test cases could not be read, so positive, negative, edge, regression, and method-neutral product-boundary coverage is unestablished.",
+      "outcome": "fail"
+    },
+    "task_time_epistemics": {
+      "explanation": "Fail: actor-visible files could not be inspected for private root-cause reasoning, reference details, hidden cases, or implementation-route leakage.",
+      "outcome": "fail"
+    },
+    "original_fails_reference_passes": {
+      "explanation": "Fail: no completed, bound runtime results could be verified for the original and reference candidates.",
+      "outcome": "fail"
+    },
+    "nop_rejected": {
+      "explanation": "Fail: no completed bound no-op trial with reward zero and null `exception_info` could be verified.",
+      "outcome": "fail"
+    },
+    "alternate_valid_accepted": {
+      "explanation": "Fail: the alternate implementation and its bound runtime result could not be inspected, so material method difference and acceptance are not established.",
+      "outcome": "fail"
+    },
+    "mutant_discrimination": {
+      "explanation": "Fail: named mutants, their relationship to the task crux, and bound per-mutant results could not be verified.",
+      "outcome": "fail"
+    },
+    "repeatability": {
+      "explanation": "Fail: at least two independent clean executions and proper infrastructure-failure handling could not be established from accessible evidence.",
+      "outcome": "fail"
+    },
+    "same_case_fairness": {
+      "explanation": "Fail: case identifiers and hashes could not be compared across candidates, so stable same-case evaluation is not demonstrated.",
+      "outcome": "fail"
+    },
+    "public_private_boundary": {
+      "explanation": "Fail: actor-visible and reviewer-only paths could not be inspected for credentials, held-out cases, private thresholds, trajectories, reference patches, or calibration-binding leakage.",
+      "outcome": "fail"
+    }
+  }
+}

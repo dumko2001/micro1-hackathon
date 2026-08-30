@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "verifiable": {
+      "explanation": "Could not assess: the execution environment rejected every filesystem read with `sandbox_apply: Operation not permitted`, so the verifier could not be examined.",
+      "outcome": "not_applicable"
+    },
+    "solvable": {
+      "explanation": "Could not assess because the reference solution and test results were inaccessible.",
+      "outcome": "not_applicable"
+    },
+    "difficult": {
+      "explanation": "Could not assess without reading the instruction, source fixture, and solution.",
+      "outcome": "not_applicable"
+    },
+    "interesting": {
+      "explanation": "Could not assess the actual scenario described by the inaccessible instruction.",
+      "outcome": "not_applicable"
+    },
+    "outcome_verified": {
+      "explanation": "Could not determine whether tests grade behavior or prescribe an implementation approach.",
+      "outcome": "not_applicable"
+    },
+    "anti_cheat_robustness": {
+      "explanation": "Could not inspect the environment image, build scripts, or verifier hardening.",
+      "outcome": "not_applicable"
+    },
+    "task_security": {
+      "explanation": "Could not perform the required security review because all file reads were denied.",
+      "outcome": "not_applicable"
+    },
+    "functional_verification": {
+      "explanation": "Could not inspect `tests/controller.go` or the supporting test scripts.",
+      "outcome": "not_applicable"
+    },
+    "deterministic_reproducible": {
+      "explanation": "Could not inspect dependency pins, source checksums, or runtime behavior.",
+      "outcome": "not_applicable"
+    },
+    "essential_difficulty": {
+      "explanation": "Could not distinguish core reasoning difficulty from clerical requirements without the artifacts.",
+      "outcome": "not_applicable"
+    },
+    "test_instruction_alignment": {
+      "explanation": "Could not compare `instruction.md` with the verifier assertions.",
+      "outcome": "not_applicable"
+    },
+    "novel": {
+      "explanation": "Could not inspect the precise Prometheus defect or required behavior.",
+      "outcome": "not_applicable"
+    },
+    "agentic": {
+      "explanation": "Could not determine the exploration and debugging workflow required by the task.",
+      "outcome": "not_applicable"
+    },
+    "reviewable": {
+      "explanation": "The review itself was blocked because the supplied filesystem could not be read through the available execution tool.",
+      "outcome": "fail"
+    },
+    "instruction_concision": {
+      "explanation": "Could not read `instruction.md`.",
+      "outcome": "not_applicable"
+    },
+    "solution_quality": {
+      "explanation": "Could not read `solution/solve.sh` or `solution/fix.patch`.",
+      "outcome": "not_applicable"
+    },
+    "separate_verifier_configured": {
+      "explanation": "Could not inspect `task.toml`, `tests/Dockerfile`, artifact declarations, or duplicated archive hashes.",
+      "outcome": "not_applicable"
+    },
+    "environment_hygiene": {
+      "explanation": "Could not inspect either Dockerfile or package-installation scripts.",
+      "outcome": "not_applicable"
+    },
+    "structured_data_schema": {
+      "explanation": "Could not determine whether the instruction expects structured output.",
+      "outcome": "not_applicable"
+    },
+    "typos": {
+      "explanation": "No typo is evident in the supplied file-tree identifiers, but file contents could not be checked.",
+      "outcome": "not_applicable"
+    },
+    "difficulty_explanation_quality": {
+      "explanation": "Could not read the `difficulty_explanation` metadata.",
+      "outcome": "not_applicable"
+    },
+    "solution_explanation_quality": {
+      "explanation": "Could not read or compare the solution explanation and solution artifacts.",
+      "outcome": "not_applicable"
+    },
+    "verification_explanation_quality": {
+      "explanation": "Could not read or compare the verification explanation and tests.",
+      "outcome": "not_applicable"
+    },
+    "category_and_tags": {
+      "explanation": "Could not read the category and tags in `task.toml`.",
+      "outcome": "not_applicable"
+    },
+    "task_name": {
+      "explanation": "`prometheus-subquery-semantics` is descriptive, lowercase kebab-case, and exactly three words.",
+      "outcome": "pass"
+    },
+    "resource_configuration": {
+      "explanation": "Could not inspect the verifier, agent, or environment resource settings.",
+      "outcome": "not_applicable"
+    },
+    "task_readme": {
+      "explanation": "No README appears in the complete file tree; it is optional.",
+      "outcome": "not_applicable"
+    },
+    "expert_time_estimate": {
+      "explanation": "Could not read the expert-time metadata.",
+      "outcome": "not_applicable"
+    },
+    "task_toml_schema": {
+      "explanation": "Could not inspect `task.toml` for recognized fields.",
+      "outcome": "not_applicable"
+    },
+    "no_extraneous_files": {
+      "explanation": "The tree contains plausible task artifacts, but references and necessity could not be verified without reading them.",
+      "outcome": "not_applicable"
+    }
+  }
+}

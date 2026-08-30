@@ -1,0 +1,15 @@
+.git
+.github
+.private-eval
+.env
+.env.*
+auth.json
+.codex
+.agents
+jobs
+submission/private
+trajectories/raw
+recordings/raw
+tmp
+*.pdf
+__pycache__

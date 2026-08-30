@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "verifiable": {
+      "explanation": "Could not evaluate: the workspace read tool failed before opening any artifact (`sandbox_apply: Operation not permitted`).",
+      "outcome": "not_applicable"
+    },
+    "solvable": {
+      "explanation": "Could not evaluate because the solution and tests were inaccessible.",
+      "outcome": "not_applicable"
+    },
+    "difficult": {
+      "explanation": "Could not evaluate because the instruction and implementation were inaccessible.",
+      "outcome": "not_applicable"
+    },
+    "interesting": {
+      "explanation": "Could not evaluate because the task scenario was inaccessible.",
+      "outcome": "not_applicable"
+    },
+    "outcome_verified": {
+      "explanation": "Could not evaluate because the tests and instruction were inaccessible.",
+      "outcome": "not_applicable"
+    },
+    "anti_cheat_robustness": {
+      "explanation": "Could not evaluate the environment and verifier implementation.",
+      "outcome": "not_applicable"
+    },
+    "task_security": {
+      "explanation": "Could not inspect the Dockerfiles, scripts, archives, or supporting files for unsafe behavior.",
+      "outcome": "not_applicable"
+    },
+    "functional_verification": {
+      "explanation": "Could not inspect whether tests execute behavior or scan source text.",
+      "outcome": "not_applicable"
+    },
+    "deterministic_reproducible": {
+      "explanation": "Could not inspect dependency pins, fixtures, or repeatability evidence.",
+      "outcome": "not_applicable"
+    },
+    "essential_difficulty": {
+      "explanation": "Could not inspect the task\u2019s substantive requirements.",
+      "outcome": "not_applicable"
+    },
+    "test_instruction_alignment": {
+      "explanation": "Could not compare instruction assertions with test coverage.",
+      "outcome": "not_applicable"
+    },
+    "novel": {
+      "explanation": "Could not inspect the underlying problem.",
+      "outcome": "not_applicable"
+    },
+    "agentic": {
+      "explanation": "Could not determine the interaction and exploration required to solve the task.",
+      "outcome": "not_applicable"
+    },
+    "reviewable": {
+      "explanation": "Could not assess reviewability because none of the artifacts could be read.",
+      "outcome": "not_applicable"
+    },
+    "instruction_concision": {
+      "explanation": "Could not read `instruction.md`.",
+      "outcome": "not_applicable"
+    },
+    "solution_quality": {
+      "explanation": "Could not read `solution/solve.sh` or `solution/fix.patch`.",
+      "outcome": "not_applicable"
+    },
+    "separate_verifier_configured": {
+      "explanation": "Could not inspect `task.toml`, verifier Dockerfile, duplicated archives, or verifier path usage.",
+      "outcome": "not_applicable"
+    },
+    "environment_hygiene": {
+      "explanation": "Could not inspect `environment/Dockerfile` or runtime setup.",
+      "outcome": "not_applicable"
+    },
+    "structured_data_schema": {
+      "explanation": "Could not determine whether the task expects structured output.",
+      "outcome": "not_applicable"
+    },
+    "typos": {
+      "explanation": "Could not inspect file contents for critical identifier typos.",
+      "outcome": "not_applicable"
+    },
+    "difficulty_explanation_quality": {
+      "explanation": "Could not read the metadata in `task.toml`.",
+      "outcome": "not_applicable"
+    },
+    "solution_explanation_quality": {
+      "explanation": "Could not compare solution metadata with the supplied solution.",
+      "outcome": "not_applicable"
+    },
+    "verification_explanation_quality": {
+      "explanation": "Could not compare verification metadata with the tests.",
+      "outcome": "not_applicable"
+    },
+    "category_and_tags": {
+      "explanation": "Could not read category and tag metadata.",
+      "outcome": "not_applicable"
+    },
+    "task_name": {
+      "explanation": "The folder name `prometheus-subquery-semantics` is descriptive and lowercase kebab-case, but it has three hyphen-separated tokens only if \u201csubquery\u201d is treated as one word; it therefore satisfies the naming constraints.",
+      "outcome": "pass"
+    },
+    "resource_configuration": {
+      "explanation": "Could not read the verifier, agent, and environment configuration.",
+      "outcome": "not_applicable"
+    },
+    "task_readme": {
+      "explanation": "No README appears in the supplied complete file tree, so this optional criterion is not applicable.",
+      "outcome": "not_applicable"
+    },
+    "expert_time_estimate": {
+      "explanation": "Could not read `expert_time_estimate_hours` from `task.toml`.",
+      "outcome": "not_applicable"
+    },
+    "task_toml_schema": {
+      "explanation": "Could not inspect `task.toml` for recognized fields.",
+      "outcome": "not_applicable"
+    },
+    "no_extraneous_files": {
+      "explanation": "The filenames appear task-related, but necessity cannot be established without reading their references and archive contents.",
+      "outcome": "not_applicable"
+    }
+  }
+}

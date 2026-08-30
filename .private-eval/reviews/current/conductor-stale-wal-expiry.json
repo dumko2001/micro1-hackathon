@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "verifiable": {
+      "explanation": "Pass: verification is deterministic and programmatic. It compiles trusted Go tests, executes two real WAL/checkpoint/restart lifecycles, and uses an unpredictable proof channel. The recorded oracle passes and untouched-parent failure further support correctness, though repeat and mutant calibration remain pending.",
+      "outcome": "pass"
+    },
+    "solvable": {
+      "explanation": "Pass: the supplied patch changes the stale-series expiry value from a WAL segment number to the compaction timestamp, and recorded evidence shows the reference solution passes. The implementation is small and feasible within hours.",
+      "outcome": "pass"
+    },
+    "difficult": {
+      "explanation": "Pass: finding the unit/domain mismatch requires understanding Prometheus stale-series eviction, WAL checkpoints, timestamp horizons, and replay. The final patch is small, but diagnosing the invariant is professionally challenging.",
+      "outcome": "pass"
+    },
+    "interesting": {
+      "explanation": "Pass: misleading corruption warnings during healthy Prometheus recovery are a realistic production observability problem relevant to TSDB maintainers and operators.",
+      "outcome": "pass"
+    },
+    "outcome_verified": {
+      "explanation": "Pass: the verifier primarily checks observable checkpoint and restart behavior. Its direct check that the expiry equals the sample horizon is tied to the explicitly requested retention invariant and an existing repository mechanism, not a prescribed editing process.",
+      "outcome": "pass"
+    },
+    "anti_cheat_robustness": {
+      "explanation": "Pass: the agent is non-root and cannot access tests or solutions; collection freezes the source; candidate tests are removed; module metadata and workspaces are restored; unsafe archives are rejected; execution is non-root after source deletion; and a per-run random proof prevents simple fake-success exits. The evidence correctly notes that in-process verification is not an absolute hostile-code boundary.",
+      "outcome": "pass"
+    },
+    "task_security": {
+      "explanation": "Pass: all scripts and Dockerfiles perform source validation, local compilation, candidate packaging, or verification. No credential access, unjustified outbound transmission, obfuscation, host escape, destructive system operation, or prompt injection was found.",
+      "outcome": "pass"
+    },
+    "functional_verification": {
+      "explanation": "Pass: tests execute real Prometheus TSDB code, create samples and checkpoints, reopen the database, inspect checkpoint records and replay metrics, and check series survival. They do not grade by source keyword scanning.",
+      "outcome": "pass"
+    },
+    "deterministic_reproducible": {
+      "explanation": "Pass: source archives and both base images are checksum/digest pinned, Go dependencies are governed by pinned go.mod/go.sum data, rollout is network-isolated, and tests use local temporary databases. The random token authenticates execution without changing the expected result.",
+      "outcome": "pass"
+    },
+    "essential_difficulty": {
+      "explanation": "Pass: the challenge is reconciling durable WAL replay semantics with timestamp-based in-memory retention across compaction and restart, not formatting, precision, or clerical work.",
+      "outcome": "pass"
+    },
+    "test_instruction_alignment": {
+      "explanation": "Pass: retention before the reference horizon, expiry afterward, clean replay, absence of stale resurrection, and survival of active series all trace to the instruction. The tests cover each stated requirement without adding an unrelated feature.",
+      "outcome": "pass"
+    },
+    "novel": {
+      "explanation": "Pass: this is a codebase-specific Prometheus regression involving an unusual interaction among stale compaction, checkpoint filtering, and replay. It is not a textbook algorithm or standard memorized exercise.",
+      "outcome": "pass"
+    },
+    "agentic": {
+      "explanation": "Pass: solving it requires inspecting a large real repository, tracing WAL and compaction state, modifying code, and running focused tests. Diagnosis cannot reasonably be completed by a context-free single command.",
+      "outcome": "pass"
+    },
+    "reviewable": {
+      "explanation": "Pass: the concise metadata, readable lifecycle tests, reference patch, provenance audit, and clean-parent/reference evidence explain the invariant sufficiently for a non-specialist. Values such as 200 and 201 are derived directly from samples created in the fixture.",
+      "outcome": "pass"
+    },
+    "instruction_concision": {
+      "explanation": "Pass: instruction.md is brief, human-readable, and outcome-focused. It contains no unnecessary headings, tool inventory, solution location, or step-by-step procedure. No file input/output paths need to be stated.",
+      "outcome": "pass"
+    },
+    "solution_quality": {
+      "explanation": "Pass: solve.sh applies a separately stored, reviewable patch, formats the modified code, and runs the focused regression test. It does not merely emit a precomputed answer or hide a large implementation in a heredoc.",
+      "outcome": "pass"
+    },
+    "separate_verifier_configured": {
+      "explanation": "Pass: every agent-derived verifier input is one of the two declared artifacts; source, tests, toolchain, and dependencies are baked into the verifier image; and the environment/verifier source archives byte-match exactly. test.sh performs no runtime network installation.",
+      "outcome": "pass"
+    },
+    "environment_hygiene": {
+      "explanation": "Pass: the agent image copies neither tests nor solution files. Apt usage includes update, no version pinning, and list cleanup. Its Go toolchain and prewarmed TSDB dependencies are useful to the agent, while verifier-only assets remain in tests/Dockerfile.",
+      "outcome": "pass"
+    },
+    "structured_data_schema": {
+      "explanation": "No structured output is requested from the agent; the artifact handoff is generated by the harness configuration rather than being an agent-authored JSON, CSV, API, or schema deliverable.",
+      "outcome": "not_applicable"
+    },
+    "typos": {
+      "explanation": "Pass: referenced filenames, artifact paths, package paths, commands, and variable names are internally consistent. The diagnostic files it reads are created by verify-source.sh.",
+      "outcome": "pass"
+    },
+    "difficulty_explanation_quality": {
+      "explanation": "Pass: the metadata identifies the specific lifecycle boundaries and durable/in-memory reasoning involved, states that the case comes from a real upstream regression, and names a Prometheus storage maintainer as the real-world practitioner.",
+      "outcome": "pass"
+    },
+    "solution_explanation_quality": {
+      "explanation": "Pass: it succinctly explains the key insight\u2014store the expiry in the checkpoint truncation timestamp domain\u2014and matches the actual head.go patch.",
+      "outcome": "pass"
+    },
+    "verification_explanation_quality": {
+      "explanation": "Pass: it accurately summarizes archive validation, trusted-test restoration, randomized proof, two independent lifecycles, replay metrics, expiry deletion, stale absence, and active-series survival. No unexplained tolerance or fuzzy threshold is used.",
+      "outcome": "pass"
+    },
+    "category_and_tags": {
+      "explanation": "Pass: Observability accurately describes Prometheus/TSDB work, and the tags are specific and discoverable: prometheus, tsdb, wal, checkpoint, stale-series, and recovery.",
+      "outcome": "pass"
+    },
+    "task_name": {
+      "explanation": "Pass: stale-wal-expiry is descriptive, lowercase kebab-case, and exactly three tokens.",
+      "outcome": "pass"
+    },
+    "resource_configuration": {
+      "explanation": "Pass: 90 minutes gives an agent reasonable time to explore Prometheus internals, while the 20-minute verifier and 40-minute image build budgets accommodate Go compilation. Two CPUs and 4 GiB are modest and supported by recorded runtime evidence; no GPU is requested.",
+      "outcome": "pass"
+    },
+    "task_readme": {
+      "explanation": "No README.md is present, and a task README is optional.",
+      "outcome": "not_applicable"
+    },
+    "expert_time_estimate": {
+      "explanation": "Pass: three hours is non-zero and plausible for an expert to trace the lifecycle, identify the unit mismatch, implement the small correction, and validate checkpoint/replay behavior.",
+      "outcome": "pass"
+    },
+    "task_toml_schema": {
+      "explanation": "Fail under the schema explicitly supplied in this review rubric: task.toml contains [[verifier.collect]] and environment.network_mode, neither of which appears in the provided allow-list. Reviewer evidence says Harbor 0.14 recognizes these local fields, but the requested criterion defines them as outside its accepted schema.",
+      "outcome": "fail"
+    },
+    "no_extraneous_files": {
+      "explanation": "Pass: every task file is referenced or required. Both archives are intentionally needed by the separate agent and verifier images; build helpers are copied by the environment Dockerfile; common verifier scripts and hidden tests are copied by tests/Dockerfile; and all scaffold files are used.",
+      "outcome": "pass"
+    }
+  }
+}

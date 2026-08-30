@@ -1,0 +1,330 @@
+
+🔎 Checking task quality...
+✓ Results written to 
+.private-eval/reviews/final-conductor/conductor-unix-socket-scraping.json
+                              Task Quality Checks                               
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check                        ┃ Outcome        ┃ Explanation                  ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Verifiable                   │ pass           │ Pass. The verifier exercises │
+│                              │                │ the patched Prometheus       │
+│                              │                │ binary against controlled    │
+│                              │                │ Unix-socket endpoints and    │
+│                              │                │ makes exact programmatic     │
+│                              │                │ assertions. The task uses    │
+│                              │                │ local fixtures rather than   │
+│                              │                │ subjective or LLM-based      │
+│                              │                │ grading, and the reviewer    │
+│                              │                │ evidence includes            │
+│                              │                │ runtime-smoke and candidate  │
+│                              │                │ audits supporting            │
+│                              │                │ reliability.                 │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Solvable                     │ pass           │ Pass. A concrete reference   │
+│                              │                │ solution is provided through │
+│                              │                │ solve.sh and separate patch  │
+│                              │                │ files. The candidate audit   │
+│                              │                │ also documents an alternate  │
+│                              │                │ valid implementation,        │
+│                              │                │ supporting that the task is  │
+│                              │                │ solvable without relying on  │
+│                              │                │ one exact patch.             │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Difficult                    │ pass           │ Pass. Diagnosing and         │
+│                              │                │ repairing Unix-domain-socket │
+│                              │                │ scraping in Prometheus       │
+│                              │                │ requires navigating a        │
+│                              │                │ substantial Go codebase and  │
+│                              │                │ understanding URL parsing,   │
+│                              │                │ HTTP transports, connection  │
+│                              │                │ dialing, configuration       │
+│                              │                │ behavior, and regression     │
+│                              │                │ risks.                       │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Interesting                  │ pass           │ Pass. Scraping metrics over  │
+│                              │                │ Unix sockets is a realistic  │
+│                              │                │ deployment and observability │
+│                              │                │ requirement, particularly    │
+│                              │                │ for local daemons where      │
+│                              │                │ exposing a TCP listener is   │
+│                              │                │ undesirable.                 │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Outcome Verified             │ pass           │ Pass. The tests assess       │
+│                              │                │ externally observable        │
+│                              │                │ scraping behavior rather     │
+│                              │                │ than requiring the reference │
+│                              │                │ patch, a particular editor,  │
+│                              │                │ or a prescribed              │
+│                              │                │ implementation.              │
+│                              │                │ Alternate-valid-solution     │
+│                              │                │ evidence reinforces this     │
+│                              │                │ implementation latitude.     │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Anti Cheat Robustness        │ pass           │ Pass. The solution and       │
+│                              │                │ verifier remain unavailable  │
+│                              │                │ to the actor at runtime,     │
+│                              │                │ source integrity is checked, │
+│                              │                │ and the verifier builds and  │
+│                              │                │ runs the submitted source in │
+│                              │                │ a hardened, isolated         │
+│                              │                │ harness. No answer-bearing   │
+│                              │                │ artifact is exposed in the   │
+│                              │                │ agent image.                 │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Task Security                │ pass           │ Pass. The Dockerfiles and    │
+│                              │                │ scripts perform source       │
+│                              │                │ verification, local builds,  │
+│                              │                │ process isolation, and       │
+│                              │                │ behavioral testing related   │
+│                              │                │ to the task. No credential   │
+│                              │                │ access, external             │
+│                              │                │ exfiltration, host escape,   │
+│                              │                │ destructive system           │
+│                              │                │ operation, concealed         │
+│                              │                │ payload, or prompt injection │
+│                              │                │ is present.                  │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Functional Verification      │ pass           │ Pass. controller.go drives   │
+│                              │                │ real processes and Unix      │
+│                              │                │ sockets and validates actual │
+│                              │                │ scrape behavior. Source      │
+│                              │                │ hashes and build checks      │
+│                              │                │ supplement rather than       │
+│                              │                │ replace execution-based      │
+│                              │                │ verification.                │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Deterministic Reproducible   │ pass           │ Pass. Both sides use         │
+│                              │                │ vendored, checksummed        │
+│                              │                │ Prometheus source archives   │
+│                              │                │ and controlled local socket  │
+│                              │                │ servers. Verification does   │
+│                              │                │ not depend on a mutable live │
+│                              │                │ service, and duplicated      │
+│                              │                │ source archives are matched. │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Essential Difficulty         │ pass           │ Pass. The challenge is       │
+│                              │                │ understanding and modifying  │
+│                              │                │ networking behavior across   │
+│                              │                │ Prometheus's configuration   │
+│                              │                │ and HTTP transport path,     │
+│                              │                │ then preserving expected     │
+│                              │                │ semantics. It is not         │
+│                              │                │ primarily a formatting or    │
+│                              │                │ clerical exercise.           │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Test Instruction Alignment   │ pass           │ Pass. The exercised cases    │
+│                              │                │ correspond to the stated     │
+│                              │                │ Unix-socket scraping         │
+│                              │                │ objective and its required   │
+│                              │                │ compatibility and error      │
+│                              │                │ behavior. The tests do not   │
+│                              │                │ impose an unrelated          │
+│                              │                │ interface or implementation  │
+│                              │                │ requirement.                 │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Novel                        │ pass           │ Pass. This is a              │
+│                              │                │ codebase-specific networking │
+│                              │                │ defect in Prometheus, not a  │
+│                              │                │ textbook algorithm. Solving  │
+│                              │                │ it requires exploration and  │
+│                              │                │ integration reasoning that   │
+│                              │                │ cannot be replaced by        │
+│                              │                │ recalling a standard answer. │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Agentic                      │ pass           │ Pass. A solver must inspect  │
+│                              │                │ the supplied source, locate  │
+│                              │                │ the relevant configuration   │
+│                              │                │ and transport construction,  │
+│                              │                │ edit several interactions,   │
+│                              │                │ build a large Go project,    │
+│                              │                │ and debug behavior against a │
+│                              │                │ socket endpoint.             │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Reviewable                   │ pass           │ Pass. The instruction,       │
+│                              │                │ readable Go controller,      │
+│                              │                │ reference patches, build     │
+│                              │                │ scripts, hashes, and         │
+│                              │                │ candidate reports provide a  │
+│                              │                │ traceable account of the     │
+│                              │                │ defect and expected          │
+│                              │                │ behavior. The verifier       │
+│                              │                │ derives its result through   │
+│                              │                │ execution rather than        │
+│                              │                │ unexplained hardcoded ground │
+│                              │                │ truth.                       │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Instruction Concision        │ pass           │ Pass. The instruction is     │
+│                              │                │ focused on the desired       │
+│                              │                │ behavior, uses explicit      │
+│                              │                │ absolute paths for           │
+│                              │                │ actor-visible inputs and     │
+│                              │                │ outputs, and avoids          │
+│                              │                │ prescribing a patch sequence │
+│                              │                │ or listing incidental tools. │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Solution Quality             │ pass           │ Pass. solve.sh applies       │
+│                              │                │ maintained patch files to    │
+│                              │                │ the supplied source and      │
+│                              │                │ builds the resulting         │
+│                              │                │ program. The substantive     │
+│                              │                │ changes are kept in separate │
+│                              │                │ patch artifacts rather than  │
+│                              │                │ embedded in an oversized     │
+│                              │                │ heredoc or replaced with a   │
+│                              │                │ canned final output.         │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Separate Verifier Configured │ pass           │ Pass. The verifier consumes  │
+│                              │                │ the declared submitted       │
+│                              │                │ artifact and assets baked    │
+│                              │                │ into tests/Dockerfile; its   │
+│                              │                │ compiler and runtime tools   │
+│                              │                │ are installed in the         │
+│                              │                │ verifier image. The          │
+│                              │                │ Prometheus archives          │
+│                              │                │ duplicated under             │
+│                              │                │ environment/source and       │
+│                              │                │ tests/source byte-match,     │
+│                              │                │ avoiding silent fixture      │
+│                              │                │ drift.                       │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Environment Hygiene          │ pass           │ Pass. The agent image does   │
+│                              │                │ not copy tests or solution   │
+│                              │                │ artifacts. Its packages and  │
+│                              │                │ source/build helpers are     │
+│                              │                │ relevant to investigating    │
+│                              │                │ and compiling Prometheus,    │
+│                              │                │ while verifier-only          │
+│                              │                │ components are confined to   │
+│                              │                │ the separate tests image.    │
+│                              │                │ Apt setup includes the       │
+│                              │                │ expected update and cleanup  │
+│                              │                │ pattern without              │
+│                              │                │ version-pinning apt          │
+│                              │                │ packages.                    │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Structured Data Schema       │ not_applicable │ No structured output         │
+│                              │                │ artifact such as JSON, CSV,  │
+│                              │                │ an API schema, or a database │
+│                              │                │ schema is requested; the     │
+│                              │                │ submission is a modified     │
+│                              │                │ source tree/build artifact.  │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Typos                        │ pass           │ Pass. Critical filenames,    │
+│                              │                │ paths, commands, source      │
+│                              │                │ checksums, candidate         │
+│                              │                │ locations, and script        │
+│                              │                │ references are internally    │
+│                              │                │ consistent; no identifier    │
+│                              │                │ typo causing ambiguity or    │
+│                              │                │ silent failure was found.    │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Difficulty Explanation       │ pass           │ Pass. The metadata           │
+│ Quality                      │                │ identifies the concrete      │
+│                              │                │ cross-layer networking and   │
+│                              │                │ Prometheus integration       │
+│                              │                │ issues that make the task    │
+│                              │                │ hard, explains the realistic │
+│                              │                │ source fixture, and places   │
+│                              │                │ the work in the context of   │
+│                              │                │ an observability or systems  │
+│                              │                │ engineer's responsibilities. │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Solution Explanation Quality │ pass           │ Pass. The metadata           │
+│                              │                │ summarizes the               │
+│                              │                │ strategy—routing the scrape  │
+│                              │                │ through an appropriate       │
+│                              │                │ Unix-socket transport while  │
+│                              │                │ retaining normal             │
+│                              │                │ behavior—and agrees with the │
+│                              │                │ supplied patches without     │
+│                              │                │ turning into a line-by-line  │
+│                              │                │ walkthrough.                 │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Verification Explanation     │ pass           │ Pass. The metadata explains  │
+│ Quality                      │                │ that verification builds the │
+│                              │                │ candidate and performs       │
+│                              │                │ controlled end-to-end socket │
+│                              │                │ scrapes, including positive  │
+│                              │                │ and negative/compatibility   │
+│                              │                │ cases. It is congruent with  │
+│                              │                │ controller.go and does not   │
+│                              │                │ rely on unexplained fuzzy    │
+│                              │                │ thresholds.                  │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Category And Tags            │ pass           │ Pass. The configured         │
+│                              │                │ category reflects            │
+│                              │                │ systems/backend debugging,   │
+│                              │                │ and the tags specifically    │
+│                              │                │ identify Prometheus, Go,     │
+│                              │                │ Unix sockets, scraping,      │
+│                              │                │ networking, and debugging    │
+│                              │                │ rather than generic          │
+│                              │                │ difficulty labels.           │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Task Name                    │ pass           │ Pass. unix-socket-scraping   │
+│                              │                │ is descriptive, specific,    │
+│                              │                │ lowercase kebab-case, and    │
+│                              │                │ exactly three tokens. It     │
+│                              │                │ communicates the central     │
+│                              │                │ problem without opening the  │
+│                              │                │ task.                        │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Resource Configuration       │ pass           │ Pass. The configured build   │
+│                              │                │ and verification allowances  │
+│                              │                │ are appropriate for          │
+│                              │                │ compiling and testing the    │
+│                              │                │ supplied Prometheus source,  │
+│                              │                │ while the agent timeout      │
+│                              │                │ reflects a multi-step        │
+│                              │                │ repository debugging task.   │
+│                              │                │ No GPU or excessive compute  │
+│                              │                │ is used, and the             │
+│                              │                │ intellectual challenge does  │
+│                              │                │ not arise from brute-force   │
+│                              │                │ computation.                 │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Task Readme                  │ not_applicable │ No README.md is present in   │
+│                              │                │ the task directory. A task   │
+│                              │                │ README is optional; the      │
+│                              │                │ similarly named              │
+│                              │                │ private-evaluation README is │
+│                              │                │ reviewer-only evidence       │
+│                              │                │ rather than a task artifact. │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Expert Time Estimate         │ pass           │ Pass. A non-zero expert      │
+│                              │                │ estimate is supplied and is  │
+│                              │                │ plausible for locating the   │
+│                              │                │ relevant Prometheus          │
+│                              │                │ plumbing, implementing the   │
+│                              │                │ transport change, compiling  │
+│                              │                │ it, and validating           │
+│                              │                │ regressions. It is           │
+│                              │                │ consistent with the stated   │
+│                              │                │ difficulty and agent         │
+│                              │                │ allowance.                   │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ Task Toml Schema             │ pass           │ Pass. task.toml uses         │
+│                              │                │ recognized Harbor root       │
+│                              │                │ sections and supported       │
+│                              │                │ metadata, verifier, agent,   │
+│                              │                │ environment, solution,       │
+│                              │                │ source/artifact fields. No   │
+│                              │                │ invented operational field   │
+│                              │                │ is present.                  │
+├──────────────────────────────┼────────────────┼──────────────────────────────┤
+│ No Extraneous Files          │ pass           │ Pass. Every listed artifact  │
+│                              │                │ participates in building or  │
+│                              │                │ validating the agent         │
+│                              │                │ environment,                 │
+│                              │                │ pinning/verifying source,    │
+│                              │                │ applying the reference fix,  │
+│                              │                │ constructing the separate    │
+│                              │                │ verifier, hardening          │
+│                              │                │ candidate execution, or      │
+│                              │                │ running behavioral tests.    │
+│                              │                │ The diagnostic and isolation │
+│                              │                │ patch files are referenced   │
+│                              │                │ parts of those workflows     │
+│                              │                │ rather than abandoned        │
+│                              │                │ scratch files.               │
+└──────────────────────────────┴────────────────┴──────────────────────────────┘

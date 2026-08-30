@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "verifiable": {
+      "explanation": "Verification is deterministic and programmatic: it compiles candidate code, runs targeted Go behavior tests, exercises randomized histogram lifecycles, and independently reads produced TSDB blocks with a trusted Oracle-built reader.",
+      "outcome": "pass"
+    },
+    "solvable": {
+      "explanation": "A working upstream-style patch is provided, but it changes 34 files with roughly 3,000 inserted lines and metadata estimates 16 expert hours. That exceeds the criterion's requirement that an expert who knows the solution should implement it within a few hours.",
+      "outcome": "fail"
+    },
+    "difficult": {
+      "explanation": "The task requires substantial Prometheus TSDB expertise across binary chunk encodings, integer and float histograms, WAL/WBL replay, out-of-order ingestion, compaction, block reads, PromQL, and compatibility gating.",
+      "outcome": "pass"
+    },
+    "interesting": {
+      "explanation": "Persisting histogram start timestamps is a realistic observability-storage feature with direct value to Prometheus users and maintainers.",
+      "outcome": "pass"
+    },
+    "outcome_verified": {
+      "explanation": "The tests evaluate compiled behavior and persisted output. They do not require the candidate to use the reference patch, particular editing tools, or a prescribed implementation structure.",
+      "outcome": "pass"
+    },
+    "anti_cheat_robustness": {
+      "explanation": "The verifier restores trusted tests and module metadata, injects hidden tests, uses execute-only binaries and proof tokens, drops privileges and capabilities, and reads blocks with code containing no candidate implementation. However, the agent environment explicitly requests public network access while the task is based on an identifiable upstream change, leaving online retrieval as an obvious shortcut that is addressed only by an instruction.",
+      "outcome": "fail"
+    },
+    "task_security": {
+      "explanation": "The files contain legitimate build, source-validation, artifact-collection, compilation, isolation, and test operations. No credential access, exfiltration, host escape, obfuscated payload, destructive broad operation, or cross-task interference was found.",
+      "outcome": "pass"
+    },
+    "functional_verification": {
+      "explanation": "Tests compile and execute the implementation, append and query samples, restart storage, compact normal and OOO data, reopen blocks, and inspect actual encoding behavior. Verification is not based on source keyword scanning.",
+      "outcome": "pass"
+    },
+    "deterministic_reproducible": {
+      "explanation": "The Go image is digest-pinned, both source archives byte-match and are checksummed, Go module metadata is frozen, verifier dependencies are prewarmed, and verification uses no live service. Randomized values affect test inputs but not the exact invariants being checked.",
+      "outcome": "pass"
+    },
+    "essential_difficulty": {
+      "explanation": "Difficulty comes from codec design, compatibility, feature propagation, and persistence behavior across multiple TSDB layers rather than formatting, precision, or clerical constraints.",
+      "outcome": "pass"
+    },
+    "test_instruction_alignment": {
+      "explanation": "The selected tests cover normal and out-of-order storage, WAL/WBL replay, blocks, both histogram kinds, legacy behavior, `st-storage`, and independence from `xor2-encoding`, all tracing to the stated requirements.",
+      "outcome": "pass"
+    },
+    "novel": {
+      "explanation": "This is a codebase-specific storage-format feature spanning several Prometheus subsystems, not a textbook algorithm or a problem readily solved through generic memorization.",
+      "outcome": "pass"
+    },
+    "agentic": {
+      "explanation": "A solver must explore a large Go repository, trace storage and replay paths, implement multiple coordinated changes, compile, test, and debug iteratively.",
+      "outcome": "pass"
+    },
+    "reviewable": {
+      "explanation": "Although domain-heavy, the instruction, metadata, reference patch, focused test names, lifecycle controller, and independent trusted reader provide enough traceability for a reviewer to understand and validate the intended behavior.",
+      "outcome": "pass"
+    },
+    "instruction_concision": {
+      "explanation": "The instruction is brief, human-readable, and outcome-oriented. It contains no relative file references or unnecessary environment/tool inventory; the online-solution prohibition is a concise anti-cheat constraint.",
+      "outcome": "pass"
+    },
+    "solution_quality": {
+      "explanation": "The solution applies a substantial standalone implementation patch, formats affected packages, runs the relevant test suites, and builds promtool. It does not merely print or copy a final output, and the large change is properly kept in `fix.patch`.",
+      "outcome": "pass"
+    },
+    "separate_verifier_configured": {
+      "explanation": "All agent-derived inputs are declared artifacts, all other verifier inputs and Go dependencies are baked into the verifier image, and the duplicated Prometheus source archives byte-match exactly. `test.sh` performs no network installation.",
+      "outcome": "pass"
+    },
+    "environment_hygiene": {
+      "explanation": "The agent image copies neither tests nor solution files. Its apt installation is preceded by an update and followed by list cleanup. Verifier-only tooling and tests are confined to the separate tests image.",
+      "outcome": "pass"
+    },
+    "structured_data_schema": {
+      "explanation": "The task asks for source-code changes rather than a structured output artifact or public JSON/CSV/API schema.",
+      "outcome": "not_applicable"
+    },
+    "typos": {
+      "explanation": "Critical filenames, feature names, paths, commands, artifact names, and variables are internally consistent; no operative typo was found.",
+      "outcome": "pass"
+    },
+    "difficulty_explanation_quality": {
+      "explanation": "The metadata identifies the relevant TSDB subsystems and real-world Prometheus maintainer, but it mostly lists areas involved. It does not explain why coordinating them is intrinsically difficult for both humans and agents, and it lacks the requested explicit sentence characterizing the accompanying real-source data and its challenge level.",
+      "outcome": "fail"
+    },
+    "solution_explanation_quality": {
+      "explanation": "The explanation accurately summarizes the reference strategy: introduce independent histogram-ST encodings and propagate them through append, replay, compaction, and query paths while retaining legacy formats. It is consistent with the patch.",
+      "outcome": "pass"
+    },
+    "verification_explanation_quality": {
+      "explanation": "The explanation concretely covers artifact integrity, compilation, isolation, randomized integer/float lifecycle tests, independent Oracle reads, persistence paths, codec edge cases, PromQL, compatibility, wiring, and feature independence. It matches the verifier and uses no unexplained tolerance bounds.",
+      "outcome": "pass"
+    },
+    "category_and_tags": {
+      "explanation": "`Observability` is the correct primary domain, and the tags specifically identify Prometheus, TSDB, WAL, chunk encoding, native histograms, and feature flags.",
+      "outcome": "pass"
+    },
+    "task_name": {
+      "explanation": "`start-timestamp-persistence` is descriptive, specific, lowercase kebab-case, and exactly three tokens.",
+      "outcome": "pass"
+    },
+    "resource_configuration": {
+      "explanation": "Two CPUs, 4 GB RAM, 10 GB storage, long build/verifier timeouts, and a three-hour agent timeout are reasonable for compiling and testing a large Prometheus Go tree. No GPU or excessive compute is requested.",
+      "outcome": "pass"
+    },
+    "task_readme": {
+      "explanation": "No README is present, and it is optional.",
+      "outcome": "not_applicable"
+    },
+    "expert_time_estimate": {
+      "explanation": "The 16-hour estimate is nonzero and plausible for a domain expert implementing and validating an approximately 3,000-line cross-cutting Prometheus storage-format feature.",
+      "outcome": "pass"
+    },
+    "task_toml_schema": {
+      "explanation": "The TOML includes fields excluded from the supplied Harbor schema: `network_mode` under both `[environment]` and `[verifier.environment]`, plus the `[[verifier.collect]]` section and its `command`. These are extra fields under the stated schema.",
+      "outcome": "fail"
+    },
+    "no_extraneous_files": {
+      "explanation": "Every listed file is part of environment construction, source provenance/prewarming, the reference solution, artifact preparation, verifier isolation, behavioral verification, trusted test replacement, or the trusted Oracle reader. No scratch, backup, editor, or OS-cruft file was found.",
+      "outcome": "pass"
+    }
+  }
+}
