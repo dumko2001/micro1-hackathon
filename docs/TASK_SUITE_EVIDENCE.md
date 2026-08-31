@@ -1,6 +1,6 @@
 # Task suite evidence ledger
 
-Snapshot: 30 August 2026. Static provenance, host checks, Daytona execution, private evidence binding, and model difficulty are separate evidence classes.
+Snapshot: 31 August 2026. Static provenance, host checks, Daytona execution, private evidence binding, and model difficulty are separate evidence classes.
 
 ## Registered lineage
 
@@ -81,10 +81,11 @@ The private grader binds task digest, candidate identity, agent, resource reques
 
 | Gate | Decisions | Complete | Balanced accuracy | False accepts | False rejects |
 |---|---:|---:|---:|---:|---:|
+| Current Oracle-conformance matrix | 25 | yes | `1.0` | `0.0` | `0.0` |
 | Full: reference, no-op, alternate, and mutants | 30 | yes | `1.0` | `0.0` | `0.0` |
 | Repeatability: reference r1/r2 and no-op r1/r2 | 20 | yes | `1.0` | `0.0` | `0.0` |
 
-These metrics apply only to the registered candidates and pinned jobs. The repository now includes the reviewer fixtures and reports; raw `jobs/` output and credentials remain ignored. A public copy is therefore a transparent benchmark artifact, not a secret evaluator.
+The 25-case row is bound by `.private-eval/cases/oracle-conformance-manifest.json` (SHA-256 `b3ce26e81ead46f0ab6bed81d022361f3ce9f673fbfda8b0b6d96481e3cbe51e`). The 30- and 20-case rows belong to earlier task digests and remain historical. These metrics apply only to the registered candidates and pinned jobs. The repository includes the reviewer fixtures and reports; raw `jobs/` output and credentials remain ignored.
 
 ## Failed experiments kept in the record
 
@@ -133,6 +134,22 @@ The candidate archives differ and use genuinely distinct encodings. Both now ret
 
 The earlier 80% result is development history, not the final task solve rate or a Micro1 baseline/final comparison.
 
+## Final-byte stock-agent calibration
+
+These ten terminal trials used Codex 0.151.0 with `gpt-5.6-luna` on the final task checksums. No reasoning override was supplied; Harbor resolved its default to `high`. Every scored trial ended without an exception.
+
+| Task | Trial results | Wall times | What the failures revealed |
+|---|---:|---:|---|
+| Unix-socket scraping | 0/2 | 989.448s; 1216.577s | both omitted the established `localhost` authority for an empty advertised address |
+| Step-invariant subquery | 0/2 | 599.909s; 573.758s | both unwrapped downstream instead of preserving the reviewed preprocessing boundary |
+| Native-histogram rates | 0/2 | 1322.127s; 1260.245s | reset/interpolation handling and the monotonic smoothed control remained wrong |
+| Start-timestamp persistence | 0/2 | 2013.710s; 1989.525s | one extra-header format and one sidecar-bitmap format were coherent but not interoperable with the landed reader |
+| Stale-series WAL expiry | 2/2 | 942.280s; 816.632s | both used the required timestamp-domain expiry |
+
+Aggregate result: 2/10, 93,842,853 input tokens, 91,727,360 cached input tokens, 278,327 output tokens, $2.59163820, 3:15:24.21 summed trial wall time, 2:13:57.51 agent time, and 52:01.56 verifier time.
+
+The original combined coordinator wrote eight terminal results and then stopped with one UDS and one ST trial marked active. The UDS actor had produced a candidate but no reward; the ST actor had not produced a trajectory. One isolated replacement job per task supplied the missing terminal decisions. Those two incomplete entries are excluded from the scored corpus and are not counted as failures. Trajectory review of all ten scored runs found no executed online search or fetch, verifier, solution, hidden-test, or reward access.
+
 ## Current claim
 
-The current suite has pinned lineage, exact-reference fidelity, deterministic packaging, source parity, Harbor parsing, 5/5 reference passes, 5/5 no-op rejections, 5/5 accepted format-compatible alternates, 10/10 rejected mutants, and 2/2 rejected superseded ST encodings. The fresh 10-trial Luna-default job is still active. Repeatability on the final bytes, a formal hostile-code proof, the video, and any numerical Micro1 same-case comparison remain incomplete.
+The current suite has pinned lineage, exact-reference fidelity, deterministic packaging, source parity, Harbor parsing, 5/5 reference passes, 5/5 no-op rejections, 5/5 accepted format-compatible alternates, 10/10 rejected mutants, 2/2 rejected superseded ST encodings, a bound 25-case gate at BA `1.0`, FAR `0.0`, FRR `0.0`, and a complete 2/10 final-byte Luna-default result. Repeatability on the final bytes, a formal hostile-code proof, the recorded video, redacted trajectory publication, and any numerical Micro1 same-case comparison remain incomplete.

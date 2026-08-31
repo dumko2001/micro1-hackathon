@@ -6,6 +6,10 @@ result. Raw Harbor jobs and credentials remain ignored.
 
 ## Two deliberately separate gates
 
+- `cases/oracle-conformance-manifest.json` binds the 25 decisions on the final
+  Oracle-conformance packages: reference, no-op, registered compatible
+  alternate, and two named mutants per task. It is the current-byte gate.
+
 - `cases/runtime-smoke-manifest.json` covers only the five Daytona oracle runs
   and five Daytona no-op runs. Passing it proves bound `1/0` smoke behavior; it
   does **not** prove alternate-valid method neutrality, mutant discrimination,
@@ -21,7 +25,7 @@ result. Raw Harbor jobs and credentials remain ignored.
   every task. Job names are part of case identity, so repeated trials cannot be
   silently exchanged.
 
-Both manifests require Harbor 0.14, Daytona, at most five concurrent trials,
+All manifests require Harbor 0.14, Daytona, at most five concurrent trials,
 exactly 2 vCPU / 4096 MiB / 10240 MiB overrides, and sandbox deletion.
 
 When a five-task Harbor job contains trials from task bytes later superseded by

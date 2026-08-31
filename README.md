@@ -60,6 +60,7 @@ The latest Oracle-alignment pass uses one final-byte reference, no-op, alternate
 | Alternate-valid fixtures | 5/5 accepted |
 | Current named behavioral mutants | 10/10 rejected |
 | Replayed non-landed ST encodings | 2/2 rejected |
+| Bound 25-case private gate | BA `1.0`, FAR `0.0`, FRR `0.0` |
 
 Earlier frozen snapshots also contain repeat runs and a broader 15-mutant corpus. They remain useful development evidence, but their task digests differ from the final Oracle-conformance package and are not presented as current-byte certification.
 
@@ -80,9 +81,9 @@ The [reproduction guide](docs/REPRODUCTION.md) covers public source checks and H
 
 The project documents the move from an initial PromQL episode to five calibrated Prometheus environments. The [changelog](CHANGELOG.md) records each verifier correction, false reject, runtime failure, and hardening decision made along the way.
 
-Ten final-byte `gpt-5.6-luna` rollouts are running now: 2 per task with no reasoning override. Earlier cohorts are kept in the evidence ledger as development history, including the two ST solutions that passed the method-neutral verifier but fail the final landed-format gate. Agent solve rate measures difficulty; it does not establish verifier validity.
+Ten final-byte `gpt-5.6-luna` rollouts are complete: 2 per task with no reasoning override, which Harbor resolved to its default `high` setting. WAL passed 2/2; UDS, subquery, histogram, and start timestamp passed 0/2. The aggregate is 2/10 with no Harbor exceptions, $2.59163820 in model cost, and 3:15:24.21 of summed trial wall time. Earlier cohorts remain development history, including the two ST solutions that passed the method-neutral verifier but fail the final landed-format gate. Agent solve rate measures difficulty; it does not establish verifier validity.
 
-The solution video, redacted representative trajectories, and a shareable commit remain submission work. See the [Micro1 checklist](docs/MICRO1_REQUIREMENTS.md).
+The recording script is ready. The actual video, redacted representative trajectories, and a shareable remote remain submission work. See the [Micro1 checklist](docs/MICRO1_REQUIREMENTS.md).
 
 ## Publishing
 

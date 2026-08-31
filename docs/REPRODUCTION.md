@@ -1,10 +1,10 @@
 # Reproduction guide
 
-This guide reproduces deterministic task materialization and the Harbor/Daytona verifier matrix. The current final-byte deterministic matrix is complete. A fresh 2-run-per-task Luna-default difficulty job is still active.
+This guide reproduces deterministic task materialization and the Harbor/Daytona verifier matrix. The current final-byte deterministic matrix and 2-run-per-task Luna-default difficulty calibration are complete.
 
 ## Clean checkout
 
-Local commit `8cc0415` exists, but final changes and the remote are pending. Replace the placeholders after publishing:
+Local commits exist, but the final evidence commit and remote are pending. Replace the placeholders after publishing:
 
 ```bash
 git clone <repository-url>
@@ -99,6 +99,8 @@ st-oracle-conformance-final-mutant-2-20260830
 ```
 
 Oracle and no-op use Harbor's built-in agents. Alternate and mutant runs use the reviewer-only candidate-fixture adapter. The current matrix expects five Oracle `1`s, five no-op `0`s, five alternate `1`s, and ten mutant `0`s, with no Harbor exceptions. Earlier repeat jobs and the seven-mutant ST corpus are retained as development evidence on superseded task digests.
+
+The final stock-agent calibration is composed from the eight terminal trials in `micro1-oracle-alignment-final-luna-default-20260830` plus the terminal replacement jobs `micro1-oracle-alignment-final-recovery-uds-20260831` and `micro1-oracle-alignment-final-recovery-20260831`. Require exactly two completed trials per task, two total rewards of `1`, eight rewards of `0`, and zero exceptions. The replaced coordinator entries have no reward and are not part of the scored corpus.
 
 ## Author-side evidence gates
 

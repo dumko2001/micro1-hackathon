@@ -6,7 +6,7 @@ Apply the reference feature patch and then `alternate-valid/fix.patch`. The cand
 
 Expected reward: `1`.
 
-This proves that grading is not a source-diff comparison. The final verifier does not require the landed byte layout or concrete Go type names: it checks complete lifecycle receipts through a separate candidate-linked reader and independently checks clean-parent legacy blocks.
+This proves that grading is not a source-diff comparison. The final verifier does not require the landed concrete Go type names or source organization. It does require the final reviewed wire format: a root-only reader built from the exact landed patch must decode the same sealed blocks as the candidate reader. Complete lifecycle receipts and clean-parent legacy blocks are checked separately.
 
 ## Named mutant: coupled feature flags
 

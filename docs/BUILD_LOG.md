@@ -60,9 +60,14 @@ The final launcher trusts Daytona's network policy, compiles serially with `GOMA
 - Added a root-only reader built from the exact landed ST patch. It reads the same sealed candidate blocks and must return the same complete receipts as the candidate reader. The registered alternate still passes because it preserves the final format.
 - The earlier private 30-case and 20-case gates each reported balanced accuracy `1.0`, false-accept rate `0.0`, and false-reject rate `0.0` on their pinned bytes.
 - On the current Oracle-conformance bytes, the exact references passed 5/5, no-ops failed 5/5, format-compatible alternates passed 5/5, and two mutants per task failed 10/10. Two formerly accepted ST encodings also failed the landed-reader gate. All trials ended without Harbor exceptions.
+- Bound those 25 current decisions in `oracle-conformance-manifest.json`. The native Harbor evidence gate reports balanced accuracy `1.0`, false-accept rate `0.0`, and false-reject rate `0.0`.
 
 Exact task hashes, job names, timings, candidate defects, and verifier boundaries are in [the evidence ledger](TASK_SUITE_EVIDENCE.md).
 
 ## Model evidence
 
-On earlier verifier bytes, ten `gpt-5.6-luna` max-reasoning runs produced eight passes. UDS, step, WAL, and start timestamp passed twice; histogram missed required semantics twice. The two start-timestamp candidates used different encodings and passed the neutral verifier, but both now fail the landed-format gate. A fresh two-run-per-task Luna-default job is active on the final packages. The Micro1 numerical comparison remains pending.
+On earlier verifier bytes, ten `gpt-5.6-luna` max-reasoning runs produced eight passes. UDS, step, WAL, and start timestamp passed twice; histogram missed required semantics twice. The two start-timestamp candidates used different encodings and passed the neutral verifier, but both now fail the landed-format gate.
+
+The final packages then received two completed `gpt-5.6-luna` runs per task with no reasoning override; Harbor used its default `high` setting. WAL passed twice. Both UDS candidates omitted the established `localhost` authority for an empty advertised address. Both subquery candidates implemented downstream unwrapping instead of preserving the reviewed preprocessing boundary. The histogram candidates missed reset/interpolation semantics. The ST candidates implemented coherent non-landed formats: one used an extra-header organization and one used a sidecar presence bitmap. The final result is 2/10 with no exceptions, 93,842,853 input tokens, 91,727,360 cached input tokens, 278,327 output tokens, $2.59163820, 3:15:24.21 summed trial wall time, 2:13:57.51 agent time, and 52:01.56 verifier time.
+
+The original combined coordinator wrote eight terminal results before stopping with one UDS and one ST trial marked active. The UDS actor had finished but never received a reward; the ST actor had not produced a trajectory. Isolated replacement jobs produced the two missing terminal rewards. The incomplete trials are disclosed and excluded, not relabeled as behavioral failures. The Micro1 numerical same-case baseline comparison remains pending.

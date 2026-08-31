@@ -2,6 +2,8 @@
 
 Date: 2026-08-30
 
+This file records the fixture audit at that stage. The start-timestamp verifier was subsequently changed from lifecycle method neutrality to explicit conformance with the final reviewed wire format. Current certification is recorded in `cases/oracle-conformance-manifest.json` and `docs/TASK_SUITE_EVIDENCE.md`.
+
 ## Verdict
 
 All 20 registered alternate and mutant fixtures apply cleanly to fresh copies of the current clean-parent archives. Every alternate passes its available discriminator and every mutant fails for its intended behavior. The five source archives in `task_support` are byte-identical to the corresponding generated task archives.
