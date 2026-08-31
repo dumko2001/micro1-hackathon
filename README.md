@@ -18,7 +18,7 @@ The seven upstream PRs were merged between 18 May and 14 August 2026. Choosing r
 
 Start-timestamp persistence spans 34 upstream files, more than the other four tasks.
 
-## One shared episode
+## One shared episode lifecycle
 
 ```text
 pinned pre-change source -> coding agent -> frozen source archive
@@ -44,16 +44,16 @@ These are milestones from the build, not a controlled model comparison. The veri
 
 All 10 final trials completed without Harbor exceptions. Together they cost `$2.59163820` and took `3:15:24.21` in summed trial time.
 
-## Final 25-case check
+## Final verifier calibration
 
-The final checker made five decisions for each task:
+The final verifier classified five registered candidates for each task:
 
 - the merged implementation should pass
 - unchanged code should fail
-- a different working implementation should pass
-- two intentionally wrong implementations should fail
+- one registered alternate-valid fixture should pass
+- two injected mutants should fail
 
-Across five tasks, that is 10 working candidates and 15 incorrect candidates. All 25 were classified correctly. On this fixed set, balanced accuracy is `1.0`, false-accept rate is `0.0`, and false-reject rate is `0.0`. Those numbers measure the checker. Luna's final solve rate is the separate 2/10 result above.
+Across five tasks, that is 10 expected-pass candidates and 15 expected-fail candidates. All 25 were classified correctly. On this fixed set, balanced accuracy is `1.0`, false-accept rate is `0.0`, and false-reject rate is `0.0`. Those numbers measure the verifier. Luna's final solve rate is the separate 2/10 result above.
 
 ## The challenging case
 
@@ -79,7 +79,7 @@ The submission archive uses these paths:
 
 The HackerEarth upload archive omits the generated `tasks/` copies to stay below its 50 MB limit. The materializer recreates them from `task_support/` and verifies their checksums.
 
-A trajectory records the instruction, agent messages, tool calls, tool responses, and outcome. A raw Harbor job also contains working directories, checker output, collected repository archives, runtime logs, and coordinator state.
+A trajectory records the instruction, agent messages, tool calls, tool responses, and outcome. A raw Harbor job also contains working directories, verifier output, collected repository archives, runtime logs, and coordinator state.
 
 The upload contains 42 completed, exception-free Luna trajectories. Its index also accounts for five excluded trial slots: two cancellations, one actor timeout, one UDS run stranded before grading, and one start-timestamp slot that stopped before writing a trajectory. Raw jobs stay local.
 
