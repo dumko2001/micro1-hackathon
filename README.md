@@ -4,15 +4,17 @@ Prometheus changes span networking, query execution, and storage. This repositor
 
 Teams training or comparing coding agents need to package a repository change as a repeatable episode without giving away the answer. Each task here has a pinned starting tree, a short maintainer request, a captured trajectory, and a binary reward. The runtime stays the same as the work moves across the codebase.
 
+The seven upstream PRs were merged between 18 May and 14 August 2026. Choosing recent changes reduces the chance of training exposure; it does not prove that a model has never seen the code.
+
 ## The five tasks
 
-| Task | Outcome |
-|---|---|
-| Unix-socket scraping | Scrape HTTP and HTTPS targets over Unix sockets without mixing targets or falling back to TCP |
-| Step-invariant PromQL | Keep fixed-time subqueries consistent across instant and range evaluation |
-| Native-histogram rates | Handle resets, schema changes, warnings, interpolation, and mixed ranges correctly |
-| Start-timestamp persistence | Preserve histogram start timestamps through chunks, WAL/WBL replay, blocks, reopen, and queries |
-| Stale-series WAL expiry | Retain stale-series metadata only while WAL references still need it |
+| Task | Upstream PRs | Outcome |
+|---|---|---|
+| Unix-socket scraping | [#18091](https://github.com/prometheus/prometheus/pull/18091), [#19399](https://github.com/prometheus/prometheus/pull/19399) | Scrape HTTP and HTTPS targets over Unix sockets without mixing targets or falling back to TCP |
+| Step-invariant PromQL | [#19187](https://github.com/prometheus/prometheus/pull/19187) | Keep fixed-time subqueries consistent across instant and range evaluation |
+| Native-histogram rates | [#18564](https://github.com/prometheus/prometheus/pull/18564), [#18943](https://github.com/prometheus/prometheus/pull/18943) | Handle resets, schema changes, warnings, interpolation, and mixed ranges correctly |
+| Start-timestamp persistence | [#18609](https://github.com/prometheus/prometheus/pull/18609) | Preserve histogram start timestamps through chunks, WAL/WBL replay, blocks, reopen, and queries |
+| Stale-series WAL expiry | [#18847](https://github.com/prometheus/prometheus/pull/18847) | Retain stale-series metadata only while WAL references still need it |
 
 Start-timestamp persistence spans 34 upstream files, more than the other four tasks.
 
@@ -31,7 +33,7 @@ The same handoff works across all five tasks. A team can add another Prometheus 
 
 ## Results
 
-The first complete Luna cohort used max reasoning and solved 8 of 10 attempts. The final cohort used Harbor's default high reasoning and solved 2 of 10.
+Each complete cohort used two Luna attempts per task, for ten attempts in total. The first complete cohort used max reasoning and solved 8 of 10. The final cohort used Harbor's default high reasoning and solved 2 of 10.
 
 | Cohort | UDS | Subquery | Histogram | Start timestamp | WAL expiry | Total |
 |---|---:|---:|---:|---:|---:|---:|
@@ -44,20 +46,20 @@ All 10 final trials completed without Harbor exceptions. Together they cost `$2.
 
 ## Final 25-case check
 
-The final verifier ran against five candidate states for each task:
+The final checker made five decisions for each task:
 
-- 5 exact upstream implementations, all accepted
-- 5 unchanged implementations, all rejected
-- 5 independently written working implementations, all accepted
-- 10 incorrect implementations, all rejected
+- the merged implementation should pass
+- unchanged code should fail
+- a different working implementation should pass
+- two intentionally wrong implementations should fail
 
-That is 10 correct candidates and 15 incorrect candidates. All 25 were classified correctly. On this fixed set, balanced accuracy is `1.0`, false-accept rate is `0.0`, and false-reject rate is `0.0`. Those numbers measure the verifier checks. Luna's final solve rate is the separate 2/10 result above.
+Across five tasks, that is 10 working candidates and 15 incorrect candidates. All 25 were classified correctly. On this fixed set, balanced accuracy is `1.0`, false-accept rate is `0.0`, and false-reject rate is `0.0`. Those numbers measure the checker. Luna's final solve rate is the separate 2/10 result above.
 
 ## The challenging case
 
 Start-timestamp persistence exposed a verifier gap. Two Luna solutions carried the feature through the storage lifecycle, but each wrote its own on-disk format. Both passed an earlier behavioral verifier. Neither format matched the one Prometheus merged.
 
-The final episode leaves implementation names and code layout open while requiring persisted blocks to work with the landed Prometheus reader. The two earlier solutions now fail that compatibility check.
+The final episode leaves implementation names and code layout open while requiring persisted blocks to work with the merged Prometheus reader. The two earlier solutions now fail that compatibility check.
 
 Job receipts and task digests are in the [evidence ledger](docs/TASK_SUITE_EVIDENCE.md).
 
@@ -73,11 +75,13 @@ The submission archive uses these paths:
 | Reference solutions and verifiers | `tasks/*/solution/` and `tasks/*/tests/` after materialization |
 | Clean-machine commands | [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md) |
 | Task digests, job receipts, and run results | [`docs/TASK_SUITE_EVIDENCE.md`](docs/TASK_SUITE_EVIDENCE.md) |
-| Representative agent trajectories and their reading guide | `trajectories/`, starting with `trajectories/README.md` |
+| Completed Luna trajectories and their index | `trajectories/`, starting with `trajectories/README.md` |
 
 The HackerEarth upload archive omits the generated `tasks/` copies to stay below its 50 MB limit. The materializer recreates them from `task_support/` and verifies their checksums.
 
-A trajectory records the instruction, agent messages, tool calls, tool responses, and reward for a selected run. A raw Harbor job also contains working directories, verifier output, collected artifacts, runtime logs, and coordinator state. The submission includes trajectories for each agent role; raw jobs stay local.
+A trajectory records the instruction, agent messages, tool calls, tool responses, and outcome. A raw Harbor job also contains working directories, checker output, collected repository archives, runtime logs, and coordinator state.
+
+The upload contains 42 completed, exception-free Luna trajectories. Its index also accounts for five excluded trial slots: two cancellations, one actor timeout, one UDS run stranded before grading, and one start-timestamp slot that stopped before writing a trajectory. Raw jobs stay local.
 
 ## Reproduce it
 
