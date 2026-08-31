@@ -11,8 +11,8 @@ Source: `micro1 - First Hackathon97ce7c5.pdf`, checked as text and as ten render
 | Compare a reasonable baseline and final solution on the same cases | 2 and 4 | The changelog defines the baseline as the first narrow PR-shaped task and the final as the hardened five-task environment. A numerical same-case comparison is not yet claimed. |
 | Choose one primary metric and report complete results | 4 | Final verifier BA/FAR/FRR and the complete 10-trial stock-agent result are reported. |
 | Keep an Improvement Changelog with meaningful and removed experiments | 3 and 7 | Covered by `CHANGELOG.md`, including false rejects, false accepts, removed designs, and the final Oracle-conformance decision. |
-| Submit complete solution code and agent instructions | 7 | Present locally; final evidence commit and remote are pending. |
-| Provide a clean-environment reproduction guide with versions, runtime, cost, and expected output | 7 | Runtime, cost, expected results, and commands are documented; a clean clone URL and numerical baseline/final cost comparison are pending. |
+| Submit complete solution code and agent instructions | 7 | Present at private repository commit `232f174f1c56901224c1e3ad00267712e7f001bd`. |
+| Provide a clean-environment reproduction guide with versions, runtime, cost, and expected output | 7 | Clone URL, frozen commit, runtime, cost, expected results, and commands are documented; a numerical baseline/final cost comparison is pending. |
 | Submit a solution video of no more than five minutes | 7 | Recording script ready; recording missing. |
 | Submit representative trajectories for every agent used | 7 | Missing |
 
@@ -49,4 +49,4 @@ It specifies no PR count, public GitHub repository, research novelty, research-p
 1. Decide whether to add a numerical same-case comparison or explicitly submit the documented qualitative evolution only.
 2. Publish representative redacted trajectories for every agent used.
 3. Record the five-minute-or-shorter video from `docs/VIDEO_SCRIPT.md`.
-4. Commit the final edits and give judges a reproducible source URL or private share.
+4. Give judges access to the private repository.

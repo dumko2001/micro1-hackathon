@@ -4,12 +4,12 @@ This guide reproduces deterministic task materialization and the Harbor/Daytona 
 
 ## Clean checkout
 
-Local commits exist, but the final evidence commit and remote are pending. Replace the placeholders after publishing:
+The frozen evidence snapshot is commit `232f174f1c56901224c1e3ad00267712e7f001bd` in the private repository:
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:dumko2001/micro1-hackathon.git
 cd micro1-hackathon
-git checkout <submission-commit>
+git checkout 232f174f1c56901224c1e3ad00267712e7f001bd
 ```
 
 Never publish `.env`, Codex authentication files, raw `jobs/` output, or unredacted trajectories. This transparent authoring repository does include reviewer fixtures and verifier internals.

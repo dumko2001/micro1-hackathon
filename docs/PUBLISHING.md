@@ -2,7 +2,7 @@
 
 ## Current state
 
-This checkout is not public. It has local commit `8cc0415` and no configured remote. Final Oracle-alignment edits remain uncommitted.
+This checkout is mirrored to the private GitHub repository [`dumko2001/micro1-hackathon`](https://github.com/dumko2001/micro1-hackathon). The frozen evidence snapshot is commit `232f174f1c56901224c1e3ad00267712e7f001bd`. The repository is not public.
 
 The tree contains both sides of the evaluation boundary:
 
@@ -13,7 +13,7 @@ The tree contains both sides of the evaluation boundary:
 - reviewer calibration code, candidate fixtures, manifests, and rubric outputs, which are tracked in this transparent authoring repository;
 - credentials, raw `jobs/` output, and recordings, which remain excluded by `.gitignore`.
 
-All five bundled source archives are stripped of `.git`, remotes, and history. That prevents direct Git discovery inside the task checkout. It cannot stop an actor with public egress from identifying familiar code or searching online. A published authoring repository is also not secret: its reference patches and verifier cases are readable once pushed.
+All five bundled source archives are stripped of `.git`, remotes, and history. That prevents direct Git discovery inside the task checkout. It cannot stop an actor with public egress from identifying familiar code or searching online. The authoring repository is not a secret evaluator: its reference patches and verifier cases are readable by every collaborator with access.
 
 ## Recommended release layout
 
@@ -49,9 +49,9 @@ If Micro1 judges need the complete source before a public release, share the ful
 
 Share private calibration evidence through restricted repository access or an encrypted archive. Put the bundle's SHA-256 in the public release manifest so judges can confirm they reviewed the cited bytes without exposing the cases.
 
-## Pre-publication checks
+## Before a public release
 
-Before creating a remote:
+Before changing the private repository to public:
 
 1. commit the final Oracle-alignment edits and record the SHA in the submission;
 2. run `git status --ignored` and confirm `.env`, `jobs/`, private submissions, and raw trajectories are ignored;

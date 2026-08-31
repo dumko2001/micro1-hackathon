@@ -83,11 +83,11 @@ The project documents the move from an initial PromQL episode to five calibrated
 
 Ten final-byte `gpt-5.6-luna` rollouts are complete: 2 per task with no reasoning override, which Harbor resolved to its default `high` setting. WAL passed 2/2; UDS, subquery, histogram, and start timestamp passed 0/2. The aggregate is 2/10 with no Harbor exceptions, $2.59163820 in model cost, and 3:15:24.21 of summed trial wall time. Earlier cohorts remain development history, including the two ST solutions that passed the method-neutral verifier but fail the final landed-format gate. Agent solve rate measures difficulty; it does not establish verifier validity.
 
-The recording script is ready. The actual video, redacted representative trajectories, and a shareable remote remain submission work. See the [Micro1 checklist](docs/MICRO1_REQUIREMENTS.md).
+The recording script is ready. The actual video and redacted representative trajectories remain submission work. See the [Micro1 checklist](docs/MICRO1_REQUIREMENTS.md).
 
 ## Publishing
 
-This checkout has a local Git commit but no GitHub remote yet. It is not public.
+The complete authoring tree is available in the private repository [`dumko2001/micro1-hackathon`](https://github.com/dumko2001/micro1-hackathon). It is not public.
 
 The authoring tree contains solutions and verifier cases. It can be published as a transparent submission and reproduction artifact, but not as a secret network-enabled benchmark. A live secret benchmark needs unreleased cases, private evaluator storage, and runtime-only credentials. The [publishing guide](docs/PUBLISHING.md) keeps those release modes separate.
 
