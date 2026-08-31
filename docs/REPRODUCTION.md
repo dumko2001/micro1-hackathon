@@ -34,7 +34,7 @@ Harbor delegates execution to Daytona, so this path does not need local Docker.
 ```bash
 git clone https://github.com/dumko2001/micro1-hackathon.git
 cd micro1-hackathon
-git checkout micro1-submission-v3
+git checkout micro1-submission-v4
 ```
 
 Create the local environment file from the safe template:

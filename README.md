@@ -61,6 +61,20 @@ The final episode leaves implementation names and code layout open while requiri
 
 Full job receipts and task digests are in the [evidence ledger](docs/TASK_SUITE_EVIDENCE.md).
 
+## Submission map
+
+The final submission archive keeps each part in one predictable place:
+
+| What you need | Location |
+|---|---|
+| Runnable Harbor packages and environment code | `tasks/*/task.toml` and `tasks/*/environment/` |
+| Task instructions shown to agents | `tasks/*/instruction.md` |
+| Reference solution code | `tasks/*/solution/` |
+| Verifier code and entrypoints | `tasks/*/tests/` |
+| Clean-machine commands | [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md) |
+| Task digests, job receipts, and run results | [`docs/TASK_SUITE_EVIDENCE.md`](docs/TASK_SUITE_EVIDENCE.md) |
+| Representative agent trajectories and their reading guide | `trajectories/`, starting with `trajectories/README.md` |
+
 ## Reproduce it
 
 Materialize all five task packages:
