@@ -1,18 +1,18 @@
 # Reproduction guide
 
-This guide reproduces deterministic task materialization and the Harbor/Daytona verifier matrix. The current final-byte deterministic matrix and 2-run-per-task Luna-default difficulty calibration are complete.
+This guide reproduces task materialization and the Harbor/Daytona runs used for the five Prometheus episodes.
 
 ## Clean checkout
 
-The frozen evidence snapshot is commit `232f174f1c56901224c1e3ad00267712e7f001bd` in the private repository:
+Clone the public submission and check out its release tag:
 
 ```bash
-git clone git@github.com:dumko2001/micro1-hackathon.git
+git clone https://github.com/dumko2001/micro1-hackathon.git
 cd micro1-hackathon
-git checkout 232f174f1c56901224c1e3ad00267712e7f001bd
+git checkout micro1-submission-v1
 ```
 
-Never publish `.env`, Codex authentication files, raw `jobs/` output, or unredacted trajectories. This transparent authoring repository does include reviewer fixtures and verifier internals.
+The repository includes the task code, reference patches, and verifier internals. Provider credentials, raw job directories, recordings, and unredacted trajectories are not part of Git.
 
 ## Pinned runtime
 
@@ -172,6 +172,8 @@ The current 25-case Oracle-conformance matrix is recorded directly in the eviden
 
 The first PromQL snapshot took 142.91 seconds for a cold focused test, 215.33 seconds for the first broad Prometheus build after that, and 23.08 seconds for an immediate warm rebuild on the author's macOS host. These are host observations, not Daytona timings. The evidence ledger records whole-job Daytona times.
 
-## Micro1 comparison still pending
+## Recorded build milestones
 
-The changelog documents the qualitative baseline—the initial narrow PR-shaped verifier—and the final five-task environment. A numerical improvement claim still requires running both versions on the same cases. Do not mix Oracle/no-op infrastructure runs into agent cost or solve rate.
+The first complete Luna cohort used 2 max-reasoning attempts per task and passed 8/10. The final cohort used 2 attempts per task with Harbor's default high reasoning and passed 2/10. The verifier version and reasoning setting changed, so these are build milestones rather than a controlled model comparison.
+
+The separate 25-case task check classified all 10 working candidates and all 15 incorrect candidates correctly. It measures the final verifier on its registered candidates; it is not an agent solve-rate result.
