@@ -134,6 +134,20 @@ The candidate archives differ and use genuinely distinct encodings. Both now ret
 
 The earlier 80% result is development history, not the final task solve rate or a Micro1 baseline/final comparison.
 
+## Prompt-matched stock-agent calibration
+
+The next cohort used Codex with `gpt-5.6-luna` and no reasoning override; the adapter resolved that default to `high`. The two five-task jobs were `micro1-current-luna-default-r1-20260830` and `micro1-current-luna-default-r2-20260830`.
+
+| Task | Result |
+|---|---:|
+| Unix-socket scraping | 2/2 |
+| Step-invariant subquery | 2/2 |
+| Native-histogram rates | 0/2 |
+| Start-timestamp persistence | 1/2 |
+| Stale-series WAL expiry | 2/2 |
+
+Aggregate result: 7/10. One passing subquery trial preceded the final exact-output control, so this cohort remains development history rather than final-byte evidence.
+
 ## Final-byte stock-agent calibration
 
 These ten terminal trials used Codex 0.151.0 with `gpt-5.6-luna` on the final task checksums. No reasoning override was supplied; Harbor resolved its default to `high`. Every scored trial ended without an exception.

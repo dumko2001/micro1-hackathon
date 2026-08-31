@@ -1,8 +1,8 @@
 # Reproduction guide
 
-These steps start from a clean machine, build the five task packages, run an executable baseline and reference solution, score the 25-candidate matrix, and launch the Luna evaluation.
+From a clean machine, the sequence is: clone the repository, materialize the five tasks, run the no-op and reference controls, score the 25 candidates, then launch Luna. The commands below match the recorded Harbor/Daytona setup.
 
-## 1. Install the runner
+## 1. Prepare the runner
 
 Required:
 
@@ -12,14 +12,14 @@ Required:
 - a Daytona account
 - Codex model access only for the Luna run
 
-Install the recorded Harbor version:
+Install the Harbor version used for the recorded runs:
 
 ```bash
 uv tool install harbor==0.14.0
 harbor --version
 ```
 
-Expected version: `0.14.0`.
+The command should report `0.14.0`.
 
 The task images use Go `1.26` from the pinned builder image:
 
@@ -27,27 +27,27 @@ The task images use Go `1.26` from the pinned builder image:
 golang:1.26-bookworm@sha256:e8c859f5632dcfde7b32d2012b4351728f6437930887c2f6a91ea242459e5514
 ```
 
-No local Docker runtime is needed when Harbor uses Daytona.
+Harbor delegates execution to Daytona, so this path does not need local Docker.
 
-## 2. Clone the submission
+## 2. Clone the environment
 
 ```bash
 git clone https://github.com/dumko2001/micro1-hackathon.git
 cd micro1-hackathon
-git checkout micro1-submission-v2
+git checkout micro1-submission-v3
 ```
 
-Copy the safe environment template:
+Create the local environment file from the safe template:
 
 ```bash
 cp .env.example .env
 ```
 
-Set `DAYTONA_API_KEY` in `.env`. Set `CODEX_FORCE_AUTH_JSON` to the contents of a Codex `auth.json` file only when running Luna. Do not put `.env`, provider credentials, or raw authentication files into Git or a shared result archive.
+Add `DAYTONA_API_KEY` to `.env`. The Luna run also needs `CODEX_FORCE_AUTH_JSON` set to the compact, single-line JSON from a Codex `auth.json` file; pretty-printed multiline JSON is not a valid dotenv value. Keep `.env`, provider credentials, and raw authentication files out of Git and shared result archives.
 
-## 3. Data and task materialization
+## 3. Materialize the tasks
 
-No external evaluation dataset is required. The repository contains:
+There is no separate evaluation download. The repository already contains:
 
 - the five pre-change Prometheus source archives
 - source checksums and upstream patch stacks
@@ -56,7 +56,7 @@ No external evaluation dataset is required. The repository contains:
 - verifier code
 - the calibration candidate fixtures
 
-Materialize and verify all five Harbor packages:
+Build and verify the five Harbor packages:
 
 ```bash
 python3 tools/materialize_prometheus_task.py
@@ -73,11 +73,11 @@ verified 22 files: .../tasks/start-timestamp-persistence
 verified 21 files: .../tasks/stale-wal-expiry
 ```
 
-Materialization takes under a minute on the recorded host and needs no network. The first remote run must download the pinned builder image and checksum-locked Go modules.
+On the recorded host, materialization took under a minute and used no network. The first Daytona run still has to fetch the pinned builder image and checksum-locked Go modules.
 
-## 4. Executable baseline
+## 4. Run the executable baseline
 
-The project story began with one fixed-time PromQL episode. For a repeatable evaluation baseline on the submitted five tasks, use Harbor's built-in no-op agent:
+The project began with one fixed-time PromQL episode. To get a repeatable baseline across the submitted five tasks, run Harbor's built-in no-op agent:
 
 ```bash
 harbor run --env-file .env -e daytona -p tasks \
@@ -89,11 +89,11 @@ harbor run --env-file .env -e daytona -p tasks \
   --yes --job-name micro1-repro-nop
 ```
 
-Expected result: 5 completed trials, 5 rewards of `0`, and no exceptions. The recorded run took about 7.5 minutes with warm image caches and used no model tokens.
+Expect 5 completed trials, 5 rewards of `0`, and no exceptions. With warm image caches, the recorded run took about 7.5 minutes and used no model tokens.
 
-## 5. Reference solution
+## 5. Run the reference solutions
 
-Run Harbor's built-in Oracle agent, which applies each registered reference solution:
+Harbor's built-in Oracle agent applies the registered reference solution for each task:
 
 ```bash
 harbor run --env-file .env -e daytona -p tasks \
@@ -105,11 +105,11 @@ harbor run --env-file .env -e daytona -p tasks \
   --yes --job-name micro1-repro-reference
 ```
 
-Expected result: 5 completed trials, 5 rewards of `1`, and no exceptions. The recorded run took about 8.7 minutes with warm image caches and used no model tokens.
+Expect 5 completed trials, 5 rewards of `1`, and no exceptions. With warm image caches, the recorded run took about 8.7 minutes and used no model tokens.
 
-## 6. Final 25-candidate evaluation
+## 6. Score the 25 candidates
 
-The remaining 15 candidates come from the public fixture adapter in `private_eval/candidate_agent.py`. Run the working alternatives:
+The no-op and reference jobs cover 10 candidates. The other 15 come from the public fixture adapter at `private_eval/candidate_agent.py`. First run the working alternatives:
 
 ```bash
 harbor run --env-file .env -e daytona -p tasks \
@@ -133,7 +133,7 @@ harbor run --env-file .env -e daytona -p tasks \
   --yes --job-name micro1-repro-alternate-uds
 ```
 
-Run the two incorrect candidate sets:
+Then run the two incorrect candidate sets:
 
 ```bash
 harbor run --env-file .env -e daytona -p tasks \
@@ -155,7 +155,7 @@ harbor run --env-file .env -e daytona -p tasks \
   --yes --job-name micro1-repro-mutant-2
 ```
 
-Score the six jobs:
+Score all six jobs together:
 
 ```bash
 python3 tools/score_candidate_matrix.py \
@@ -184,11 +184,11 @@ Expected result:
 }
 ```
 
-The six recorded jobs took about 44 minutes when run sequentially with warm caches. They use no model tokens. Daytona infrastructure charges depend on the account plan.
+Run sequentially with warm caches, the six recorded jobs took about 44 minutes. They use no model tokens. Daytona infrastructure charges depend on the account plan.
 
-## 7. Luna evaluation
+## 7. Run Luna
 
-Run 2 attempts per task:
+Launch 2 attempts for each task:
 
 ```bash
 harbor run --env-file .env -e daytona -p tasks \
@@ -202,15 +202,15 @@ harbor run --env-file .env -e daytona -p tasks \
   --yes --job-name micro1-repro-luna
 ```
 
-Expect 10 terminal trial results under `jobs/micro1-repro-luna/`. Each trial contains the instruction, Codex trajectory, timing, token and cost fields, verifier response, and binary reward.
+The run should create 10 terminal trial results under `jobs/micro1-repro-luna/`. Each one contains the instruction, Codex trajectory, timing, token and cost fields, verifier response, and binary reward.
 
-Model results are not deterministic. The recorded final cohort returned 2/10, both on stale WAL expiry, with no scored exceptions. Its summed trial time was `3:15:24.21`, model cost was `$2.59163820`, and total output was 278,327 tokens. With three concurrent sandboxes, allow roughly 1 to 2 hours of wall time plus first-build cache time.
+Model results vary from run to run. The recorded final cohort returned 2/10, both on stale WAL expiry, with no scored exceptions. Its summed trial time was `3:15:24.21`, model cost was `$2.59163820`, and total output was 278,327 tokens. With three concurrent sandboxes, allow roughly 1 to 2 hours of wall time plus the first-build cache time.
 
-The earlier Luna-max cohort returned 8/10 on earlier verifier bytes. Because the reasoning setting and task checks changed, 8/10 and 2/10 are build milestones rather than a controlled accuracy comparison.
+An earlier Luna-max cohort returned 8/10 on earlier verifier bytes. The reasoning setting and task checks changed before the final run, so 8/10 and 2/10 are build milestones rather than a controlled accuracy comparison.
 
-## 8. Result files
+## 8. Keep the result files
 
-Harbor writes each job to `jobs/<job-name>/`. Keep these files for reproduction:
+Harbor writes every job to `jobs/<job-name>/`. Retain these files:
 
 - job `config.json`, `lock.json`, and `result.json`
 - each trial's `config.json` and `result.json`
@@ -218,4 +218,4 @@ Harbor writes each job to `jobs/<job-name>/`. Keep these files for reproduction:
 - verifier `reward.txt` and `status.json`
 - collected candidate archive and checksum manifest
 
-Do not publish provider credentials or raw authentication material. Representative model trajectories belong in the submission bundle; the full raw job directory can remain a reviewer artifact.
+Keep provider credentials and raw authentication material private. Put representative model trajectories in the submission bundle. The complete raw job directory can stay as a reviewer artifact.
