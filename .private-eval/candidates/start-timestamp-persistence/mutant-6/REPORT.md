@@ -21,4 +21,4 @@ The fixture applies the exact landed Oracle, then drops the start timestamp in t
 - Candidate writer and reader compilation: passed.
 - Final neutral controller: option discovery, integer reset, and integer recode passed. The integer stale-recovery assertion rejected the candidate at controller line 792 with `candidate reader did not recover the complete expected histogram sample`.
 
-Two earlier plausible variants were discarded because the final controller reached the legacy phase, proving they were inert after the actual V2/WAL lifecycle. They are not retained as fixtures or claimed as evidence. The host controller differed only by replacing Linux UID ownership changes with no-ops. No Daytona or local container run was used for this host calibration.
+Two earlier variants were discarded because the final controller reached the legacy phase, proving they were inert after the V2/WAL lifecycle. They are not retained as fixtures or claimed as evidence. The host controller differed only by replacing Linux UID ownership changes with no-ops. No Daytona or local container run was used for this host calibration.

@@ -1,6 +1,6 @@
 # Environment profiles
 
-The five task overlays may select reusable setup for:
+The five task overlays may select shared setup for:
 
 - PromQL engine evaluation;
 - Unix-socket and TLS scrape transport;

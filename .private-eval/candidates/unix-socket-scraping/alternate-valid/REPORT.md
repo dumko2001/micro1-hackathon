@@ -8,7 +8,6 @@ Validation on the clean parent:
 
 - `git apply --check`: pass
 - hidden behavioral Unix-socket and TCP controls: pass
-- complete `./scrape/...` package tests: pass
+- `./scrape/...` package tests: pass
 
 The implementation changes only `scrape/scrape.go`; it does not copy the Oracle's exported constant, request context key, context-propagated socket lookup, or transport-pool organization.
-

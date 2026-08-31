@@ -11,8 +11,8 @@ For bare smoothed selectors, this candidate independently adds histogram point s
 Validation on the clean parent:
 
 - `git apply --check`: pass
-- complete hidden extended-rate matrix, including single-sample windows, double resets, both-boundary reset interpolation, schema compatibility, custom buckets, and mixed types: pass
+- hidden extended-rate matrix, including single-sample windows, double resets, both-boundary reset interpolation, schema compatibility, custom buckets, and mixed types: pass
 - exact two-point exponential/custom window used by the external controller: omitted with the expected warning
-- focused upstream `TestEvaluations` regression set: pass
+- upstream `TestEvaluations` regression set: pass
 
 The implementation changes `promql/engine.go` and `promql/functions.go`; it does not copy the Oracle's `extendedHistogramRate`, boundary-picker helpers, reset-correction helper, or internal tests.

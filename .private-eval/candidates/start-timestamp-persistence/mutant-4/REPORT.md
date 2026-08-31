@@ -18,7 +18,7 @@ The fixture applies the exact landed Oracle, then makes integer and float histog
 
 - Clean-parent Oracle apply: passed.
 - Mutant apply after Oracle: passed.
-- Full `go test ./tsdb/chunkenc`: passed.
+- `go test ./tsdb/chunkenc`: passed.
 - Final neutral controller: option discovery, reset, recode, stale recovery, and enabled in-order persistence passed. The disabled-mode assertion rejected the candidate at controller line 796 with `candidate reader did not recover the complete expected histogram sample`.
 
 The host controller differed only by replacing Linux UID ownership changes with no-ops. No Daytona or local container run was used for this host calibration.

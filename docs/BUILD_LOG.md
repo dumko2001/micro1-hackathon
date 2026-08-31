@@ -28,9 +28,9 @@ This phase proved clean-parent failure and exact-reference success. It still rel
 
 ## 30 August: trust-boundary rewrite
 
-- Replaced the UDS linked test with a root controller driving a real candidate Prometheus daemon through randomized HTTP and TLS Unix sockets.
+- Replaced the UDS linked test with a root controller driving a candidate Prometheus daemon through randomized HTTP and TLS Unix sockets.
 - Replaced the step linked test with a root controller driving instant and range queries against a candidate daemon and trusted backfilled data.
-- Made WAL expiry a candidate-program/trusted-reader protocol over real checkpoints.
+- Made WAL expiry a candidate-program/trusted-reader protocol over candidate-generated checkpoints.
 - Added an external daemon/API controller to the histogram task and an external artifact gate to start timestamps.
 - Kept a linked supplemental test only for histogram reset/interpolation behavior that has no stable external interface.
 - Ran candidate executables as UID 65532 with an empty environment, no capabilities, `no_new_privs`, and resource limits. Deleted build sources before execution.
@@ -52,12 +52,12 @@ The final launcher trusts Daytona's network policy, compiles serially with `GOMA
 - A stock step trajectory completed a verifier-passing patch but reached the 1800-second actor timeout. Raised the final actor budget to 3600 seconds and recertified that task's candidate matrix.
 - Documented the histogram controller's `1e-12` relative tolerance after review flagged the missing rationale. Repeated the task's final-byte matrix after the metadata change.
 - Removed Go-generated `go.work.sum` before start-timestamp collection so a build byproduct cannot alter candidate identity. Repeated its final-byte matrix.
-- Replaced start-timestamp's remaining concrete-type tests with external candidate writer and reader programs. The corpus checks complete receipts for 130 samples across recode, chunk threshold, stale recovery, restart, compaction, and fresh `Seek`.
+- Replaced start-timestamp's remaining concrete-type tests with external candidate writer and reader programs. The corpus checks receipts for 130 samples across recode, chunk threshold, stale recovery, restart, compaction, and fresh `Seek`.
 - Tested a method-neutral ST reader after clean stock implementations chose coherent encodings that differed from the Oracle. This was retained as development evidence, then superseded when the task was explicitly changed to landed-format conformance.
 - Made the start-timestamp root controller project valid blocks into a root-owned read-only tree, delete the writable database, and seal its parent before candidate reads. A clean-parent writer supplies legacy fixtures, and only the root controller computes expected receipts.
 - On the earlier method-neutral package, two exact-reference and two no-op decisions per task returned 10 rewards of `1` and 10 rewards of `0`; fifteen named mutants returned `0`, and five alternates returned `1`.
 - The histogram false reject came from treating an incompatible first sample as a reset and dropping it. An independent bucket-family compatibility preflight now rejects that window while accepting the alternate.
-- Added a root-only reader built from the exact landed ST patch. It reads the same sealed candidate blocks and must return the same complete receipts as the candidate reader. The registered alternate still passes because it preserves the final format.
+- Added a root-only reader built from the exact landed ST patch. It reads the same sealed candidate blocks and must return the same receipts as the candidate reader. The registered alternate still passes because it preserves the final format.
 - The earlier private 30-case and 20-case gates each reported balanced accuracy `1.0`, false-accept rate `0.0`, and false-reject rate `0.0` on their pinned bytes.
 - On the current Oracle-conformance bytes, the exact references passed 5/5, no-ops failed 5/5, format-compatible alternates passed 5/5, and two mutants per task failed 10/10. Two formerly accepted ST encodings also failed the landed-reader gate. All trials ended without Harbor exceptions.
 - Bound those 25 current decisions in `oracle-conformance-manifest.json`. The native Harbor evidence gate reports balanced accuracy `1.0`, false-accept rate `0.0`, and false-reject rate `0.0`.

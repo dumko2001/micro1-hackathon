@@ -59,11 +59,11 @@ The UDS alternate uses a different registry and ownership layout. Step uses a di
 
 | Task | Mutant 1 | Mutant 2 | Additional start-timestamp mutants |
 |---|---|---|---|
-| Unix-socket scraping | cross-target pooling | TCP fallback | — |
-| Step-invariant subquery | wrong wrapping boundary | `start()`/`end()`-only fix | — |
-| Native-histogram rates | partial mixed-window/panic fix | reset interpolation defect | — |
+| Unix-socket scraping | cross-target pooling | TCP fallback | none |
+| Step-invariant subquery | wrong wrapping boundary | `start()`/`end()`-only fix | none |
+| Native-histogram rates | partial mixed-window/panic fix | reset interpolation defect | none |
 | Start-timestamp persistence | feature flags coupled | OOO encoding downgrade | recode loss; always-on persistence; block loss/read repair; stale-recovery defect; `Seek` defect |
-| Stale-series WAL expiry | off-by-one lifetime | retain forever | — |
+| Stale-series WAL expiry | off-by-one lifetime | retain forever | none |
 
 The start-timestamp corpus has 130 samples. It crosses recode and chunk thresholds, expands compatible bucket layouts, changes zero thresholds, recovers from stale markers, reopens WAL/WBL and normal/OOO blocks, and exercises fresh and past-end `Seek`. The root controller compares timestamp, start timestamp, kind, reset state, schema, zero threshold and count, bucket populations, custom bounds, count, sum, ordering, and cardinality. Equivalent span segmentation is accepted.
 
@@ -71,7 +71,7 @@ The start-timestamp corpus has 130 samples. It crosses recode and chunk threshol
 
 The project tested a method-neutral version first. It built both writer and reader from candidate source and accepted two clean Luna-max solutions with different on-disk formats. That experiment showed the lifecycle could be solved without reproducing the landed bytes.
 
-The final task is stricter by design. It treats the reviewed persistent format as part of upstream conformance. The candidate writer still creates real normal and OOO lifecycles, and its own reader must return complete semantic receipts. The controller then runs a second root-only reader built from the exact landed patch against the same sealed blocks. Both readers must agree. The Oracle source and reader are inaccessible to the candidate process.
+The final task treats the reviewed persistent format as part of upstream conformance. The candidate writer creates normal and OOO lifecycles, and its reader must return receipts for every sample. The controller then runs a second root-only reader built from the exact landed patch against the same sealed blocks. Both readers must agree. The Oracle source and reader are inaccessible to the candidate process.
 
 The two formerly passing Luna-max archives now return reward `0`. The registered ST alternate still returns `1` because it changes dispatch organization while preserving the final format. This is deliberate format conformance, not a claim of method neutrality.
 
@@ -119,7 +119,7 @@ These jobs used Codex 0.145.0 with `gpt-5.6-luna` and max reasoning on earlier v
 |---|---:|---:|---|
 | Unix-socket scraping | 2/2 | 2000.9s; 1900.2s | both passed |
 | Step-invariant subquery | 2/2 | 973.0s; 1491.2s | both passed |
-| Native-histogram rates | 0/2 | 3245.6s; 3594.7s | both made genuine semantic misses |
+| Native-histogram rates | 0/2 | 3245.6s; 3594.7s | both made semantic errors |
 | Stale-series WAL expiry | 2/2 | 1352.6s; 1154.5s | both passed |
 | Start-timestamp persistence | 2/2 | 5937.57s; 5366.58s | both passed with distinct candidate encodings |
 
@@ -130,7 +130,7 @@ The final start-timestamp jobs had no exception or retry:
 | `st-neutral-final-luna-r1-20260830` | 1:38:57.57 | 1:32:31.93 | 5:34.52 | 74,692,273 | 72,761,600 | 188,134 | $2.06712740 | `717ef199…` |
 | `st-neutral-final-luna-r2-20260830` | 1:29:26.58 | 1:23:08.76 | 5:20.18 | 60,919,614 | 59,318,272 | 146,349 | $1.68225264 | `51336b71…` |
 
-The candidate archives differ and use genuinely distinct encodings. Both now return reward `0` under the final landed-format reader. Trajectory review found no executed online search or fetch, verifier, solution, hidden-test, or reward access, reward hack, refusal, or timeout. R1 ran `make -n lint`, which printed a `curl` command but did not execute it.
+The candidate archives use different encodings. Both now return reward `0` under the final landed-format reader. Trajectory review found no executed online search or fetch, verifier, solution, hidden-test, or reward access, reward hack, refusal, or timeout. R1 ran `make -n lint`, which printed a `curl` command but did not execute it.
 
 The earlier 80% result is development history, not the final task solve rate or a Micro1 baseline/final comparison.
 
@@ -166,4 +166,4 @@ The original combined coordinator wrote eight terminal results and then stopped 
 
 ## Current claim
 
-The current suite has pinned lineage, deterministic packaging, Harbor parsing, 5/5 reference passes, 5/5 no-op rejections, 5/5 accepted format-compatible alternatives, 10/10 rejected incorrect candidates, 2/2 rejected superseded ST encodings, a 25-case result at BA `1.0`, FAR `0.0`, FRR `0.0`, and a complete 2/10 final Luna result. The 25-case matrix is one run per registered candidate. The 8/10 and 2/10 Luna cohorts used different reasoning settings and task checks, so they remain build milestones rather than a controlled accuracy comparison.
+The current suite has pinned lineage, deterministic packaging, Harbor parsing, 5/5 reference passes, 5/5 no-op rejections, 5/5 accepted format-compatible alternatives, 10/10 rejected incorrect candidates, 2/2 rejected superseded ST encodings, a 25-case result at BA `1.0`, FAR `0.0`, FRR `0.0`, and a 2/10 final Luna result across all ten trials. The 25-case matrix is one run per registered candidate. The 8/10 and 2/10 Luna cohorts used different reasoning settings and task checks, so they remain build milestones rather than a controlled accuracy comparison.

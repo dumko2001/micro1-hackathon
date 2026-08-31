@@ -5,4 +5,4 @@
 - Correctness follow-up: PR #19399, merge `05f9eb8b3b8e10b48c8f4153b0714dbe9bc9a630`
 - Archive SHA-256: `3f014fbedbdecbd18207b01e9deabba6a393bdb01e32765f64cab65fdfc2aff0`
 
-The reference is deliberately compound. PR #18091 alone can pool transports across socket targets that share an advertised address; PR #19399 supplies the same-surface isolation correction. No later UDS correction was found through 2026-08-29.
+The reference combines two changes. PR #18091 alone can pool transports across socket targets that share an advertised address; PR #19399 supplies the same-surface isolation correction. No later UDS correction was found through 2026-08-29.

@@ -34,7 +34,7 @@ Harbor delegates execution to Daytona, so this path does not need local Docker.
 ```bash
 git clone https://github.com/dumko2001/micro1-hackathon.git
 cd micro1-hackathon
-git checkout micro1-submission-v5
+git checkout micro1-submission-v6
 ```
 
 Create the local environment file from the safe template:
@@ -218,4 +218,4 @@ Harbor writes every job to `jobs/<job-name>/`. Retain these files:
 - verifier `reward.txt` and `status.json`
 - collected candidate archive and checksum manifest
 
-Keep provider credentials and raw authentication material private. Put representative model trajectories in the submission bundle. The complete raw job directory can stay as a reviewer artifact.
+Keep provider credentials and raw authentication material private. Put representative model trajectories in the submission bundle. The raw job directory can stay as a reviewer artifact.

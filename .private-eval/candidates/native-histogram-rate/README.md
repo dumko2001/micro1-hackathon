@@ -14,6 +14,6 @@ Expected reward: `0`.
 
 ## Mutant 2: reset-blind interpolation
 
-`mutant-2/solve.sh` applies the full Oracle, then linearly interpolates across counter resets.
+`mutant-2/solve.sh` applies the Oracle patch, then linearly interpolates across counter resets.
 
 Expected reward: `0`.

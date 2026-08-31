@@ -4,7 +4,7 @@ This tracked directory contains author-side release criteria and calibration
 fixtures. It is not actor input, and an empty manifest is not evidence of a
 result. Raw Harbor jobs and credentials remain ignored.
 
-## Two deliberately separate gates
+## Two evidence gates
 
 - `cases/oracle-conformance-manifest.json` binds the 25 decisions on the final
   Oracle-conformance packages: reference, no-op, registered compatible
@@ -42,7 +42,7 @@ python3 .private-eval/grade.py --emit-bindings \
   jobs/oracle-one jobs/oracle-two jobs/nop-one jobs/nop-two
 ```
 
-The real smoke invocation must include all ten job directories (or fewer job
+The smoke invocation must include all ten job directories (or fewer job
 directories containing exactly those ten completed trials). `--emit-bindings`
 validates the evidence and prints a candidate `evidence_bindings` object. It
 never edits a manifest and always reports `complete: false`. Review that output,
@@ -111,5 +111,5 @@ than being inferred from expected outcomes or static solution scripts.
 python3 -m unittest discover -s .private-eval/tests -v
 ```
 
-The synthetic tests cover successful draft-to-pinned binding, infrastructure
+The synthetic tests cover draft-to-pinned binding, infrastructure
 exception rejection, and unsafe candidate-archive link rejection.

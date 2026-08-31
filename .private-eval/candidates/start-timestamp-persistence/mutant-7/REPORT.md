@@ -2,7 +2,7 @@
 
 ## Defect
 
-The fixture applies the exact landed Oracle, then advances histogram ST iterators while the requested timestamp is equal to the current sample. Full iteration remains correct, but exact-timestamp `Seek` returns the following sample.
+The fixture applies the exact landed Oracle, then advances histogram ST iterators while the requested timestamp is equal to the current sample. Sequential iteration remains correct, but exact-timestamp `Seek` returns the following sample.
 
 ## Pinned inputs
 
@@ -21,6 +21,6 @@ The fixture applies the exact landed Oracle, then advances histogram ST iterator
 - Candidate writer and reader compilation: passed.
 - Basic integer and float ST append/iteration tests: passed.
 - The focused upstream integer and float `Seek` tests failed only at the intended boundary: expected timestamp `2000`, received `3000`.
-- Final neutral controller completed option discovery and complete reset iteration, then rejected the fresh iterator at controller line 788 with `candidate iterator Seek returned the wrong complete histogram sample`.
+- Final neutral controller completed option discovery and reset iteration, then rejected the fresh iterator at controller line 788 with `candidate iterator Seek returned the wrong complete histogram sample`.
 
 The host controller differed only by replacing Linux UID ownership changes with no-ops. No Daytona or local container run was used for this host calibration.

@@ -14,7 +14,7 @@ requirements. Reviewed architectural invariants may be enforced when the task
 is explicitly upstream-conformance, but the verifier must record why they
 matter.
 
-The visible instruction states the incident and any genuinely new public
+The visible instruction states the incident and any new public
 interface. It does not enumerate routine senior-maintainer obligations such as
 preserving established behavior, failing safely, maintaining compatibility, or
 covering the repository's normal lifecycle paths. The verifier may enforce
@@ -41,7 +41,7 @@ It is not represented as the exact knowledge state of one author on one parent.
   reuse.
 - Negative cases: after reload, a nonexistent socket may be omitted or report
   `up=0`; in either case a live TCP trap must record no fallback connection.
-- Boundary: an external controller drives a real candidate daemon through
+- Boundary: an external controller drives a candidate daemon through
   randomized HTTP and TLS sockets. It uses the literal public label and imports
   no Oracle-invented production symbol.
 
@@ -59,7 +59,7 @@ included the failing query shape; the internal AST diagnosis remains hidden.
   step-varying arguments, nested expression, `@ start()`, `@ end()`, and offset.
 - Negative/regression cases: ordinary non-fixed subqueries must remain
   step-varying and fixed constant results must remain invariant.
-- Boundary: an external controller queries a real candidate daemon over HTTP.
+- Boundary: an external controller queries a candidate daemon over HTTP.
   A verifier-owned probe checks the exported preprocessed AST without naming a
   private helper.
 
@@ -106,10 +106,10 @@ treats the landed persistent byte format as an upstream-conformance contract.
 - Negative/regression cases: feature-off legacy encodings, `AtST()==0`, V1 WAL
   compatibility, failed append immutability, stale markers, and seek past end.
 - Boundary: writer and reader programs compiled from candidate source exercise
-  real normal and OOO storage through pre-existing query and iterator APIs. A
+  normal and OOO storage through pre-existing query and iterator APIs. A
   root controller projects valid blocks into a root-owned read-only tree,
   deletes the original writable database, seals the parent, and compares
-  complete semantic receipts. A clean-parent writer creates legacy integer and
+  receipts for every sample. A clean-parent writer creates legacy integer and
   float fixtures. A second root-only reader built from the landed patch must
   decode the same sealed blocks and return identical receipts.
 - Boundary: the candidate cannot read the landed source or reader binary. The
@@ -131,7 +131,7 @@ hidden.
   references across record kinds, active-series survival.
 - Negative cases: post-horizon checkpoint omission, no stale resurrection,
   expiry bookkeeping deletion, active control retained.
-- Boundary: a candidate program writes real WAL checkpoints. A trusted
+- Boundary: a candidate program writes WAL checkpoints. A trusted
   clean-parent reader checks membership and replay behavior across randomized
   horizons, with pre-existing retention assertions as supporting evidence.
 

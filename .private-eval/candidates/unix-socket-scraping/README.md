@@ -14,6 +14,6 @@ Expected reward: `0`.
 
 ## Mutant 2: TCP fallback
 
-`mutant-2/solve.sh` applies the full Oracle, then falls back to the advertised TCP endpoint after a Unix-socket dial failure.
+`mutant-2/solve.sh` applies the Oracle patch, then falls back to the advertised TCP endpoint after a Unix-socket dial failure.
 
 Expected reward: `0`.

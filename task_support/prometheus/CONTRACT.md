@@ -35,10 +35,10 @@ The verifier deletes candidate tests, restores trusted harness files, and compil
 
 Verification uses the most external stable surface available:
 
-- UDS and subquery tasks: a trusted controller drives a real candidate Prometheus daemon.
+- UDS and subquery tasks: a trusted controller drives a candidate Prometheus daemon.
 - WAL expiry: a candidate program writes checkpoints that a trusted clean-parent reader inspects.
 - Histogram: an external API controller is conjunctive with a linked Go breadth test.
-- Start timestamp: a candidate writer creates normal and out-of-order lifecycles, the controller projects and seals valid blocks, and a candidate reader must return complete semantic receipts. A clean-parent writer supplies legacy blocks independently; no landed-format decoder or internal symbol is part of reward.
+- Start timestamp: a candidate writer creates normal and out-of-order lifecycles, the controller projects and seals valid blocks, and a candidate reader must return every sample field. A clean-parent writer supplies legacy blocks independently; no landed-format decoder or internal symbol is part of reward.
 
 The linked histogram breadth gate remains weaker against malicious candidate code. Start timestamp keeps reward assertions in the root controller, but a deliberately colluding writer and reader could still fabricate the randomized protocol. Sealed read-only projections and process hardening close demonstrated bypasses; they are not a formal hostile-code proof.
 
@@ -60,10 +60,10 @@ A task is release-ready only after:
 - clean parent fails and exact reference passes;
 - no-op fails on identical bytes;
 - an alternate-valid candidate passes;
-- named plausible mutants fail;
+- named mutants fail;
 - repeated backend runs keep the same reward and status;
 - infrastructure and candidate failures remain distinct;
 - stock-agent calibration records solve rate, runtime, token use, and cost;
 - public and secret evaluator artifacts have separate release boundaries.
 
-The suite clears every listed verifier gate on its registered candidate set. Ten fixed-model stock rollouts are complete: UDS, subquery, WAL, and start timestamp passed twice; histogram produced two genuine semantic misses. This is difficulty evidence, not a claim of universal method neutrality or formal malicious-code resistance.
+The suite clears every listed verifier gate on its registered candidate set. Ten fixed-model stock rollouts finished: UDS, subquery, WAL, and start timestamp passed twice; histogram produced two semantic misses. This is difficulty evidence, not a claim of universal method neutrality or formal malicious-code resistance.

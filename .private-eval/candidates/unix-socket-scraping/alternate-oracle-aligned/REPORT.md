@@ -12,7 +12,7 @@ The implementation preserves the reviewed invariants:
 - different sockets and ordinary TCP targets never share that pool;
 - standard keep-alives remain enabled;
 - sync discards pools for unused sockets;
-- reload replaces and closes the complete old registry;
+- reload closes every client in the old registry before replacing it;
 - client-construction errors return a fixed failing transport instead of falling back to TCP.
 
 Validation on the checksum-pinned clean parent:

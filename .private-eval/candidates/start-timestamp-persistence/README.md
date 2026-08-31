@@ -6,7 +6,7 @@ Apply the reference feature patch and then `alternate-valid/fix.patch`. The cand
 
 Expected reward: `1`.
 
-This proves that grading is not a source-diff comparison. The final verifier does not require the landed concrete Go type names or source organization. It does require the final reviewed wire format: a root-only reader built from the exact landed patch must decode the same sealed blocks as the candidate reader. Complete lifecycle receipts and clean-parent legacy blocks are checked separately.
+This proves that grading is not a source-diff comparison. The final verifier does not require the landed concrete Go type names or source organization. It does require the reviewed wire format: a root-only reader built from the exact landed patch must decode the same sealed blocks as the candidate reader. The checks cover each lifecycle receipt and clean-parent legacy blocks.
 
 ## Named mutant: coupled feature flags
 
@@ -48,6 +48,6 @@ Expected reward: `0`.
 
 ## Named mutant: iterator Seek off by one
 
-Apply the reference patch and then `mutant-7/fix.patch`. Full iteration remains correct, but exact-timestamp `Seek` advances to the following histogram sample.
+Apply the reference patch and then `mutant-7/fix.patch`. Iteration remains correct, but exact-timestamp `Seek` advances to the following histogram sample.
 
 Expected reward: `0`.

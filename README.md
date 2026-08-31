@@ -1,8 +1,8 @@
 # Prometheus RL environment
 
-Prometheus already contains the range of work a coding agent should face: networking, query execution, and storage. This repository turns five merged Prometheus changes into one RL environment that runs through Harbor on Daytona.
+Prometheus changes span networking, query execution, and storage. This repository turns five merged changes into one RL environment that runs through Harbor on Daytona.
 
-It is built for teams training or comparing coding agents on repository-scale work. The hard part for those teams is packaging a real change into a repeatable episode without giving away the answer. Here, every task has a pinned starting tree, a short maintainer request, a captured trajectory, and a binary reward. The runtime stays the same as the work moves across the codebase.
+Teams training or comparing coding agents need to package a repository change as a repeatable episode without giving away the answer. Each task here has a pinned starting tree, a short maintainer request, a captured trajectory, and a binary reward. The runtime stays the same as the work moves across the codebase.
 
 ## The five tasks
 
@@ -14,7 +14,7 @@ It is built for teams training or comparing coding agents on repository-scale wo
 | Start-timestamp persistence | Preserve histogram start timestamps through chunks, WAL/WBL replay, blocks, reopen, and queries |
 | Stale-series WAL expiry | Retain stale-series metadata only while WAL references still need it |
 
-Start-timestamp persistence is the largest task. It spans 34 upstream files and is closer to a long-horizon storage change than a normal short coding episode.
+Start-timestamp persistence spans 34 upstream files, more than the other four tasks.
 
 ## One shared episode
 
@@ -27,7 +27,7 @@ The agent works in a Git-stripped Prometheus tree. The upstream patch, repositor
 
 The verifier drives Prometheus behavior through live scrape targets, PromQL queries, WAL checkpoints, block reopen, replay, compaction, and iterators. Reward comes from the running system and its artifacts, never from comparing the candidate diff with the upstream diff.
 
-That shared handoff is the practical value of the environment. A team can add or study work in another Prometheus subsystem without inventing a new actor runtime each time.
+The same handoff works across all five tasks. A team can add another Prometheus subsystem without writing a new actor runtime.
 
 ## Results
 
@@ -49,21 +49,21 @@ The final verifier ran against five candidate states for each task:
 - 5 exact upstream implementations, all accepted
 - 5 unchanged implementations, all rejected
 - 5 independently written working implementations, all accepted
-- 10 plausible but incorrect implementations, all rejected
+- 10 incorrect implementations, all rejected
 
 That is 10 correct candidates and 15 incorrect candidates. All 25 were classified correctly. On this fixed set, balanced accuracy is `1.0`, false-accept rate is `0.0`, and false-reject rate is `0.0`. Those numbers measure the verifier checks. Luna's final solve rate is the separate 2/10 result above.
 
 ## The challenging case
 
-Start-timestamp persistence forced the clearest design decision. Two Luna solutions carried the feature through the full storage lifecycle, but each wrote its own on-disk format. Both passed an earlier behavioral verifier. Neither format matched the one Prometheus merged.
+Start-timestamp persistence exposed a verifier gap. Two Luna solutions carried the feature through the storage lifecycle, but each wrote its own on-disk format. Both passed an earlier behavioral verifier. Neither format matched the one Prometheus merged.
 
 The final episode leaves implementation names and code layout open while requiring persisted blocks to work with the landed Prometheus reader. The two earlier solutions now fail that compatibility check.
 
-Full job receipts and task digests are in the [evidence ledger](docs/TASK_SUITE_EVIDENCE.md).
+Job receipts and task digests are in the [evidence ledger](docs/TASK_SUITE_EVIDENCE.md).
 
 ## Submission map
 
-The final submission archive keeps each part in one predictable place:
+The submission archive uses these paths:
 
 | What you need | Location |
 |---|---|
@@ -77,6 +77,8 @@ The final submission archive keeps each part in one predictable place:
 
 The HackerEarth upload archive omits the generated `tasks/` copies to stay below its 50 MB limit. The materializer recreates them from `task_support/` and verifies their checksums.
 
+A trajectory records the instruction, agent messages, tool calls, tool responses, and reward for a selected run. A raw Harbor job also contains working directories, verifier output, collected artifacts, runtime logs, and coordinator state. The submission includes trajectories for each agent role; raw jobs stay local.
+
 ## Reproduce it
 
 Materialize all five task packages:
@@ -86,13 +88,13 @@ python3 tools/materialize_prometheus_task.py
 python3 tools/materialize_prometheus_task.py --verify
 ```
 
-The [reproduction guide](docs/REPRODUCTION.md) gives the public clone commands, pinned runtime, complete 25-case run, and Luna command. The registry is [suite.toml](task_support/prometheus/suite.toml).
+The [reproduction guide](docs/REPRODUCTION.md) gives the public clone commands, pinned runtime, 25-case run, and Luna command. The registry is [suite.toml](task_support/prometheus/suite.toml).
 
 ## Limits
 
-This is a transparent submission repository. It includes reference solutions and verifier code for inspection and reproduction. Before using it as a secret network-enabled evaluation set, move the hidden cases behind a private boundary.
+This repository includes reference solutions and verifier code for inspection and reproduction. Before using it as a secret network-enabled evaluation set, move the hidden cases behind a private boundary.
 
-The histogram task still has one verifier-owned Go test linked with candidate code. The other main checks run through external processes or inspect artifacts produced by candidate programs. The [verifier provenance audit](docs/VERIFIER_PROVENANCE_AUDIT.md) describes that boundary.
+The histogram task still has one verifier-owned Go test linked with candidate code. The other checks run through external processes or inspect artifacts produced by candidate programs. The [verifier provenance audit](docs/VERIFIER_PROVENANCE_AUDIT.md) describes that boundary.
 
 ## License
 
