@@ -67,13 +67,15 @@ The final submission archive keeps each part in one predictable place:
 
 | What you need | Location |
 |---|---|
-| Runnable Harbor packages and environment code | `tasks/*/task.toml` and `tasks/*/environment/` |
-| Task instructions shown to agents | `tasks/*/instruction.md` |
-| Reference solution code | `tasks/*/solution/` |
-| Verifier code and entrypoints | `tasks/*/tests/` |
+| Canonical task source | `task_support/prometheus/tasks/` |
+| Runnable Harbor packages | `tasks/`, created by `python3 tools/materialize_prometheus_task.py` |
+| Task instructions shown to agents | `tasks/*/instruction.md` after materialization |
+| Reference solutions and verifiers | `tasks/*/solution/` and `tasks/*/tests/` after materialization |
 | Clean-machine commands | [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md) |
 | Task digests, job receipts, and run results | [`docs/TASK_SUITE_EVIDENCE.md`](docs/TASK_SUITE_EVIDENCE.md) |
 | Representative agent trajectories and their reading guide | `trajectories/`, starting with `trajectories/README.md` |
+
+The HackerEarth upload archive omits the generated `tasks/` copies to stay below its 50 MB limit. The materializer recreates them from `task_support/` and verifies their checksums.
 
 ## Reproduce it
 
