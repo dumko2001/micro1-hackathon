@@ -2,7 +2,7 @@
 
 This project turns five merged Prometheus changes into coding episodes for reinforcement learning and agent evaluation. Each episode starts from the source just before the change, gives the agent a short maintainer request, and returns a binary reward from a separate verifier.
 
-It is for teams that want repository-scale work rather than isolated coding puzzles. The difficult part is packaging a real change so that the task is repeatable, the agent cannot see the answer, and the reward reflects the behavior Prometheus needs.
+It is for teams that want repository-scale work rather than isolated coding puzzles. Their bottleneck is packaging a real change so the starting state, runtime, trajectory, and reward are repeatable without revealing the answer. Once that episode boundary is shared, the same team can train or compare agents across networking, query, and storage work without rebuilding the infrastructure for every task.
 
 ## The five tasks
 
@@ -36,7 +36,7 @@ The first complete Luna cohort solved 8 of 10 attempts at max reasoning. After t
 | First full Luna cohort, max reasoning | 2/2 | 2/2 | 0/2 | 2/2 | 2/2 | 8/10 |
 | Final Luna cohort, default high reasoning | 0/2 | 0/2 | 0/2 | 0/2 | 2/2 | 2/10 |
 
-This is the build history, not a controlled model comparison: the verifier bytes and reasoning setting changed between the two cohorts. The [changelog](CHANGELOG.md) records what changed between them.
+This is the build history, not a controlled model comparison: the verifier bytes and reasoning setting changed between the two cohorts. The [Improvement Changelog](CHANGELOG.md) connects each iteration to the evidence that led to the next decision.
 
 All 10 final trials completed without Harbor exceptions. Together they cost `$2.59163820` and took `3:15:24.21` in summed trial time.
 

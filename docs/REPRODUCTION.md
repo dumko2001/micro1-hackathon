@@ -1,179 +1,221 @@
 # Reproduction guide
 
-This guide reproduces task materialization and the Harbor/Daytona runs used for the five Prometheus episodes.
+These steps start from a clean machine, build the five task packages, run an executable baseline and reference solution, score the 25-candidate matrix, and launch the Luna evaluation.
 
-## Clean checkout
+## 1. Install the runner
 
-Clone the public submission and check out its release tag:
+Required:
+
+- Git
+- Python 3.12 or newer; recorded materialization used Python `3.14.3`
+- [`uv`](https://docs.astral.sh/uv/)
+- a Daytona account
+- Codex model access only for the Luna run
+
+Install the recorded Harbor version:
+
+```bash
+uv tool install harbor==0.14.0
+harbor --version
+```
+
+Expected version: `0.14.0`.
+
+The task images use Go `1.26` from the pinned builder image:
+
+```text
+golang:1.26-bookworm@sha256:e8c859f5632dcfde7b32d2012b4351728f6437930887c2f6a91ea242459e5514
+```
+
+No local Docker runtime is needed when Harbor uses Daytona.
+
+## 2. Clone the submission
 
 ```bash
 git clone https://github.com/dumko2001/micro1-hackathon.git
 cd micro1-hackathon
-git checkout micro1-submission-v1
+git checkout micro1-submission-v2
 ```
 
-The repository includes the task code, reference patches, and verifier internals. Provider credentials, raw job directories, recordings, and unredacted trajectories are not part of Git.
+Copy the safe environment template:
 
-## Pinned runtime
+```bash
+cp .env.example .env
+```
 
-- Harbor `0.14.0`
-- Python `3.14.3` for recorded materialization
-- Go `1.26`
-- builder `golang:1.26-bookworm@sha256:e8c859f5632dcfde7b32d2012b4351728f6437930887c2f6a91ea242459e5514`
-- registry `task_support/prometheus/suite.toml`
-- Conductor rubric SHA-256 `8beb2c4a6faea2b5d673189b009e9a5f939eb717946372a8ace1fa475675868f`
+Set `DAYTONA_API_KEY` in `.env`. Set `CODEX_FORCE_AUTH_JSON` to the contents of a Codex `auth.json` file only when running Luna. Do not put `.env`, provider credentials, or raw authentication files into Git or a shared result archive.
 
-Materialization needs no network. Image construction needs the pinned builder and checksum-locked Go modules. The verifier runs separately with `network_mode=no-network`. A model actor needs public egress to reach its provider.
+## 3. Data and task materialization
 
-## Materialize and verify
+No external evaluation dataset is required. The repository contains:
+
+- the five pre-change Prometheus source archives
+- source checksums and upstream patch stacks
+- task instructions
+- reference solutions
+- verifier code
+- the calibration candidate fixtures
+
+Materialize and verify all five Harbor packages:
 
 ```bash
 python3 tools/materialize_prometheus_task.py
 python3 tools/materialize_prometheus_task.py --verify
 ```
 
-Expected file counts are:
+Expected output:
 
 ```text
-unix-socket-scraping          20
-prometheus-subquery-semantics 19
-histogram-rate-semantics      20
-start-timestamp-persistence   22
-stale-wal-expiry              21
+verified 20 files: .../tasks/unix-socket-scraping
+verified 19 files: .../tasks/prometheus-subquery-semantics
+verified 20 files: .../tasks/histogram-rate-semantics
+verified 22 files: .../tasks/start-timestamp-persistence
+verified 21 files: .../tasks/stale-wal-expiry
 ```
 
-Verify source archives independently:
+Materialization takes under a minute on the recorded host and needs no network. The first remote run must download the pinned builder image and checksum-locked Go modules.
+
+## 4. Executable baseline
+
+The project story began with one fixed-time PromQL episode. For a repeatable evaluation baseline on the submitted five tasks, use Harbor's built-in no-op agent:
 
 ```bash
-for source in task_support/prometheus/tasks/*/source; do
-  (cd "$source" && sha256sum -c SOURCE.SHA256SUMS)
-done
-```
-
-Expected result: five `OK` lines. Also require Harbor to parse all five generated task directories before remote execution.
-
-## Host parent/reference check
-
-For each task:
-
-1. Extract its registered clean-parent archive twice.
-2. Apply the registered upstream patch stack to one copy.
-3. Remove candidate or reference-added tests.
-4. Restore the clean-parent test harness.
-5. Add the verifier-owned cases to both copies.
-6. Run the same focused Go command.
-7. Require parent failure and reference success.
-
-Start-timestamp persistence uses external programs rather than reference-owned tests linked with candidate code. A writer and reader built from candidate source exercise real storage and the pre-existing query and iterator surface. The root controller projects blocks into a read-only tree, deletes the writable database, and compares complete receipts. A clean-parent writer creates legacy fixtures. A second root-only reader built from the exact landed patch must decode the candidate blocks and return the same receipts. The candidate cannot read that source or binary.
-
-## Daytona matrix
-
-Keep the Daytona token in gitignored `.env`. The frozen jobs use 2 vCPU, 4096 MiB RAM, 10240 MiB disk, and at most five concurrent sandboxes. No local Docker runtime is part of the recorded evidence.
-
-The common Harbor shape is:
-
-```bash
-harbor run --env-file .env -e daytona \
-  -p tasks -a <agent> -k 1 -n 5 \
+harbor run --env-file .env -e daytona -p tasks \
+  -a nop -k 1 -n 5 \
   --cpus request --memory request \
   --override-cpus 2 --override-memory-mb 4096 --override-storage-mb 10240 \
   --delete --max-retries 1 \
   --retry-include DaytonaRateLimitError --retry-include DaytonaError \
-  --yes --job-name <job-name>
+  --yes --job-name micro1-repro-nop
 ```
 
-The current deterministic matrix uses these jobs:
+Expected result: 5 completed trials, 5 rewards of `0`, and no exceptions. The recorded run took about 7.5 minutes with warm image caches and used no model tokens.
 
-```text
-micro1-oracle-alignment-final-oracle-20260830
-micro1-oracle-alignment-final-nop-20260830
-micro1-oracle-alignment-final-alternate-main-20260830
-micro1-oracle-alignment-final-alternate-uds-20260830
-micro1-oracle-alignment-final-mutant-1-20260830
-micro1-oracle-alignment-final-mutant-2-20260830
-st-oracle-conformance-final-oracle-20260830
-st-oracle-conformance-final-nop-20260830
-st-oracle-conformance-final-alternate-20260830
-st-oracle-conformance-final-mutant-1-20260830
-st-oracle-conformance-final-mutant-2-20260830
-```
+## 5. Reference solution
 
-Oracle and no-op use Harbor's built-in agents. Alternate and mutant runs use the reviewer-only candidate-fixture adapter. The current matrix expects five Oracle `1`s, five no-op `0`s, five alternate `1`s, and ten mutant `0`s, with no Harbor exceptions. Earlier repeat jobs and the seven-mutant ST corpus are retained as development evidence on superseded task digests.
-
-The final stock-agent calibration is composed from the eight terminal trials in `micro1-oracle-alignment-final-luna-default-20260830` plus the terminal replacement jobs `micro1-oracle-alignment-final-recovery-uds-20260831` and `micro1-oracle-alignment-final-recovery-20260831`. Require exactly two completed trials per task, two total rewards of `1`, eight rewards of `0`, and zero exceptions. The replaced coordinator entries have no reward and are not part of the scored corpus.
-
-## Author-side evidence gates
-
-This transparent authoring repository includes `.private-eval`, candidate fixtures, manifests, and rubric results. It excludes raw jobs and credentials. The following historical commands reproduce the two bound gates on their pinned earlier task bytes:
+Run Harbor's built-in Oracle agent, which applies each registered reference solution:
 
 ```bash
-python3 .private-eval/grade.py \
-  --manifest .private-eval/cases/manifest.json \
-  jobs/micro1-prometheus-oracle-r1-v2-20260830 \
-  jobs/micro1-prometheus-nop-r1-20260830 \
-  jobs/micro1-prometheus-alternate-valid-final-20260830 \
-  jobs/micro1-prometheus-mutant-1-20260830 \
-  jobs/micro1-prometheus-mutant-2-20260830 \
-  jobs/uds-contract-final-oracle-r1-20260830 \
-  jobs/uds-contract-final-nop-r1-20260830 \
-  jobs/uds-contract-final-alternate-valid-20260830 \
-  jobs/uds-contract-final-mutant-1-20260830 \
-  jobs/uds-contract-final-mutant-2-20260830 \
-  jobs/step-timeout-20260830-oracle-r1 \
-  jobs/step-timeout-20260830-nop-r1 \
-  jobs/step-timeout-20260830-alternate-valid \
-  jobs/step-timeout-20260830-mutant-1 \
-  jobs/step-timeout-20260830-mutant-2 \
-  jobs/hist-finaldoc-20260830-oracle-r1 \
-  jobs/hist-finaldoc-20260830-nop-r1 \
-  jobs/hist-finaldoc-20260830-alternate-valid \
-  jobs/hist-finaldoc-20260830-mutant-1 \
-  jobs/hist-finaldoc-20260830-mutant-2 \
-  jobs/st-neutral-final-oracle-r1-20260830 \
-  jobs/st-neutral-final-nop-r1-20260830 \
-  jobs/st-neutral-final-alternate-valid-20260830 \
-  jobs/st-neutral-final-mutant-1-20260830 \
-  jobs/st-neutral-final-mutant-2-20260830 \
-  jobs/st-neutral-final-mutant-3-20260830 \
-  jobs/st-neutral-final-mutant-4-20260830 \
-  jobs/st-neutral-final-mutant-5-20260830 \
-  jobs/st-neutral-final-mutant-6-20260830 \
-  jobs/st-neutral-final-mutant-7-20260830
-
-python3 .private-eval/grade.py \
-  --manifest .private-eval/cases/repeatability-manifest.json \
-  jobs/micro1-prometheus-oracle-r1-v2-20260830 \
-  jobs/micro1-prometheus-oracle-r2-20260830 \
-  jobs/micro1-prometheus-nop-r1-20260830 \
-  jobs/micro1-prometheus-nop-r2-20260830 \
-  jobs/uds-contract-final-oracle-r1-20260830 \
-  jobs/uds-contract-final-oracle-r2-20260830 \
-  jobs/uds-contract-final-nop-r1-20260830 \
-  jobs/uds-contract-final-nop-r2-20260830 \
-  jobs/step-timeout-20260830-oracle-r1 \
-  jobs/step-timeout-20260830-oracle-r2 \
-  jobs/step-timeout-20260830-nop-r1 \
-  jobs/step-timeout-20260830-nop-r2 \
-  jobs/hist-finaldoc-20260830-oracle-r1 \
-  jobs/hist-finaldoc-20260830-oracle-r2 \
-  jobs/hist-finaldoc-20260830-nop-r1 \
-  jobs/hist-finaldoc-20260830-nop-r2 \
-  jobs/st-neutral-final-oracle-r1-20260830 \
-  jobs/st-neutral-final-oracle-r2-20260830 \
-  jobs/st-neutral-final-nop-r1-20260830 \
-  jobs/st-neutral-final-nop-r2-20260830
+harbor run --env-file .env -e daytona -p tasks \
+  -a oracle -k 1 -n 5 \
+  --cpus request --memory request \
+  --override-cpus 2 --override-memory-mb 4096 --override-storage-mb 10240 \
+  --delete --max-retries 1 \
+  --retry-include DaytonaRateLimitError --retry-include DaytonaError \
+  --yes --job-name micro1-repro-reference
 ```
 
-Expected result for both gates: `complete: true`, balanced accuracy `1.0`, false-accept rate `0.0`, and false-reject rate `0.0`.
+Expected result: 5 completed trials, 5 rewards of `1`, and no exceptions. The recorded run took about 8.7 minutes with warm image caches and used no model tokens.
 
-The current 25-case Oracle-conformance matrix is recorded directly in the evidence ledger. The older manifests must not be relabeled as current-byte certification.
+## 6. Final 25-candidate evaluation
 
-## Build-time context
+The remaining 15 candidates come from the public fixture adapter in `private_eval/candidate_agent.py`. Run the working alternatives:
 
-The first PromQL snapshot took 142.91 seconds for a cold focused test, 215.33 seconds for the first broad Prometheus build after that, and 23.08 seconds for an immediate warm rebuild on the author's macOS host. These are host observations, not Daytona timings. The evidence ledger records whole-job Daytona times.
+```bash
+harbor run --env-file .env -e daytona -p tasks \
+  -x unix-socket-scraping \
+  --agent-import-path private_eval.candidate_agent:CandidateFixtureAgent \
+  --agent-kwarg candidate_id=alternate-valid -k 1 -n 4 \
+  --cpus request --memory request \
+  --override-cpus 2 --override-memory-mb 4096 --override-storage-mb 10240 \
+  --delete --max-retries 1 \
+  --retry-include DaytonaRateLimitError --retry-include DaytonaError \
+  --yes --job-name micro1-repro-alternate-main
 
-## Recorded build milestones
+harbor run --env-file .env -e daytona -p tasks \
+  -i unix-socket-scraping \
+  --agent-import-path private_eval.candidate_agent:CandidateFixtureAgent \
+  --agent-kwarg candidate_id=alternate-oracle-aligned -k 1 -n 1 \
+  --cpus request --memory request \
+  --override-cpus 2 --override-memory-mb 4096 --override-storage-mb 10240 \
+  --delete --max-retries 1 \
+  --retry-include DaytonaRateLimitError --retry-include DaytonaError \
+  --yes --job-name micro1-repro-alternate-uds
+```
 
-The first complete Luna cohort used 2 max-reasoning attempts per task and passed 8/10. The final cohort used 2 attempts per task with Harbor's default high reasoning and passed 2/10. The verifier version and reasoning setting changed, so these are build milestones rather than a controlled model comparison.
+Run the two incorrect candidate sets:
 
-The separate 25-case task check classified all 10 working candidates and all 15 incorrect candidates correctly. It measures the final verifier on its registered candidates; it is not an agent solve-rate result.
+```bash
+harbor run --env-file .env -e daytona -p tasks \
+  --agent-import-path private_eval.candidate_agent:CandidateFixtureAgent \
+  --agent-kwarg candidate_id=mutant-1 -k 1 -n 5 \
+  --cpus request --memory request \
+  --override-cpus 2 --override-memory-mb 4096 --override-storage-mb 10240 \
+  --delete --max-retries 1 \
+  --retry-include DaytonaRateLimitError --retry-include DaytonaError \
+  --yes --job-name micro1-repro-mutant-1
+
+harbor run --env-file .env -e daytona -p tasks \
+  --agent-import-path private_eval.candidate_agent:CandidateFixtureAgent \
+  --agent-kwarg candidate_id=mutant-2 -k 1 -n 5 \
+  --cpus request --memory request \
+  --override-cpus 2 --override-memory-mb 4096 --override-storage-mb 10240 \
+  --delete --max-retries 1 \
+  --retry-include DaytonaRateLimitError --retry-include DaytonaError \
+  --yes --job-name micro1-repro-mutant-2
+```
+
+Score the six jobs:
+
+```bash
+python3 tools/score_candidate_matrix.py \
+  --positive jobs/micro1-repro-reference \
+  --positive jobs/micro1-repro-alternate-main \
+  --positive jobs/micro1-repro-alternate-uds \
+  --negative jobs/micro1-repro-nop \
+  --negative jobs/micro1-repro-mutant-1 \
+  --negative jobs/micro1-repro-mutant-2
+```
+
+Expected result:
+
+```json
+{
+  "balanced_accuracy": 1.0,
+  "complete": true,
+  "false_accept_rate": 0.0,
+  "false_negative": 0,
+  "false_positive": 0,
+  "false_reject_rate": 0.0,
+  "negative_cases": 15,
+  "positive_cases": 10,
+  "true_negative": 15,
+  "true_positive": 10
+}
+```
+
+The six recorded jobs took about 44 minutes when run sequentially with warm caches. They use no model tokens. Daytona infrastructure charges depend on the account plan.
+
+## 7. Luna evaluation
+
+Run 2 attempts per task:
+
+```bash
+harbor run --env-file .env -e daytona -p tasks \
+  -a codex -m gpt-5.6-luna -k 2 -n 3 \
+  --cpus request --memory request \
+  --override-cpus 2 --override-memory-mb 4096 --override-storage-mb 10240 \
+  --delete --max-retries 3 \
+  --retry-include DaytonaRateLimitError \
+  --retry-include DaytonaError \
+  --retry-include ApiRateLimitError \
+  --yes --job-name micro1-repro-luna
+```
+
+Expect 10 terminal trial results under `jobs/micro1-repro-luna/`. Each trial contains the instruction, Codex trajectory, timing, token and cost fields, verifier response, and binary reward.
+
+Model results are not deterministic. The recorded final cohort returned 2/10, both on stale WAL expiry, with no scored exceptions. Its summed trial time was `3:15:24.21`, model cost was `$2.59163820`, and total output was 278,327 tokens. With three concurrent sandboxes, allow roughly 1 to 2 hours of wall time plus first-build cache time.
+
+The earlier Luna-max cohort returned 8/10 on earlier verifier bytes. Because the reasoning setting and task checks changed, 8/10 and 2/10 are build milestones rather than a controlled accuracy comparison.
+
+## 8. Result files
+
+Harbor writes each job to `jobs/<job-name>/`. Keep these files for reproduction:
+
+- job `config.json`, `lock.json`, and `result.json`
+- each trial's `config.json` and `result.json`
+- `agent/trajectory.json`
+- verifier `reward.txt` and `status.json`
+- collected candidate archive and checksum manifest
+
+Do not publish provider credentials or raw authentication material. Representative model trajectories belong in the submission bundle; the full raw job directory can remain a reviewer artifact.
